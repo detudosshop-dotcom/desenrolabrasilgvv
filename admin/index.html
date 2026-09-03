@@ -802,6 +802,7 @@
             const [loading, setLoading] = useState(true);
             const [saving, setSaving] = useState(false);
             const [toast, setToast] = useState(null);
+            const [activePixelTab, setActivePixelTab] = useState('utmify');
 
             const loadData = () => {
                 const token = localStorage.getItem('recupera_admin_token');
@@ -865,32 +866,27 @@
                 });
             };
 
-            const handleSave = async () => {
+            // Each platform saves through its own isolated request, touching only its own
+            // slice of data on the server (see savePixels) - saving Utmify can never affect
+            // Facebook or TikTok data, and vice-versa.
+            const savePlatform = async (payload, successText) => {
                 if (saving) return;
                 setSaving(true);
                 setToast(null);
 
                 const token = localStorage.getItem('recupera_admin_token');
                 try {
-                    // Single request for pixels + Utmify tokens together, so this can't land on
-                    // two different server instances and have one write clobber the other.
-                    const resPixels = await fetch('/api/admin/pixels', {
+                    const res = await fetch('/api/admin/pixels', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                        body: JSON.stringify({
-                            utmify: pixels.utmify || [],
-                            facebook: pixels.facebook || [],
-                            tiktok: pixels.tiktok || [],
-                            utmifyTokens: utmifyTokens.filter(t => t && t.trim())
-                        })
+                        body: JSON.stringify(payload)
                     }).then(r => r.json());
 
-                    if (resPixels && resPixels.success) {
-                        setToast({ type: 'success', text: '✓ Todas as configurações de Pixeis (Utmify, Meta, TikTok) e Tokens de API foram salvas com sucesso!' });
+                    if (res && res.success) {
+                        setToast({ type: 'success', text: successText });
                         loadData();
                     } else {
-                        const errMsg = (resPixels && resPixels.error) || 'Falha ao salvar configurações.';
-                        setToast({ type: 'error', text: errMsg });
+                        setToast({ type: 'error', text: (res && res.error) || 'Falha ao salvar configurações.' });
                     }
                 } catch(e) {
                     setToast({ type: 'error', text: 'Erro de comunicação ao salvar: ' + e.message });
@@ -898,6 +894,19 @@
                     setSaving(false);
                 }
             };
+
+            const handleSaveUtmify = () => savePlatform(
+                { utmify: pixels.utmify || [], utmifyTokens: utmifyTokens.filter(t => t && t.trim()) },
+                '✓ Pixel e credenciais da Utmify salvos com sucesso!'
+            );
+            const handleSaveFacebook = () => savePlatform(
+                { facebook: pixels.facebook || [] },
+                '✓ Pixels do Meta (Facebook) salvos com sucesso!'
+            );
+            const handleSaveTiktok = () => savePlatform(
+                { tiktok: pixels.tiktok || [] },
+                '✓ Pixels do TikTok salvos com sucesso!'
+            );
 
             if (loading) {
                 return (
@@ -909,32 +918,33 @@
 
             return (
                 <div className="space-y-6">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div>
-                            <span className="text-[10px] font-bold text-[#00a86b] uppercase tracking-wider">RASTREAMENTO & CONVERSÃO</span>
-                            <h2 className="text-xl font-bold text-[#132238] dark:text-white mt-0.5">Pixeis & Webhooks de Venda</h2>
-                            <p className="text-xs text-[#718197] dark:text-[#94a3b8] mt-1">
-                                Gerencie seus Pixeis e múltiplas Credenciais de API para envio automático e simultâneo de Webhooks.
-                            </p>
-                        </div>
-                        <button
-                            type="button"
-                            onClick={handleSave}
-                            disabled={saving}
-                            className="px-6 py-3 rounded-xl bg-[#00a86b] hover:bg-[#00915c] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 self-start sm:self-auto disabled:opacity-50"
-                        >
-                            {saving ? (
-                                <>
-                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                    Salvando...
-                                </>
-                            ) : (
-                                <>
-                                    <Icon name="check" className="w-4 h-4" />
-                                    Salvar Alterações
-                                </>
-                            )}
-                        </button>
+                    <div>
+                        <span className="text-[10px] font-bold text-[#00a86b] uppercase tracking-wider">RASTREAMENTO & CONVERSÃO</span>
+                        <h2 className="text-xl font-bold text-[#132238] dark:text-white mt-0.5">Pixeis & Webhooks de Venda</h2>
+                        <p className="text-xs text-[#718197] dark:text-[#94a3b8] mt-1">
+                            Cada plataforma é isolada e salva de forma independente - mexer numa nunca afeta as outras.
+                        </p>
+                    </div>
+
+                    <div className="flex items-center gap-2 bg-white dark:bg-[#152132] p-1.5 rounded-2xl border border-[#e2e9f0] dark:border-[#1e2d42] shadow-sm w-fit">
+                        {[
+                            { id: 'utmify', label: 'Utmify' },
+                            { id: 'facebook', label: 'Meta (Facebook)' },
+                            { id: 'tiktok', label: 'TikTok' }
+                        ].map(t => (
+                            <button
+                                key={t.id}
+                                type="button"
+                                onClick={() => setActivePixelTab(t.id)}
+                                className={"px-4 py-2 rounded-xl text-xs font-bold transition " + (
+                                    activePixelTab === t.id
+                                        ? "bg-[#00a86b] text-white"
+                                        : "text-[#718197] hover:bg-[#f8fafc] dark:hover:bg-[#111c2d]"
+                                )}
+                            >
+                                {t.label}
+                            </button>
+                        ))}
                     </div>
 
                     {toast && (
@@ -951,6 +961,7 @@
                         </div>
                     )}
 
+                    {activePixelTab === 'utmify' && (<>
                     {/* SECTION 0: UTMIFY API CREDENTIALS (MULTI-ACCOUNT WEBHOOKS) */}
                     <div className="bg-white dark:bg-[#152132] rounded-[24px] p-6 sm:p-8 border border-[#e2e9f0] dark:border-[#1e2d42] shadow-sm space-y-4">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#e2e9f0] dark:border-[#1e2d42] pb-4">
@@ -1082,6 +1093,21 @@
                         </div>
                     </div>
 
+                    <button
+                        type="button"
+                        onClick={handleSaveUtmify}
+                        disabled={saving}
+                        className="px-6 py-3 rounded-xl bg-[#00a86b] hover:bg-[#00915c] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                        {saving ? (
+                            <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Salvando...</>
+                        ) : (
+                            <><Icon name="check" className="w-4 h-4" /> Salvar Utmify</>
+                        )}
+                    </button>
+                    </>)}
+
+                    {activePixelTab === 'facebook' && (<>
                     {/* SECTION 2: META / FACEBOOK PIXELS */}
                     <div className="bg-white dark:bg-[#152132] rounded-[24px] p-6 sm:p-8 border border-[#e2e9f0] dark:border-[#1e2d42] shadow-sm space-y-4">
                         <div className="flex items-center justify-between border-b border-[#e2e9f0] dark:border-[#1e2d42] pb-4">
@@ -1156,6 +1182,21 @@
                         </div>
                     </div>
 
+                    <button
+                        type="button"
+                        onClick={handleSaveFacebook}
+                        disabled={saving}
+                        className="px-6 py-3 rounded-xl bg-[#00a86b] hover:bg-[#00915c] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                        {saving ? (
+                            <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Salvando...</>
+                        ) : (
+                            <><Icon name="check" className="w-4 h-4" /> Salvar Meta (Facebook)</>
+                        )}
+                    </button>
+                    </>)}
+
+                    {activePixelTab === 'tiktok' && (<>
                     {/* SECTION 3: TIKTOK PIXELS */}
                     <div className="bg-white dark:bg-[#152132] rounded-[24px] p-6 sm:p-8 border border-[#e2e9f0] dark:border-[#1e2d42] shadow-sm space-y-4">
                         <div className="flex items-center justify-between border-b border-[#e2e9f0] dark:border-[#1e2d42] pb-4">
@@ -1226,6 +1267,20 @@
                             ))}
                         </div>
                     </div>
+
+                    <button
+                        type="button"
+                        onClick={handleSaveTiktok}
+                        disabled={saving}
+                        className="px-6 py-3 rounded-xl bg-[#00a86b] hover:bg-[#00915c] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                        {saving ? (
+                            <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Salvando...</>
+                        ) : (
+                            <><Icon name="check" className="w-4 h-4" /> Salvar TikTok</>
+                        )}
+                    </button>
+                    </>)}
                 </div>
             );
         }
