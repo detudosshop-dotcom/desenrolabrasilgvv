@@ -43,45 +43,12 @@
   }
 
   function applyPixels(pixels) {
-    // A. Apply UTMify
-    if (pixels.utmify && Array.isArray(pixels.utmify)) {
-      pixels.utmify.forEach(utm => {
-        if (utm.active !== false) {
-          // If has script code, execute it
-          if (utm.scriptCode) {
-            try {
-              let cleanCode = utm.scriptCode.replace(/<\/?script[^>]*>/gi, '').trim();
-              if (cleanCode) {
-                const s = document.createElement('script');
-                s.type = 'text/javascript';
-                s.text = cleanCode;
-                (document.head || document.documentElement).appendChild(s);
-              }
-            } catch(e) {
-              console.error('Error executing UTMify script code:', e);
-            }
-          }
-          
-          // If has token / pixelId
-          if (utm.token) {
-            window.pixelId = utm.token;
-            const utmScript = document.createElement('script');
-            utmScript.async = true;
-            utmScript.defer = true;
-            utmScript.src = 'https://cdn.utmify.com.br/scripts/pixel/pixel.js';
-            (document.head || document.documentElement).appendChild(utmScript);
-
-            const utmUtms = document.createElement('script');
-            utmUtms.async = true;
-            utmUtms.src = 'https://cdn.utmify.com.br/scripts/utms/latest.js';
-            utmUtms.setAttribute('data-utmify-token', utm.token);
-            (document.head || document.documentElement).appendChild(utmUtms);
-          }
-        }
-      });
-    }
-
-    // B. Apply Facebook / Meta Pixels
+    // A. Apply Facebook / Meta Pixels FIRST. The Utmify "universal pixel" script
+    // (loaded below) also tries to create window.fbq if one doesn't exist yet -
+    // if it wins that race, it sets up an fbq that was never told our Meta pixel
+    // ID, and Meta Pixel Helper reports no pixel found. Initializing fbq
+    // synchronously here, before Utmify's script has a chance to load, guarantees
+    // ours is the one already in place.
     if (pixels.facebook && Array.isArray(pixels.facebook)) {
       initFacebookSDK();
       pixels.facebook.forEach(fb => {
@@ -99,7 +66,8 @@
       });
     }
 
-    // C. Apply TikTok Pixels
+    // B. Apply TikTok Pixels (same reasoning as above, before any third-party
+    // script that might also probe for/create window.ttq).
     if (pixels.tiktok && Array.isArray(pixels.tiktok)) {
       initTikTokSDK();
       pixels.tiktok.forEach(tt => {
@@ -110,6 +78,44 @@
             if (tt.code) eval(tt.code);
           } catch(e) {
             console.error('Error initializing TT Pixel:', tt.pixelId, e);
+          }
+        }
+      });
+    }
+
+    // C. Apply UTMify
+    if (pixels.utmify && Array.isArray(pixels.utmify)) {
+      pixels.utmify.forEach(utm => {
+        if (utm.active !== false) {
+          // If has script code, execute it
+          if (utm.scriptCode) {
+            try {
+              let cleanCode = utm.scriptCode.replace(/<\/?script[^>]*>/gi, '').trim();
+              if (cleanCode) {
+                const s = document.createElement('script');
+                s.type = 'text/javascript';
+                s.text = cleanCode;
+                (document.head || document.documentElement).appendChild(s);
+              }
+            } catch(e) {
+              console.error('Error executing UTMify script code:', e);
+            }
+          }
+
+          // If has token / pixelId
+          if (utm.token) {
+            window.pixelId = utm.token;
+            const utmScript = document.createElement('script');
+            utmScript.async = true;
+            utmScript.defer = true;
+            utmScript.src = 'https://cdn.utmify.com.br/scripts/pixel/pixel.js';
+            (document.head || document.documentElement).appendChild(utmScript);
+
+            const utmUtms = document.createElement('script');
+            utmUtms.async = true;
+            utmUtms.src = 'https://cdn.utmify.com.br/scripts/utms/latest.js';
+            utmUtms.setAttribute('data-utmify-token', utm.token);
+            (document.head || document.documentElement).appendChild(utmUtms);
           }
         }
       });

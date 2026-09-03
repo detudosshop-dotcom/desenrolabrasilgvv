@@ -872,29 +872,24 @@
 
                 const token = localStorage.getItem('recupera_admin_token');
                 try {
-                    const [resPixels, resToken] = await Promise.all([
-                        fetch('/api/admin/pixels', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                            body: JSON.stringify({
-                                utmify: pixels.utmify || [],
-                                facebook: pixels.facebook || [],
-                                tiktok: pixels.tiktok || [],
-                                pixels: pixels
-                            })
-                        }).then(r => r.json()),
-                        fetch('/api/admin/utmify-token', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                            body: JSON.stringify({ tokens: utmifyTokens.filter(t => t && t.trim()) })
-                        }).then(r => r.json())
-                    ]);
+                    // Single request for pixels + Utmify tokens together, so this can't land on
+                    // two different server instances and have one write clobber the other.
+                    const resPixels = await fetch('/api/admin/pixels', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                        body: JSON.stringify({
+                            utmify: pixels.utmify || [],
+                            facebook: pixels.facebook || [],
+                            tiktok: pixels.tiktok || [],
+                            utmifyTokens: utmifyTokens.filter(t => t && t.trim())
+                        })
+                    }).then(r => r.json());
 
-                    if (resPixels && resPixels.success && resToken && resToken.success) {
+                    if (resPixels && resPixels.success) {
                         setToast({ type: 'success', text: '✓ Todas as configurações de Pixeis (Utmify, Meta, TikTok) e Tokens de API foram salvas com sucesso!' });
                         loadData();
                     } else {
-                        const errMsg = (resPixels && resPixels.error) || (resToken && resToken.error) || 'Falha ao salvar configurações.';
+                        const errMsg = (resPixels && resPixels.error) || 'Falha ao salvar configurações.';
                         setToast({ type: 'error', text: errMsg });
                     }
                 } catch(e) {
@@ -1261,7 +1256,7 @@
             useEffect(() => { loadDataRef.current(); }, [filterStatus]);
 
             useEffect(() => {
-                const interval = setInterval(() => loadDataRef.current(), 1000);
+                const interval = setInterval(() => loadDataRef.current(), 4000);
                 return () => clearInterval(interval);
             }, []);
 
