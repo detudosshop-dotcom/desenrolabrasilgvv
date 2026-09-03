@@ -1,0 +1,1447 @@
+    <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DesenrolaBrasil - Central Administrativa</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#e6f7f0',
+                            100: '#ccf0e1',
+                            500: '#00a86b',
+                            600: '#00915c',
+                            700: '#007a4e'
+                        },
+                        navy: {
+                            800: '#132238',
+                            900: '#0b131f',
+                            950: '#060a10'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark .custom-scroll::-webkit-scrollbar-thumb { background: #334155; }
+    </style>
+</head>
+<body class="bg-[#f5f8fb] text-[#132238] dark:bg-[#0b131f] dark:text-[#f1f5f9] min-h-screen antialiased flex flex-col">
+    <div id="root"></div>
+
+    <!-- React 18 & Babel CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useRef } = React;
+
+        // Unified SVG Icon Component
+        const Icon = ({ name, className = "w-4 h-4", ...props }) => {
+            switch (name) {
+                case 'credit-card':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>;
+                case 'layers':
+                case 'tag':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>;
+                case 'clipboard':
+                case 'orders':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>;
+                case 'bar-chart':
+                case 'retention':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>;
+                case 'activity':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>;
+                case 'share-2':
+                case 'facebook':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>;
+                case 'video':
+                case 'tiktok':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>;
+                case 'chevron-right':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="9 18 15 12 9 6"/></svg>;
+                case 'sun':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>;
+                case 'moon':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>;
+                case 'key':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 2l-2 2m-1.5 1.5L16 7l-2 2-1.5 1.5L9 14l-2 2a4.24 4.24 0 0 1-6-6l2-2 3.5-3.5 1.5-1.5L11 4l1.5-1.5L14 1l2 2 1.5 1.5L19 3l2-1z"/></svg>;
+                case 'shield-check':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>;
+                case 'refresh-cw':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>;
+                case 'log-out':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>;
+                case 'plus':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
+                case 'check':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="20 6 9 17 4 12"/></svg>;
+                case 'check-circle':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
+                case 'alert-circle':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>;
+                case 'search':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
+                case 'trash-2':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>;
+                case 'menu':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>;
+                case 'x':
+                    return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+                default:
+                    return null;
+            }
+        };
+
+        // Main App
+        function App() {
+            const [sessionUser, setSessionUser] = useState(null);
+            const [authLoading, setAuthLoading] = useState(true);
+            const [activeTab, setActiveTab] = useState('portal'); // 'portal', 'pixels', 'orders'
+            const [darkMode, setDarkMode] = useState(() => localStorage.getItem('recupera_theme') === 'dark');
+            const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+            useEffect(() => {
+                if (darkMode) {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('recupera_theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('recupera_theme', 'light');
+                }
+            }, [darkMode]);
+
+            useEffect(() => {
+                const token = localStorage.getItem('recupera_admin_token');
+                if (!token) {
+                    setAuthLoading(false);
+                    return;
+                }
+                fetch('/api/admin/auth/me', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.user) {
+                        setSessionUser(data.user);
+                    } else {
+                        localStorage.removeItem('recupera_admin_token');
+                        setSessionUser(null);
+                    }
+                })
+                .catch(() => setSessionUser(null))
+                .finally(() => setAuthLoading(false));
+            }, []);
+
+            const handleLoginSuccess = (user, token) => {
+                localStorage.setItem('recupera_admin_token', token);
+                setSessionUser(user);
+            };
+
+            const handleLogout = () => {
+                const token = localStorage.getItem('recupera_admin_token');
+                fetch('/api/admin/auth/logout', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token }
+                }).finally(() => {
+                    localStorage.removeItem('recupera_admin_token');
+                    setSessionUser(null);
+                });
+            };
+
+            if (authLoading) {
+                return (
+                    <div className="min-h-screen bg-[#f5f8fb] dark:bg-[#0b131f] flex items-center justify-center">
+                        <div className="w-8 h-8 border-4 border-[#00a86b] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                );
+            }
+
+            if (!sessionUser) {
+                return <LoginView onLoginSuccess={handleLoginSuccess} darkMode={darkMode} setDarkMode={setDarkMode} />;
+            }
+
+            return (
+                <div className="min-h-screen bg-[#f5f8fb] dark:bg-[#0b131f] text-[#132238] dark:text-[#f1f5f9] flex flex-col md:flex-row">
+                    {/* DESKTOP SIDEBAR */}
+                    <aside className="hidden md:flex flex-col w-[240px] bg-white dark:bg-[#111c2d] border-r border-[#e2e9f0] dark:border-[#1e2d42] p-5 fixed h-full z-30">
+                        <SidebarContent activeTab={activeTab} setActiveTab={setActiveTab} onLogout={handleLogout} />
+                    </aside>
+
+                    {/* MOBILE DRAWER */}
+                    {mobileSidebarOpen && (
+                        <div className="fixed inset-0 z-50 md:hidden flex">
+                            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileSidebarOpen(false)}></div>
+                            <div className="relative w-[280px] bg-white dark:bg-[#111c2d] p-6 flex flex-col h-full z-10 shadow-2xl">
+                                <button 
+                                    onClick={() => setMobileSidebarOpen(false)}
+                                    className="absolute top-4 right-4 p-2 text-[#718197] hover:text-[#132238] dark:hover:text-white"
+                                >
+                                    <Icon name="x" className="w-5 h-5" />
+                                </button>
+                                <SidebarContent 
+                                    activeTab={activeTab} 
+                                    setActiveTab={(t) => { setActiveTab(t); setMobileSidebarOpen(false); }} 
+                                    onLogout={handleLogout} 
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MAIN WRAPPER */}
+                    <div className="flex-1 md:ml-[240px] flex flex-col min-h-screen">
+                        {/* TOPBAR */}
+                        <header className="h-[72px] bg-white dark:bg-[#111c2d] border-b border-[#e2e9f0] dark:border-[#1e2d42] px-6 flex items-center justify-between sticky top-0 z-20">
+                            <div className="flex items-center gap-3">
+                                <button 
+                                    onClick={() => setMobileSidebarOpen(true)}
+                                    className="md:hidden p-2 text-[#718197] hover:text-[#132238] dark:hover:text-white"
+                                >
+                                    <Icon name="menu" className="w-5 h-5" />
+                                </button>
+                                <div>
+                                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#00a86b] block">
+                                        {activeTab === 'portal' && 'CONFIGURAÇÃO'}
+                                        {activeTab === 'pixels' && 'RASTREAMENTO GLOBAL'}
+                                        {activeTab === 'orders' && 'AO VIVO'}
+                                    </span>
+                                    <h1 className="text-xl font-bold text-[#132238] dark:text-white leading-tight">
+                                        {activeTab === 'portal' && 'Portais de pagamento'}
+                                        {activeTab === 'pixels' && 'Pixels de rastreamento'}
+                                        {activeTab === 'orders' && 'Pedidos'}
+                                    </h1>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-4">
+                                {/* THEME TOGGLE */}
+                                <button
+                                    onClick={() => setDarkMode(!darkMode)}
+                                    className="p-2 rounded-xl border border-[#e2e9f0] dark:border-[#1e2d42] bg-[#f5f8fb] dark:bg-[#152132] text-[#718197] dark:text-[#94a3b8] hover:text-[#00a86b] transition-all flex items-center gap-2 text-xs font-bold"
+                                    title={darkMode ? 'Mudar para tema claro' : 'Mudar para tema escuro'}
+                                >
+                                    <Icon name={darkMode ? 'sun' : 'moon'} className="w-4 h-4 text-[#00a86b]" />
+                                    <span className="hidden sm:inline">{darkMode ? 'Tema Claro' : 'Tema Escuro'}</span>
+                                </button>
+
+                                <div className="w-8 h-8 rounded-full bg-[#132238] dark:bg-[#00a86b] text-white flex items-center justify-center font-bold text-xs">
+                                    {sessionUser.username ? sessionUser.username.substring(0, 2).toUpperCase() : 'RB'}
+                                </div>
+                            </div>
+                        </header>
+
+                        {/* VIEW CONTENT */}
+                        <main className="p-4 sm:p-6 md:p-8 flex-1 max-w-[1300px] w-full mx-auto">
+                            {activeTab === 'portal' && <PortalView />}
+                            {activeTab === 'pixels' && <PixelsView />}
+                            {activeTab === 'orders' && <OrdersView />}
+                        </main>
+                    </div>
+                </div>
+            );
+        }
+
+        // --- SIDEBAR CONTENT ---
+        function SidebarContent({ activeTab, setActiveTab, onLogout }) {
+            const navItems = [
+                { id: 'portal', label: 'Portal', icon: 'credit-card' },
+                { id: 'pixels', label: 'Pixels', icon: 'layers' },
+                { id: 'orders', label: 'Pedidos', icon: 'clipboard' }
+            ];
+
+            return (
+                <div className="flex flex-col h-full justify-between">
+                    <div>
+                        {/* BRAND */}
+                        <div className="flex items-center gap-3 mb-8">
+                            <div className="w-10 h-10 rounded-xl bg-[#00a86b] text-white flex items-center justify-center shadow-md">
+                                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>
+                            </div>
+                            <div>
+                                <div className="text-base font-black text-[#132238] dark:text-white tracking-tight leading-none">
+                                    Desenrola<span className="text-[#00a86b]">Brasil</span>
+                                </div>
+                                <span className="text-[10px] font-bold text-[#718197] tracking-widest uppercase">CENTRAL</span>
+                            </div>
+                        </div>
+
+                        {/* GROUP */}
+                        <div className="mb-2 px-1">
+                            <span className="text-[10px] font-bold text-[#718197] uppercase tracking-wider">OPERAÇÃO</span>
+                        </div>
+
+                        {/* NAV ITEMS */}
+                        <nav className="space-y-1">
+                            {navItems.map(item => {
+                                const isActive = activeTab === item.id;
+                                return (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => setActiveTab(item.id)}
+                                        className={"w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all " + (
+                                            isActive
+                                                ? "bg-[#e6f7f0] dark:bg-[#00a86b]/15 text-[#00a86b] font-bold border border-[#00a86b]/20"
+                                                : "text-[#718197] dark:text-[#94a3b8] hover:bg-[#f1f5f9] dark:hover:bg-[#152132] hover:text-[#132238] dark:hover:text-white"
+                                        )}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <Icon name={item.icon} className={"w-4 h-4 " + (isActive ? "text-[#00a86b]" : "text-[#718197]")} />
+                                            <span>{item.label}</span>
+                                        </div>
+                                        {isActive && <Icon name="chevron-right" className="w-3.5 h-3.5 text-[#00a86b]" />}
+                                    </button>
+                                );
+                            })}
+                        </nav>
+                    </div>
+
+                    {/* FOOTER */}
+                    <div className="pt-4 border-t border-[#e2e9f0] dark:border-[#1e2d42] space-y-2">
+                        <div className="flex items-center gap-2 text-xs font-semibold text-[#132238] dark:text-white px-2 py-1">
+                            <span className="w-2 h-2 rounded-full bg-[#00a86b]"></span>
+                            <span>Sistema operacional</span>
+                        </div>
+                        <button
+                            onClick={onLogout}
+                            className="w-full flex items-center gap-2 text-xs font-bold text-[#718197] hover:text-red-500 px-2 py-1.5 transition-colors"
+                        >
+                            <Icon name="log-out" className="w-3.5 h-3.5" />
+                            <span>Sair do painel</span>
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        // --- 1. LOGIN VIEW ---
+        function LoginView({ onLoginSuccess, darkMode, setDarkMode }) {
+            const [username, setUsername] = useState('');
+            const [password, setPassword] = useState('');
+            const [loading, setLoading] = useState(false);
+            const [errorMsg, setErrorMsg] = useState('');
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setErrorMsg('');
+                setLoading(true);
+
+                try {
+                    const res = await fetch('/api/admin/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username, password })
+                    });
+                    const data = await res.json();
+                    if (data.success && data.token) {
+                        onLoginSuccess(data.user, data.token);
+                    } else {
+                        setErrorMsg(data.error || 'Credenciais inválidas.');
+                    }
+                } catch(e) {
+                    setErrorMsg('Erro de conexão com o servidor.');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-[#f5f8fb] dark:bg-[#0b131f] flex flex-col items-center justify-center p-4">
+                    <div className="w-full max-w-[420px] bg-white dark:bg-[#152132] rounded-[24px] p-8 shadow-xl border border-[#e2e9f0] dark:border-[#1e2d42]">
+                        <div className="flex items-center justify-between mb-6">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-[#00a86b] text-white flex items-center justify-center shadow-md">
+                                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>
+                                </div>
+                                <div>
+                                    <span className="text-base font-extrabold text-[#132238] dark:text-white leading-none block">
+                                        Desenrola<span className="text-[#00a86b]">Brasil</span>
+                                    </span>
+                                    <span className="text-[10px] font-bold text-[#718197] tracking-widest uppercase">CENTRAL</span>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={() => setDarkMode(!darkMode)}
+                                className="p-2 rounded-xl border border-[#e2e9f0] dark:border-[#1e2d42] bg-[#f5f8fb] dark:bg-[#0b131f] text-[#718197]"
+                                title="Alternar tema"
+                            >
+                                <Icon name={darkMode ? 'sun' : 'moon'} className="w-4 h-4 text-[#00a86b]" />
+                            </button>
+                        </div>
+
+                        <div className="mb-6">
+                            <span className="text-[10px] font-bold text-[#00a86b] uppercase tracking-widest">ÁREA RESTRITA</span>
+                            <h2 className="text-xl font-extrabold text-[#132238] dark:text-white mt-0.5">Bem-vindo ao painel</h2>
+                            <p className="text-xs text-[#718197] dark:text-[#94a3b8] mt-1">Entre para acompanhar pagamentos, gateways e indicadores da operação.</p>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-[#132238] dark:text-white uppercase mb-1">Usuário</label>
+                                <input
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    required
+                                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-sm text-[#132238] dark:text-white font-medium"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-[#132238] dark:text-white uppercase mb-1">Senha</label>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-sm text-[#132238] dark:text-white font-medium"
+                                />
+                            </div>
+
+                            {errorMsg && (
+                                <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-xs font-bold flex items-center gap-2">
+                                    <Icon name="alert-circle" className="w-4 h-4 flex-shrink-0" />
+                                    <span>{errorMsg}</span>
+                                </div>
+                            )}
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full py-3 rounded-xl bg-[#00a86b] hover:bg-[#00915c] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2"
+                            >
+                                {loading ? 'Entrando...' : 'Entrar com segurança'}
+                            </button>
+                        </form>
+
+                        <div className="mt-6 pt-4 border-t border-[#e2e9f0] dark:border-[#1e2d42] text-center text-[11px] text-[#718197] space-y-1">
+                            <span className="font-semibold text-[#132238] dark:text-white block">Ambiente protegido</span>
+                            <span>Acesso exclusivo para administradores</span>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // --- 2. PORTAL VIEW ---
+        function PortalView() {
+            const [config, setConfig] = useState(null);
+            const [selectedGwKey, setSelectedGwKey] = useState('freepay');
+            const [editSecret, setEditSecret] = useState('');
+            const [editPublic, setEditPublic] = useState('');
+            const [editLimit, setEditLimit] = useState('100000');
+            const [loading, setLoading] = useState(true);
+            const [saving, setSaving] = useState(false);
+            const [testing, setTesting] = useState(false);
+            const [testResult, setTestResult] = useState(null);
+
+            const loadConfig = () => {
+                const token = localStorage.getItem('recupera_admin_token');
+                fetch('/api/admin/gateway-config', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        setConfig(data);
+                        if (!selectedGwKey) setSelectedGwKey(data.activeGatewayKey);
+                    }
+                })
+                .finally(() => setLoading(false));
+            };
+
+            useEffect(() => { loadConfig(); }, []);
+
+            const currentGw = useMemo(() => {
+                if (!config) return null;
+                return config.gateways.find(g => g.key === selectedGwKey);
+            }, [config, selectedGwKey]);
+
+            useEffect(() => {
+                if (currentGw) {
+                    setEditSecret('');
+                    setEditPublic('');
+                    setEditLimit(String(currentGw.maxAmountCents || 100000));
+                }
+            }, [selectedGwKey]);
+
+            const requiresPublicKey = selectedGwKey !== 'pingupag' && selectedGwKey !== 'flevopay';
+
+            // Direct Save and Activate (Without requiring test PIX)
+            const handleDirectSave = async (activate = false) => {
+                if (saving || testing) return;
+                setSaving(true);
+                setTestResult(null);
+
+                const token = localStorage.getItem('recupera_admin_token');
+                try {
+                    const res = await fetch('/api/admin/gateway-config', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify({
+                            gatewayKey: selectedGwKey,
+                            secretKey: editSecret,
+                            publicKey: editPublic,
+                            maxAmountCents: Number(editLimit),
+                            setActive: activate
+                        })
+                    });
+
+                    const data = await res.json();
+                    if (data.success) {
+                        setTestResult({
+                            type: 'success',
+                            text: data.message || 'Configurações salvas com sucesso!'
+                        });
+                        loadConfig();
+                    } else {
+                        setTestResult({
+                            type: 'error',
+                            text: data.error || 'Falha ao salvar gateway.'
+                        });
+                    }
+                } catch(e) {
+                    setTestResult({ type: 'error', text: 'Erro de comunicação ao salvar: ' + e.message });
+                } finally {
+                    setSaving(false);
+                }
+            };
+
+            // Test PIX (R$ 1,00) and Activate
+            const handleTestAndActivate = async () => {
+                if (testing || saving) return;
+                setTesting(true);
+                setTestResult(null);
+
+                const token = localStorage.getItem('recupera_admin_token');
+                try {
+                    const res = await fetch('/api/admin/gateway-test', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify({
+                            gatewayKey: selectedGwKey,
+                            secretKey: editSecret,
+                            publicKey: editPublic,
+                            maxAmountCents: Number(editLimit)
+                        })
+                    });
+
+                    const data = await res.json();
+                    if (data.success) {
+                        setTestResult({
+                            type: 'success',
+                            text: data.test ? data.test.message : (data.message || 'Teste aprovado e gateway ativado!')
+                        });
+                        loadConfig();
+                    } else {
+                        setTestResult({
+                            type: 'error',
+                            text: data.error || 'Falha no teste da adquirente.'
+                        });
+                    }
+                } catch(e) {
+                    setTestResult({ type: 'error', text: 'Erro de comunicação: ' + e.message });
+                } finally {
+                    setTesting(false);
+                }
+            };
+
+            if (loading || !config) {
+                return (
+                    <div className="py-20 flex justify-center">
+                        <div className="w-8 h-8 border-4 border-[#00a86b] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                );
+            }
+
+            const isActiveInProd = config.activeGatewayKey === selectedGwKey;
+
+            return (
+                <div className="space-y-6">
+                    <div>
+                        <span className="text-[10px] font-bold text-[#00a86b] uppercase tracking-wider">GATEWAY EM PRODUÇÃO</span>
+                        <h2 className="text-xl font-bold text-[#132238] dark:text-white mt-0.5">Portais de Pagamento</h2>
+                        <p className="text-xs text-[#718197] dark:text-[#94a3b8] mt-1">
+                            Selecione a adquirente ativa para emissão do PIX. Você pode salvar e ativar diretamente ou realizar um teste com cobrança de R$ 1,00.
+                        </p>
+                    </div>
+
+                    {testResult && (
+                        <div className={"p-4 rounded-2xl border text-xs font-bold flex items-center justify-between gap-3 " + (
+                            testResult.type === 'success'
+                                ? "bg-[#e6f7f0] dark:bg-[#00a86b]/15 text-[#00a86b] border-[#00a86b]/30"
+                                : "bg-red-50 dark:bg-red-950/40 text-red-600 border-red-200 dark:border-red-900"
+                        )}>
+                            <div className="flex items-center gap-2">
+                                <Icon name={testResult.type === 'success' ? 'check-circle' : 'alert-circle'} className="w-5 h-5 flex-shrink-0" />
+                                <span>{testResult.text}</span>
+                            </div>
+                            <button onClick={() => setTestResult(null)} className="text-xs opacity-70 hover:opacity-100">✕</button>
+                        </div>
+                    )}
+
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        {/* LEFT: GATEWAY LIST */}
+                        <div className="lg:col-span-5 bg-white dark:bg-[#152132] rounded-[24px] p-6 border border-[#e2e9f0] dark:border-[#1e2d42] shadow-sm">
+                            <h3 className="text-sm font-extrabold text-[#132238] dark:text-white mb-4">Portais cadastrados</h3>
+                            <div className="space-y-3">
+                                {config.gateways.map(gw => {
+                                    const isSelected = selectedGwKey === gw.key;
+                                    const isProd = config.activeGatewayKey === gw.key;
+                                    const needsPub = gw.key !== 'pingupag' && gw.key !== 'flevopay';
+
+                                    return (
+                                        <div
+                                            key={gw.key}
+                                            onClick={() => setSelectedGwKey(gw.key)}
+                                            className={"p-4 rounded-2xl border cursor-pointer transition-all " + (
+                                                isSelected
+                                                    ? "border-[#00a86b] bg-[#e6f7f0]/40 dark:bg-[#00a86b]/10 shadow-sm"
+                                                    : "border-[#e2e9f0] dark:border-[#1e2d42] bg-white dark:bg-[#111c2d] hover:border-[#cbd5e1]"
+                                            )}
+                                        >
+                                            <div className="flex items-center justify-between mb-1.5">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="font-extrabold text-sm text-[#132238] dark:text-white">{gw.name}</span>
+                                                    {isProd && (
+                                                        <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#00a86b] text-white">
+                                                            EM PRODUÇÃO
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <span className={"text-[10px] font-bold px-2 py-0.5 rounded-full " + (
+                                                    gw.hasAdapter 
+                                                        ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400" 
+                                                        : "bg-slate-100 dark:bg-slate-800 text-slate-500"
+                                                )}>
+                                                    {gw.statusText}
+                                                </span>
+                                            </div>
+                                            <div className="text-[11px] text-[#718197] dark:text-[#94a3b8] space-y-0.5">
+                                                <div>Chave secreta: <span className="font-mono">{gw.secretKeyMasked || 'Não configurada'}</span></div>
+                                                {needsPub && (
+                                                    <div>Chave pública: <span className="font-mono">{gw.publicKeyMasked || 'Não configurada'}</span></div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* RIGHT: CREDENTIALS EDITOR */}
+                        <div className="lg:col-span-7 bg-white dark:bg-[#152132] rounded-[24px] p-6 sm:p-8 border border-[#e2e9f0] dark:border-[#1e2d42] shadow-sm space-y-5">
+                            <div className="border-b border-[#e2e9f0] dark:border-[#1e2d42] pb-4">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-[10px] font-bold text-[#00a86b] uppercase tracking-wider">CREDENCIAS DA ADQUIRENTE</span>
+                                    {isActiveInProd ? (
+                                        <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+                                            ATUALMENTE ATIVO
+                                        </span>
+                                    ) : (
+                                        <span className="text-[10px] font-bold text-slate-400">INATIVO</span>
+                                    )}
+                                </div>
+                                <h3 className="text-lg font-bold text-[#132238] dark:text-white mt-0.5">Configurar {currentGw?.name}</h3>
+                                <p className="text-xs text-[#718197] dark:text-[#94a3b8] mt-0.5">
+                                    {selectedGwKey === 'pingupag'
+                                        ? 'A Pingupag requer apenas a Chave Secreta (X-API-Key) para autenticação das requisições PIX. Não é necessária chave pública.'
+                                        : (selectedGwKey === 'flevopay'
+                                            ? 'A FlevoPay requer apenas a Chave Secreta (X-API-Key) para autenticação das requisições PIX. Não é necessária chave pública.'
+                                            : 'Informe as credenciais fornecidas no painel da ' + (currentGw ? currentGw.name : 'adquirente') + '.')}
+                                </p>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-[#132238] dark:text-white uppercase mb-1">
+                                        {selectedGwKey === 'pingupag' 
+                                            ? 'Chave Secreta Pingupag (X-API-Key / Secret Key) *' 
+                                            : (selectedGwKey === 'flevopay'
+                                                ? 'Chave Secreta FlevoPay (X-API-Key / Secret Key) *'
+                                                : 'Chave Secreta (Secret Key / API Key) *')}
+                                    </label>
+                                    <input
+                                        type="password"
+                                        value={editSecret}
+                                        onChange={(e) => setEditSecret(e.target.value)}
+                                        placeholder={currentGw?.secretKeyMasked || (selectedGwKey === 'pingupag' ? 'Ex: pingupag_live_... ou sua chave secreta' : (selectedGwKey === 'flevopay' ? 'Ex: flevopay_... ou sua Chave Secreta' : 'Insira a chave secreta...'))}
+                                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-sm text-[#132238] dark:text-white font-mono"
+                                    />
+                                    {selectedGwKey === 'flevopay' && (
+                                        <p className="text-[11px] text-[#00a86b] font-medium mt-1">
+                                            ✓ Documentação oficial: Envie sua Chave Secreta (Secret Key) copiada da aba "Configurações e API" da FlevoPay.
+                                        </p>
+                                    )}
+                                    {selectedGwKey === 'pingupag' && (
+                                        <p className="text-[11px] text-[#00a86b] font-medium mt-1">
+                                            ✓ Documentação oficial: Envie sua Chave Secreta copiada da aba "Configurações e API" da Pingupag.
+                                        </p>
+                                    )}
+                                </div>
+
+                                {requiresPublicKey && (
+                                    <div>
+                                        <label className="block text-xs font-bold text-[#132238] dark:text-white uppercase mb-1">
+                                            Chave Pública (Public Key)
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={editPublic}
+                                            onChange={(e) => setEditPublic(e.target.value)}
+                                            placeholder={currentGw?.publicKeyMasked || "Insira a chave pública..."}
+                                            className="w-full px-3.5 py-2.5 rounded-xl border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-sm text-[#132238] dark:text-white font-mono"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* THREE DISTINCT ACTIONS: SAVE ONLY, ACTIVATE, OR TEST+ACTIVATE */}
+                            <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => handleDirectSave(false)}
+                                    disabled={saving || testing}
+                                    className="w-full sm:flex-1 py-3.5 rounded-xl border border-[#e2e9f0] dark:border-[#223247] bg-[#f8fafc] dark:bg-[#111c2d] text-[#132238] dark:text-white hover:border-[#00a86b] font-bold text-xs transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                    title="Salva as credenciais desta gateway sem alterar qual gateway está em produção"
+                                >
+                                    {saving ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-[#00a86b] border-t-transparent rounded-full animate-spin"></div>
+                                            Salvando...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Icon name="check" className="w-4 h-4" />
+                                            Salvar Credenciais
+                                        </>
+                                    )}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={() => handleDirectSave(true)}
+                                    disabled={saving || testing || isActiveInProd}
+                                    className="w-full sm:flex-1 py-3.5 rounded-xl bg-[#00a86b] hover:bg-[#00915c] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                    title="Salva e define esta gateway como a ativa em produção agora"
+                                >
+                                    {saving ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                            Salvando...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Icon name="check" className="w-4 h-4" />
+                                            {isActiveInProd ? 'Já é a Gateway Ativa' : ('Usar ' + (currentGw ? currentGw.name : '') + ' Agora')}
+                                        </>
+                                    )}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={handleTestAndActivate}
+                                    disabled={testing || saving}
+                                    className="w-full sm:w-auto px-5 py-3.5 rounded-xl border border-[#e2e9f0] dark:border-[#223247] bg-[#f8fafc] dark:bg-[#111c2d] text-[#132238] dark:text-white hover:border-[#00a86b] font-bold text-xs transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                    title="Gera cobrança PIX real de R$ 1,00 para validar as credenciais; se aprovado, ativa esta gateway automaticamente"
+                                >
+                                    {testing ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-[#00a86b] border-t-transparent rounded-full animate-spin"></div>
+                                            Testando...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Icon name="activity" className="w-4 h-4 text-[#00a86b]" />
+                                            Testar PIX (R$ 1,00)
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                            <p className="text-[11px] text-[#718197] dark:text-[#94a3b8]">
+                                "Salvar Credenciais" apenas guarda as chaves desta adquirente. "Usar Agora" torna esta adquirente a gateway em produção imediatamente. "Testar PIX" gera uma cobrança real de R$ 1,00 e, se aprovada, ativa esta gateway automaticamente.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // --- 3. PIXELS & WEBHOOKS VIEW ---
+        function PixelsView() {
+            const [pixels, setPixels] = useState({ utmify: [], facebook: [], tiktok: [] });
+            const [utmifyTokens, setUtmifyTokens] = useState([
+                '487lh6GrQqPa4qvYSNBIO4a7tnBxtZNKoYIe',
+                'FVCewCTST4jON2YWRwue5Cl0o4xzJETGKsOA'
+            ]);
+            const [loading, setLoading] = useState(true);
+            const [saving, setSaving] = useState(false);
+            const [toast, setToast] = useState(null);
+
+            const loadData = () => {
+                const token = localStorage.getItem('recupera_admin_token');
+                Promise.all([
+                    fetch('/api/admin/pixels', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json()),
+                    fetch('/api/admin/utmify-token', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json())
+                ])
+                .then(([pixelData, tokenData]) => {
+                    if (pixelData.success && pixelData.pixels) {
+                        setPixels({
+                            utmify: pixelData.pixels.utmify || [],
+                            facebook: pixelData.pixels.facebook || [],
+                            tiktok: pixelData.pixels.tiktok || []
+                        });
+                    }
+                    if (tokenData.success && tokenData.tokens) {
+                        setUtmifyTokens(Array.isArray(tokenData.tokens) ? tokenData.tokens : [tokenData.token]);
+                    }
+                })
+                .finally(() => setLoading(false));
+            };
+
+            useEffect(() => { loadData(); }, []);
+
+            const addUtmifyToken = () => {
+                setUtmifyTokens(prev => [...prev, '']);
+            };
+
+            const removeUtmifyToken = (index) => {
+                setUtmifyTokens(prev => prev.filter((_, i) => i !== index));
+            };
+
+            const updateUtmifyToken = (index, val) => {
+                setUtmifyTokens(prev => {
+                    const list = [...prev];
+                    list[index] = val;
+                    return list;
+                });
+            };
+
+            const addPixel = (type) => {
+                const newObj = type === 'utmify' 
+                    ? { id: 'utm_' + Date.now(), name: 'Pixel UTMify', token: '', scriptCode: '', active: true }
+                    : { id: (type === 'facebook' ? 'fb_' : 'tt_') + Date.now(), name: (type === 'facebook' ? 'Pixel Meta' : 'Pixel TikTok'), pixelId: '', code: '', token: '', active: true };
+                setPixels(prev => ({ ...prev, [type]: [...prev[type], newObj] }));
+            };
+
+            const removePixel = (type, index) => {
+                setPixels(prev => {
+                    const list = [...prev[type]];
+                    list.splice(index, 1);
+                    return { ...prev, [type]: list };
+                });
+            };
+
+            const updatePixelField = (type, index, field, value) => {
+                setPixels(prev => {
+                    const list = [...prev[type]];
+                    list[index] = { ...list[index], [field]: value };
+                    return { ...prev, [type]: list };
+                });
+            };
+
+            const handleSave = async () => {
+                if (saving) return;
+                setSaving(true);
+                setToast(null);
+
+                const token = localStorage.getItem('recupera_admin_token');
+                try {
+                    const [resPixels, resToken] = await Promise.all([
+                        fetch('/api/admin/pixels', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                            body: JSON.stringify({
+                                utmify: pixels.utmify || [],
+                                facebook: pixels.facebook || [],
+                                tiktok: pixels.tiktok || [],
+                                pixels: pixels
+                            })
+                        }).then(r => r.json()),
+                        fetch('/api/admin/utmify-token', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                            body: JSON.stringify({ tokens: utmifyTokens.filter(t => t && t.trim()) })
+                        }).then(r => r.json())
+                    ]);
+
+                    if (resPixels && resPixels.success && resToken && resToken.success) {
+                        setToast({ type: 'success', text: '✓ Todas as configurações de Pixeis (Utmify, Meta, TikTok) e Tokens de API foram salvas com sucesso!' });
+                        loadData();
+                    } else {
+                        const errMsg = (resPixels && resPixels.error) || (resToken && resToken.error) || 'Falha ao salvar configurações.';
+                        setToast({ type: 'error', text: errMsg });
+                    }
+                } catch(e) {
+                    setToast({ type: 'error', text: 'Erro de comunicação ao salvar: ' + e.message });
+                } finally {
+                    setSaving(false);
+                }
+            };
+
+            if (loading) {
+                return (
+                    <div className="py-20 flex justify-center">
+                        <div className="w-8 h-8 border-4 border-[#00a86b] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="space-y-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <span className="text-[10px] font-bold text-[#00a86b] uppercase tracking-wider">RASTREAMENTO & CONVERSÃO</span>
+                            <h2 className="text-xl font-bold text-[#132238] dark:text-white mt-0.5">Pixeis & Webhooks de Venda</h2>
+                            <p className="text-xs text-[#718197] dark:text-[#94a3b8] mt-1">
+                                Gerencie seus Pixeis e múltiplas Credenciais de API para envio automático e simultâneo de Webhooks.
+                            </p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={handleSave}
+                            disabled={saving}
+                            className="px-6 py-3 rounded-xl bg-[#00a86b] hover:bg-[#00915c] text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2 self-start sm:self-auto disabled:opacity-50"
+                        >
+                            {saving ? (
+                                <>
+                                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    Salvando...
+                                </>
+                            ) : (
+                                <>
+                                    <Icon name="check" className="w-4 h-4" />
+                                    Salvar Alterações
+                                </>
+                            )}
+                        </button>
+                    </div>
+
+                    {toast && (
+                        <div className={"p-4 rounded-2xl border text-xs font-bold flex items-center justify-between gap-3 " + (
+                            toast.type === 'success'
+                                ? "bg-[#e6f7f0] dark:bg-[#00a86b]/15 text-[#00a86b] border-[#00a86b]/30"
+                                : "bg-red-50 dark:bg-red-950/40 text-red-600 border-red-200 dark:border-red-900"
+                        )}>
+                            <div className="flex items-center gap-2">
+                                <Icon name={toast.type === 'success' ? 'check-circle' : 'alert-circle'} className="w-5 h-5 flex-shrink-0" />
+                                <span>{toast.text}</span>
+                            </div>
+                            <button onClick={() => setToast(null)} className="text-xs opacity-70 hover:opacity-100">✕</button>
+                        </div>
+                    )}
+
+                    {/* SECTION 0: UTMIFY API CREDENTIALS (MULTI-ACCOUNT WEBHOOKS) */}
+                    <div className="bg-white dark:bg-[#152132] rounded-[24px] p-6 sm:p-8 border border-[#e2e9f0] dark:border-[#1e2d42] shadow-sm space-y-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#e2e9f0] dark:border-[#1e2d42] pb-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center font-black text-sm">
+                                    API
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-extrabold text-[#132238] dark:text-white flex items-center gap-2">
+                                        Credenciais de API Utmify ({utmifyTokens.length} contas conectadas)
+                                        <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-300">
+                                            DISPARO SIMULTÂNEO
+                                        </span>
+                                    </h3>
+                                    <p className="text-xs text-[#718197] dark:text-[#94a3b8]">
+                                        Dispara todos os webhooks de vendas pendentes (waiting_payment) e aprovadas (paid) com o produto "ebook liberado" simultaneamente para todas as contas cadastradas.
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={addUtmifyToken}
+                                    className="px-3.5 py-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 hover:bg-purple-100 text-xs font-bold transition-all flex items-center gap-1.5"
+                                >
+                                    <Icon name="plus" className="w-3.5 h-3.5" /> Adicionar Token API
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3">
+                            {utmifyTokens.map((tok, idx) => (
+                                <div key={idx} className="flex items-center gap-3 p-3.5 rounded-xl border border-[#e2e9f0] dark:border-[#1e2d42] bg-[#f8fafc] dark:bg-[#111c2d]">
+                                    <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 flex items-center justify-center font-bold text-xs">
+                                        #{idx + 1}
+                                    </div>
+                                    <div className="flex-1">
+                                        <input
+                                            type="text"
+                                            value={tok}
+                                            onChange={(e) => updateUtmifyToken(idx, e.target.value)}
+                                            placeholder="Insira o API Token da Utmify..."
+                                            className="w-full px-3 py-2 rounded-lg border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-xs text-[#132238] dark:text-white font-mono"
+                                        />
+                                    </div>
+                                    {utmifyTokens.length > 1 && (
+                                        <button
+                                            type="button"
+                                            onClick={() => removeUtmifyToken(idx)}
+                                            className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-all"
+                                            title="Remover Token"
+                                        >
+                                            <Icon name="trash-2" className="w-4 h-4" />
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* SECTION 1: UTMIFY PIXELS */}
+                    <div className="bg-white dark:bg-[#152132] rounded-[24px] p-6 sm:p-8 border border-[#e2e9f0] dark:border-[#1e2d42] shadow-sm space-y-4">
+                        <div className="flex items-center justify-between border-b border-[#e2e9f0] dark:border-[#1e2d42] pb-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center font-black text-sm">
+                                    UTM
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-extrabold text-[#132238] dark:text-white">Pixel Utmify (Script Frontend)</h3>
+                                    <p className="text-xs text-[#718197] dark:text-[#94a3b8]">Rastreamento de conversões e parâmetros UTM no navegador.</p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => addPixel('utmify')}
+                                className="px-3.5 py-2 rounded-xl bg-[#f0fdf4] dark:bg-[#00a86b]/15 text-[#00a86b] hover:bg-[#dcfce7] text-xs font-bold transition-all flex items-center gap-1.5"
+                            >
+                                <Icon name="plus" className="w-3.5 h-3.5" /> Adicionar Pixel Utmify
+                            </button>
+                        </div>
+
+                        <div className="space-y-4">
+                            {pixels.utmify.map((pix, idx) => (
+                                <div key={pix.id || idx} className="p-4 rounded-xl border border-[#e2e9f0] dark:border-[#1e2d42] bg-[#f8fafc] dark:bg-[#111c2d] space-y-3 relative">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[11px] font-bold text-[#718197] uppercase">Pixel Utmify #{idx + 1}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => removePixel('utmify', idx)}
+                                            className="text-red-500 hover:text-red-700 text-xs font-bold flex items-center gap-1"
+                                        >
+                                            <Icon name="trash-2" className="w-3.5 h-3.5" /> Remover
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-[#132238] dark:text-white uppercase mb-1">Código do Script da Utmify * (é só isso que você precisa)</label>
+                                        <textarea
+                                            value={pix.scriptCode || ''}
+                                            onChange={(e) => updatePixelField('utmify', idx, 'scriptCode', e.target.value)}
+                                            placeholder="Cole aqui a tag <script>...<\/script> fornecida pela Utmify"
+                                            rows="2"
+                                            className="w-full px-3 py-2 rounded-lg border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-xs text-[#132238] dark:text-white font-mono"
+                                        ></textarea>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label className="block text-[11px] font-bold text-[#132238] dark:text-white uppercase mb-1">Token do Pixel (opcional, avançado)</label>
+                                            <input
+                                                type="text"
+                                                value={pix.token}
+                                                onChange={(e) => updatePixelField('utmify', idx, 'token', e.target.value)}
+                                                placeholder="Ex: 6a9646a5663b68854ecd15d4"
+                                                className="w-full px-3 py-2 rounded-lg border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-xs text-[#132238] dark:text-white font-mono"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[11px] font-bold text-[#132238] dark:text-white uppercase mb-1">Identificação / Nome</label>
+                                            <input
+                                                type="text"
+                                                value={pix.name}
+                                                onChange={(e) => updatePixelField('utmify', idx, 'name', e.target.value)}
+                                                placeholder="Ex: Pixel Utmify Principal"
+                                                className="w-full px-3 py-2 rounded-lg border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-xs text-[#132238] dark:text-white"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* SECTION 2: META / FACEBOOK PIXELS */}
+                    <div className="bg-white dark:bg-[#152132] rounded-[24px] p-6 sm:p-8 border border-[#e2e9f0] dark:border-[#1e2d42] shadow-sm space-y-4">
+                        <div className="flex items-center justify-between border-b border-[#e2e9f0] dark:border-[#1e2d42] pb-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center font-black text-sm">
+                                    FB
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-extrabold text-[#132238] dark:text-white">Pixeis Meta (Facebook)</h3>
+                                    <p className="text-xs text-[#718197] dark:text-[#94a3b8]">Configure ID, Código e Token da API de Conversões (CAPI).</p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => addPixel('facebook')}
+                                className="px-3.5 py-2 rounded-xl bg-[#f0fdf4] dark:bg-[#00a86b]/15 text-[#00a86b] hover:bg-[#dcfce7] text-xs font-bold transition-all flex items-center gap-1.5"
+                            >
+                                <Icon name="plus" className="w-3.5 h-3.5" /> Adicionar Pixel Meta
+                            </button>
+                        </div>
+
+                        <div className="space-y-4">
+                            {pixels.facebook.map((pix, idx) => (
+                                <div key={pix.id || idx} className="p-4 rounded-xl border border-[#e2e9f0] dark:border-[#1e2d42] bg-[#f8fafc] dark:bg-[#111c2d] space-y-3 relative">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[11px] font-bold text-[#718197] uppercase">Pixel Meta #{idx + 1}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => removePixel('facebook', idx)}
+                                            className="text-red-500 hover:text-red-700 text-xs font-bold flex items-center gap-1"
+                                        >
+                                            <Icon name="trash-2" className="w-3.5 h-3.5" /> Remover
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label className="block text-[11px] font-bold text-[#132238] dark:text-white uppercase mb-1">ID do Pixel Meta *</label>
+                                            <input
+                                                type="text"
+                                                value={pix.pixelId}
+                                                onChange={(e) => updatePixelField('facebook', idx, 'pixelId', e.target.value)}
+                                                placeholder="Ex: 1392443726166280"
+                                                className="w-full px-3 py-2 rounded-lg border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-xs text-[#132238] dark:text-white font-mono"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[11px] font-bold text-[#132238] dark:text-white uppercase mb-1">Identificação / Nome</label>
+                                            <input
+                                                type="text"
+                                                value={pix.name || pix.code}
+                                                onChange={(e) => {
+                                                    updatePixelField('facebook', idx, 'name', e.target.value);
+                                                    updatePixelField('facebook', idx, 'code', e.target.value);
+                                                }}
+                                                placeholder="Ex: Meta Principal"
+                                                className="w-full px-3 py-2 rounded-lg border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-xs text-[#132238] dark:text-white"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-[#132238] dark:text-white uppercase mb-1">Token da API de Conversões (CAPI Access Token)</label>
+                                        <input
+                                            type="text"
+                                            value={pix.token}
+                                            onChange={(e) => updatePixelField('facebook', idx, 'token', e.target.value)}
+                                            placeholder="Ex: EAAWeSsA6RKsBSR... (Gera envio direto pelo servidor)"
+                                            className="w-full px-3 py-2 rounded-lg border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-xs text-[#132238] dark:text-white font-mono"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* SECTION 3: TIKTOK PIXELS */}
+                    <div className="bg-white dark:bg-[#152132] rounded-[24px] p-6 sm:p-8 border border-[#e2e9f0] dark:border-[#1e2d42] shadow-sm space-y-4">
+                        <div className="flex items-center justify-between border-b border-[#e2e9f0] dark:border-[#1e2d42] pb-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-pink-500/10 text-pink-600 flex items-center justify-center font-black text-sm">
+                                    TT
+                                </div>
+                                <div>
+                                    <h3 className="text-base font-extrabold text-[#132238] dark:text-white">Pixeis TikTok</h3>
+                                    <p className="text-xs text-[#718197] dark:text-[#94a3b8]">Configure ID, Código e Token (Events API).</p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => addPixel('tiktok')}
+                                className="px-3.5 py-2 rounded-xl bg-[#f0fdf4] dark:bg-[#00a86b]/15 text-[#00a86b] hover:bg-[#dcfce7] text-xs font-bold transition-all flex items-center gap-1.5"
+                            >
+                                <Icon name="plus" className="w-3.5 h-3.5" /> Adicionar Pixel TikTok
+                            </button>
+                        </div>
+
+                        <div className="space-y-4">
+                            {pixels.tiktok.map((pix, idx) => (
+                                <div key={pix.id || idx} className="p-4 rounded-xl border border-[#e2e9f0] dark:border-[#1e2d42] bg-[#f8fafc] dark:bg-[#111c2d] space-y-3 relative">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[11px] font-bold text-[#718197] uppercase">Pixel TikTok #{idx + 1}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => removePixel('tiktok', idx)}
+                                            className="text-red-500 hover:text-red-700 text-xs font-bold flex items-center gap-1"
+                                        >
+                                            <Icon name="trash-2" className="w-3.5 h-3.5" /> Remover
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div>
+                                            <label className="block text-[11px] font-bold text-[#132238] dark:text-white uppercase mb-1">ID do Pixel (Pixel Code) *</label>
+                                            <input
+                                                type="text"
+                                                value={pix.pixelId}
+                                                onChange={(e) => updatePixelField('tiktok', idx, 'pixelId', e.target.value)}
+                                                placeholder="Ex: DA9IHQBC77UBPDTVJ18G"
+                                                className="w-full px-3 py-2 rounded-lg border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-xs text-[#132238] dark:text-white font-mono"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[11px] font-bold text-[#132238] dark:text-white uppercase mb-1">Código de Identificação</label>
+                                            <input
+                                                type="text"
+                                                value={pix.code}
+                                                onChange={(e) => updatePixelField('tiktok', idx, 'code', e.target.value)}
+                                                placeholder="Ex: TikTok Principal"
+                                                className="w-full px-3 py-2 rounded-lg border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-xs text-[#132238] dark:text-white"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[11px] font-bold text-[#132238] dark:text-white uppercase mb-1">Token de Eventos (Events API Token) *</label>
+                                        <input
+                                            type="text"
+                                            value={pix.token}
+                                            onChange={(e) => updatePixelField('tiktok', idx, 'token', e.target.value)}
+                                            placeholder="Insira o Access Token do TikTok..."
+                                            className="w-full px-3 py-2 rounded-lg border border-[#e2e9f0] dark:border-[#223247] bg-white dark:bg-[#0b131f] text-xs text-[#132238] dark:text-white font-mono"
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+                // --- 4. ORDERS VIEW ---
+        function OrdersView() {
+            const [orders, setOrders] = useState([]);
+            const [metrics, setMetrics] = useState(null);
+            const [filterStatus, setFilterStatus] = useState('ALL');
+            const [searchQuery, setSearchQuery] = useState('');
+            const [loading, setLoading] = useState(true);
+
+            const loadData = () => {
+                const token = localStorage.getItem('recupera_admin_token');
+                Promise.all([
+                    fetch('/api/admin/metrics', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json()),
+                    fetch('/api/admin/orders?status=' + filterStatus + '&search=' + encodeURIComponent(searchQuery), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json())
+                ])
+                .then(([metRes, ordRes]) => {
+                    if (metRes.success) setMetrics(metRes.cards);
+                    if (ordRes.success) setOrders(ordRes.orders || []);
+                })
+                .finally(() => setLoading(false));
+            };
+
+            const loadDataRef = useRef(loadData);
+            loadDataRef.current = loadData;
+
+            useEffect(() => { loadDataRef.current(); }, [filterStatus]);
+
+            useEffect(() => {
+                const interval = setInterval(() => loadDataRef.current(), 1000);
+                return () => clearInterval(interval);
+            }, []);
+
+            const handleSearchSubmit = (e) => {
+                e.preventDefault();
+                loadData();
+            };
+
+            const exportContacts = (status) => {
+                window.open('/api/admin/orders/export?status=' + status, '_blank');
+            };
+
+            if (loading && !metrics) {
+                return (
+                    <div className="py-20 flex justify-center">
+                        <div className="w-8 h-8 border-4 border-[#00a86b] border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="space-y-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <span className="text-[10px] font-bold text-[#00a86b] uppercase tracking-wider">ACOMPANHAMENTO AO VIVO</span>
+                            <h2 className="text-xl font-bold text-[#132238] dark:text-white mt-0.5">Pedidos e Vendas</h2>
+                            <p className="text-xs text-[#718197] dark:text-[#94a3b8] mt-1">
+                                Status é atualizado automaticamente pelo gateway. Não existe aprovação manual.
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button
+                                type="button"
+                                onClick={() => exportContacts('PAID')}
+                                className="px-3.5 py-2.5 rounded-xl bg-[#e6f7f0] dark:bg-[#00a86b]/15 text-[#00a86b] hover:bg-[#dcfce7] text-xs font-bold transition-all flex items-center gap-1.5"
+                                title="Baixa CSV com nome, telefone e email dos clientes que pagaram"
+                            >
+                                <Icon name="clipboard" className="w-3.5 h-3.5" /> Exportar Pagos
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => exportContacts('PENDING')}
+                                className="px-3.5 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 hover:bg-amber-100 text-xs font-bold transition-all flex items-center gap-1.5"
+                                title="Baixa CSV com nome, telefone e email dos clientes pendentes"
+                            >
+                                <Icon name="clipboard" className="w-3.5 h-3.5" /> Exportar Pendentes
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* METRIC CARDS */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="p-4 rounded-2xl bg-white dark:bg-[#152132] border border-[#e2e9f0] dark:border-[#1e2d42]">
+                            <span className="text-[11px] font-bold text-[#718197] uppercase">TOTAL DE PEDIDOS</span>
+                            <div className="text-2xl font-extrabold text-[#132238] dark:text-white mt-1">{metrics?.totalOrders || 0}</div>
+                        </div>
+                        <div className="p-4 rounded-2xl bg-white dark:bg-[#152132] border border-[#e2e9f0] dark:border-[#1e2d42]">
+                            <span className="text-[11px] font-bold text-amber-600 uppercase">AGUARDANDO PIX</span>
+                            <div className="text-2xl font-extrabold text-amber-600 mt-1">{metrics?.pendingOrders || 0}</div>
+                        </div>
+                        <div className="p-4 rounded-2xl bg-white dark:bg-[#152132] border border-[#e2e9f0] dark:border-[#1e2d42]">
+                            <span className="text-[11px] font-bold text-[#00a86b] uppercase">PAGOS</span>
+                            <div className="text-2xl font-extrabold text-[#00a86b] mt-1">{metrics?.paidOrders || 0}</div>
+                        </div>
+                        <div className="p-4 rounded-2xl bg-white dark:bg-[#152132] border border-[#e2e9f0] dark:border-[#1e2d42]">
+                            <span className="text-[11px] font-bold text-[#00a86b] uppercase">RECEITA APROVADA</span>
+                            <div className="text-2xl font-extrabold text-[#00a86b] mt-1">
+                                R$ {(metrics?.approvedRevenue || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* FILTERS & SEARCH */}
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-[#152132] p-4 rounded-2xl border border-[#e2e9f0] dark:border-[#1e2d42]">
+                        <form onSubmit={handleSearchSubmit} className="w-full sm:w-auto flex-1 max-w-md relative">
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="Buscar por nome, CPF ou ID..."
+                                className="w-full pl-9 pr-4 py-2 rounded-xl border border-[#e2e9f0] dark:border-[#223247] bg-[#f8fafc] dark:bg-[#0b131f] text-xs"
+                            />
+                            <Icon name="search" className="w-4 h-4 text-[#718197] absolute left-3 top-2.5" />
+                        </form>
+
+                        <div className="flex items-center gap-2 w-full sm:w-auto">
+                            {['ALL', 'PENDING', 'PAID'].map(st => (
+                                <button
+                                    key={st}
+                                    type="button"
+                                    onClick={() => setFilterStatus(st)}
+                                    className={"px-3 py-1.5 rounded-xl text-xs font-bold transition " + (
+                                        filterStatus === st
+                                            ? "bg-[#00a86b] text-white"
+                                            : "bg-[#f8fafc] dark:bg-[#111c2d] text-[#718197] hover:bg-[#e2e9f0]"
+                                    )}
+                                >
+                                    {st === 'ALL' ? 'Todos' : st === 'PENDING' ? 'Aguardando' : 'Pagos'}
+                                </button>
+                            ))}
+                            <button onClick={loadData} className="p-2 rounded-xl border border-[#e2e9f0] dark:border-[#223247] text-[#718197] hover:text-[#00a86b]">
+                                <Icon name="refresh-cw" className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* ORDERS TABLE */}
+                    <div className="bg-white dark:bg-[#152132] rounded-[24px] border border-[#e2e9f0] dark:border-[#1e2d42] overflow-hidden shadow-sm">
+                        <div className="overflow-x-auto custom-scroll">
+                            <table className="w-full text-left text-xs">
+                                <thead className="bg-[#f8fafc] dark:bg-[#111c2d] border-b border-[#e2e9f0] dark:border-[#1e2d42] text-[#718197] uppercase text-[10px] font-bold">
+                                    <tr>
+                                        <th className="py-3.5 px-4">Data/Hora</th>
+                                        <th className="py-3.5 px-4">Cliente</th>
+                                        <th className="py-3.5 px-4">Contato</th>
+                                        <th className="py-3.5 px-4">Gateway</th>
+                                        <th className="py-3.5 px-4">Valor</th>
+                                        <th className="py-3.5 px-4">Status</th>
+                                        <th className="py-3.5 px-4">Código Pix</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-[#e2e9f0] dark:divide-[#1e2d42]">
+                                    {orders.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="7" className="text-center py-10 text-[#718197]">
+                                                Nenhum pedido encontrado.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        orders.map(o => (
+                                            <tr key={o.id} className="hover:bg-[#f8fafc] dark:hover:bg-[#111c2d]/50 transition">
+                                                <td className="py-3 px-4 font-mono text-[11px] text-[#718197]">
+                                                    {new Date(o.createdAt).toLocaleString('pt-BR')}
+                                                </td>
+                                                <td className="py-3 px-4 font-bold text-[#132238] dark:text-white">
+                                                    {o.clientName || 'Beneficiário'}
+                                                </td>
+                                                <td className="py-3 px-4 text-[#718197]">
+                                                    <div className="font-mono">{o.phone || o.phoneMasked || '—'}</div>
+                                                    <div className="text-[10px] opacity-80">{o.email || '—'}</div>
+                                                </td>
+                                                <td className="py-3 px-4">
+                                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-[#132238] dark:text-slate-200">
+                                                        {o.gateway}
+                                                    </span>
+                                                </td>
+                                                <td className="py-3 px-4 font-bold text-[#132238] dark:text-white">
+                                                    R$ {Number(o.amount).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                                </td>
+                                                <td className="py-3 px-4">
+                                                    <span className={"px-2.5 py-1 rounded-full text-[10px] font-extrabold " + (
+                                                        o.status === 'PAID'
+                                                            ? "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300"
+                                                            : "bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300"
+                                                    )}>
+                                                        {o.status === 'PAID' ? 'PAGO' : 'AGUARDANDO'}
+                                                    </span>
+                                                </td>
+                                                <td className="py-3 px-4">
+                                                    <span className={"px-2.5 py-1 rounded-full text-[10px] font-extrabold " + (
+                                                        o.pixCopied
+                                                            ? "bg-sky-100 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300"
+                                                            : "bg-slate-100 dark:bg-slate-800 text-slate-500"
+                                                    )}>
+                                                        {o.pixCopied ? 'Copiado' : 'Não copiado'}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Render React Application
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

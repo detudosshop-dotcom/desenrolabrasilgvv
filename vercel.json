@@ -1,0 +1,76 @@
+{
+  "version": 2,
+  "framework": null,
+  "buildCommand": null,
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/api/admin/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/generate-pix",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/generate-pix-upsell",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/generate-pix-multa",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/generate-qrcode",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/check-payment/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/admin",
+      "destination": "/admin/index.html"
+    },
+    {
+      "source": "/pre",
+      "destination": "/pre/index.html"
+    },
+    {
+      "source": "/cpf",
+      "destination": "/cpf/index.html"
+    },
+    {
+      "source": "/atendimento",
+      "destination": "/atendimento/index.html"
+    },
+    {
+      "source": "/upsell1",
+      "destination": "/upsell1/index.html"
+    },
+    {
+      "source": "/upsell2",
+      "destination": "/upsell2/index.html"
+    },
+    {
+      "source": "/negociacao",
+      "destination": "/negociacao/index.html"
+    },
+    {
+      "source": "/busca",
+      "destination": "/busca/index.html"
+    },
+    {
+      "source": "/consulta",
+      "destination": "/consulta/index.html"
+    },
+    {
+      "source": "/chat",
+      "destination": "/chat/index.html"
+    }
+  ]
+}

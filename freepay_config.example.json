@@ -1,0 +1,5 @@
+{
+  "PUBLIC_KEY": "SUA_CHAVE_PUBLICA_AQUI",
+  "SECRET_KEY": "SUA_CHAVE_SECRETA_AQUI",
+  "BASE_URL": "https://api.freepaybrasil.com"
+}

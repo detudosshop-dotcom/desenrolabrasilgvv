@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desenrola Brasil - Atendimento</title>
+    <!-- Google Ads -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18302482370"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'AW-18302482370');
+    </script>
+    <!-- TikTok Pixel -->
+    <script>
+    !function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+    ttq.load('DA9IHQBC77UBPDTVJ18G');
+    ttq.page();
+    }(window,document,'ttq');
+    </script>
+    <!-- QR Code Generator -->
+    <script src="/static/js/qrcode.min.js"></script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            background: #f0f0f0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* ── Header ── */
+        .govbr-header {
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+            width: 100%;
+            max-width: 520px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .govbr-logo {
+            font-size: 22px;
+            font-weight: 900;
+            color: #1351B4;
+            letter-spacing: -1px;
+        }
+        .govbr-logo span { color: #FFCD07; }
+        .user-chip {
+            background: #1351B4;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 20px;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ── Agent bar ── */
+        .agent-bar {
+            background: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            width: 100%;
+            max-width: 520px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .agent-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .agent-info .agent-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+        .agent-info .agent-role {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* ── Chat area ── */
+        .chat-area {
+            width: 100%;
+            max-width: 520px;
+            flex: 1;
+            padding: 16px 14px 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #f0f0f0;
+        }
+
+        /* welcome card */
+        .welcome-card {
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            opacity: 0;
+            transform: translateY(12px);
+            animation: fadeUp .5s ease forwards;
+        }
+        .welcome-card img {
+            width: 100%;
+            display: block;
+        }
+
+        /* agent bubble row */
+        .bubble-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .bubble-row.visible {
+            animation: fadeUp .4s ease forwards;
+        }
+        .bubble-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            margin-bottom: 2px;
+        }
+        .bubble {
+            background: #fff;
+            border-radius: 18px 18px 18px 4px;
+            padding: 11px 15px;
+            font-size: 15px;
+            color: #1a1a1a;
+            line-height: 1.5;
+            max-width: 82%;
+            box-shadow: 0 1px 4px rgba(0,0,0,.07);
+        }
+
+        /* typing indicator */
+        .typing-bubble {
+            background: #fff;
+            border-radius: 18px 18px 18px 4px;
+            padding: 12px 16px;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,.07);
+            width: 60px;
+        }
+        .typing-bubble span {
+            width: 7px;
+            height: 7px;
+            background: #bbb;
+            border-radius: 50%;
+            animation: bounce .9s infinite;
+        }
+        .typing-bubble span:nth-child(2) { animation-delay: .15s; }
+        .typing-bubble span:nth-child(3) { animation-delay: .30s; }
+
+        /* video card */
+        .video-card {
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            max-width: 82%;
+            margin-left: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.10);
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .video-card.visible {
+            animation: fadeUp .4s ease forwards;
+        }
+        .video-card video {
+            width: 100%;
+            display: block;
+            border-radius: 14px;
+        }
+        .video-sound-badge {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(19, 81, 180, 0.92);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 10;
+            transition: transform 0.2s, background 0.2s;
+            animation: bounce 1.5s infinite;
+        }
+        .video-sound-badge:hover {
+            background: #0f3e8e;
+            transform: scale(1.05);
+        }
+        /* typing DURING video */
+        .video-typing-row {
+            display: none;
+            align-items: flex-end;
+            gap: 8px;
+        }
+        .video-typing-row.active { display: flex; }
+
+        /* system note */
+        .system-note {
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+            font-style: italic;
+            opacity: 0;
+        }
+        .system-note.visible {
+            animation: fadeUp .3s ease forwards;
+        }
+
+        /* confirmation card */
+        .confirm-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 18px 18px 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .confirm-card.visible {
+            animation: fadeUp .4s ease forwards;
+        }
+        .confirm-card .confirm-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1351B4;
+            margin-bottom: 14px;
+        }
+        .confirm-field { margin-bottom: 10px; }
+        .confirm-field .label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+        .confirm-field .value {
+            font-size: 14px;
+            color: #1351B4;
+            margin-top: 1px;
+        }
+        .confirm-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .btn-sim {
+            flex: 1;
+            background: #1351B4;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            padding: 13px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .btn-sim:hover { background: #0f3e8e; }
+        .btn-nao {
+            flex: 1;
+            background: transparent;
+            color: #1351B4;
+            border: 2px solid #1351B4;
+            border-radius: 30px;
+            padding: 13px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        .btn-nao:hover { background: #eef3fc; }
+
+        /* PIX section */
+        .pix-section {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+        /* PIX document card */
+        .pix-card {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #d0d7e3;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,.10);
+        }
+        .pix-card-header {
+            background: #1351B4;
+            color: #fff;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pix-card-header img {
+            width: 28px; height: 28px; border-radius: 50%;
+        }
+        .pix-card-header .hdr-title {
+            font-size: 14px; font-weight: 800; line-height: 1.2;
+        }
+        .pix-card-header .hdr-sub {
+            font-size: 11px; opacity: .85;
+        }
+        .pix-card-body {
+            padding: 16px;
+        }
+        .pix-doc-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 7px 0; border-bottom: 1px solid #f0f0f0;
+            font-size: 13px; color: #333;
+        }
+        .pix-doc-row:last-child { border-bottom: none; }
+        .pix-doc-row .lbl { color: #777; font-size: 12px; }
+        .pix-doc-row .val { font-weight: 700; color: #1a1a1a; font-size: 13px; text-align: right; }
+        .pix-doc-row .val-green { font-weight: 900; color: #1a7a2e; font-size: 18px; }
+        .pix-divider { border: none; border-top: 2px dashed #e0e7ef; margin: 12px 0; }
+        .pix-qr {
+            width: 160px; height: 160px;
+            border: 1px solid #d0d7e3;
+            border-radius: 6px;
+            margin: 0 auto 10px;
+            display: block;
+        }
+        .pix-qr-label {
+            text-align: center; font-size: 12px; color: #666; margin-bottom: 10px;
+        }
+        .pix-code-box {
+            background: #f5f7fa;
+            border: 1px solid #dde3ee;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 11px;
+            word-break: break-all;
+            color: #444;
+            margin-bottom: 12px;
+            font-family: monospace;
+            line-height: 1.5;
+        }
+        @keyframes copyPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 14px rgba(19,81,180,.35); }
+            50% { transform: scale(1.02); box-shadow: 0 6px 22px rgba(19,81,180,.65); }
+        }
+        .btn-copy {
+            width: 100%;
+            background: #1351B4;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-bottom: 8px;
+            animation: copyPulse 2.2s infinite ease-in-out;
+            transition: background .2s, transform .1s;
+        }
+        .btn-copy:hover {
+            background: #0f3e8e;
+        }
+        .countdown-text {
+            font-size: 13px;
+            color: #888;
+        }
+        .pix-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+            color: #555;
+            font-size: 14px;
+        }
+        .spinner {
+            width: 36px; height: 36px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #1351B4;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+        }
+
+        /* ── Footer ── */
+        .govbr-footer {
+            background: #071D41;
+            width: 100%;
+            max-width: 520px;
+            padding: 16px 20px;
+            position: sticky;
+            bottom: 0;
+        }
+        .govbr-footer .footer-logo {
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1px;
+            margin-bottom: 4px;
+        }
+        .govbr-footer .footer-logo span { color: #FFCD07; }
+        .govbr-footer p {
+            font-size: 11px;
+            color: #aabbd4;
+            line-height: 1.4;
+        }
+        .govbr-footer strong { color: #fff; }
+
+        /* ── animations ── */
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%,60%,100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* user bubble (right side) */
+        .user-bubble-row {
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .user-bubble-row.visible { animation: fadeUp .3s ease forwards; }
+        .user-bubble {
+            background: #1351B4;
+            color: #fff;
+            border-radius: 18px 18px 4px 18px;
+            padding: 12px 18px;
+            font-size: 15px;
+            font-weight: 600;
+            max-width: 75%;
+            box-shadow: 0 1px 4px rgba(0,0,0,.12);
+        }
+
+        /* companies image card */
+        .companies-card {
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,.10);
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .companies-card.visible { animation: fadeUp .4s ease forwards; }
+        .companies-card img { width: 100%; display: block; }
+
+        /* bottom CONTINUAR button */
+        .sticky-btn-wrap {
+            display: none;
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+        .sticky-btn-wrap.visible { display: block; }
+        .btn-continuar-sticky {
+            width: 100%;
+            background: #1351B4;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 800;
+            border: none;
+            border-radius: 30px;
+            padding: 16px;
+            cursor: pointer;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 16px rgba(19,81,180,.35);
+            transition: background .2s;
+        }
+        .btn-continuar-sticky:hover { background: #0f3e8e; }
+
+        /* audio player bubble */
+        .audio-bubble-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .audio-bubble-row.visible { animation: fadeUp .4s ease forwards; }
+        .audio-player {
+            background: #fff;
+            border-radius: 18px 18px 18px 4px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.10);
+            max-width: 88%;
+            min-width: 240px;
+        }
+        .audio-play-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: #1351B4;
+            border: none;
+            color: #fff;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background .2s;
+        }
+        .audio-play-btn:hover { background: #0f3e8e; }
+        .audio-progress-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+        .audio-progress-bar {
+            width: 100%;
+            height: 5px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .audio-progress-fill {
+            height: 100%;
+            background: #1351B4;
+            border-radius: 2px;
+            width: 0%;
+            transition: width .3s linear;
+        }
+        .audio-time {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* CPF status card */
+        .cpf-status-card {
+            background: #f0f4ff;
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.07);
+            max-width: 82%;
+            margin-left: 40px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .cpf-status-card.visible { animation: fadeUp .4s ease forwards; }
+        .cpf-status-card .lbl { font-size: 13px; color: #555; margin-bottom: 4px; }
+        .cpf-status-card .cpf-val { font-size: 15px; color: #1351B4; font-weight: 600; margin-bottom: 6px; }
+        .cpf-status-card .neg { font-size: 16px; font-weight: 900; color: #1a1a1a; }
+
+        /* Serasa score card */
+        .score-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 16px 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            max-width: 82%;
+            margin-left: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .score-card.visible { animation: fadeUp .4s ease forwards; }
+        .score-card .score-label { font-size: 11px; color: #888; margin-bottom: 6px; }
+        .score-card .score-text { font-size: 15px; font-weight: 800; color: #1a1a1a; line-height: 1.3; }
+        .score-gauge-wrap { position: relative; width: 90px; height: 54px; flex-shrink: 0; }
+        .score-gauge-wrap svg { width: 90px; height: 54px; }
+        .score-number { position: absolute; bottom: -2px; right: 0; left: 0; text-align: center; font-size: 20px; font-weight: 900; color: #1a1a1a; }
+        .score-denom { font-size: 11px; font-weight: 400; color: #888; display: block; }
+
+        /* Proposta card (após áudio4) */
+        .proposta-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 16px 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            max-width: 86%;
+            margin-left: 40px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .proposta-card.visible { animation: fadeUp .4s ease forwards; }
+        .proposta-card .pc-row { margin-bottom: 4px; }
+        .proposta-card .pc-bold { font-weight: 800; color: #1a1a1a; font-size: 15px; }
+        .proposta-card .pc-blue { color: #1351B4; font-weight: 700; }
+        .proposta-card .pc-score { font-weight: 800; color: #1a1a1a; }
+        .proposta-card .pc-valor { color: #333; margin-top: 4px; }
+
+        /* CONTINUAR PARA O PAGAMENTO button */
+        .btn-pagamento {
+            width: 100%;
+            background: #1351B4;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 900;
+            border: none;
+            border-radius: 30px;
+            padding: 18px 16px;
+            cursor: pointer;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 16px rgba(19,81,180,.35);
+            transition: background .2s;
+            opacity: 0;
+            transform: translateY(10px);
+            text-align: center;
+        }
+        .btn-pagamento.visible { animation: fadeUp .4s ease forwards; }
+        .btn-pagamento:hover { background: #0f3e8e; }
+
+        /* CONFIRMAR O ACORDO button */
+        .btn-confirmar-acordo {
+            width: 100%;
+            background: #1351B4;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 900;
+            border: none;
+            border-radius: 10px;
+            padding: 20px 16px;
+            cursor: pointer;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 16px rgba(19,81,180,.35);
+            transition: background .2s;
+            opacity: 0;
+            transform: translateY(10px);
+            text-align: center;
+            line-height: 1.3;
+            margin-top: 16px;
+        }
+        .btn-confirmar-acordo.visible { animation: fadeUp .4s ease forwards; }
+        .btn-confirmar-acordo:hover { background: #0f3e8e; }
+
+        /* BUSCAR ACORDO / VER ACORDO user-side buttons */
+        .btn-buscar-acordo, .btn-ver-acordo {
+            align-self: flex-end;
+            background: #1351B4;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 900;
+            border: none;
+            border-radius: 30px;
+            padding: 15px 32px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 16px rgba(19,81,180,.35);
+            transition: background .2s;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .btn-buscar-acordo.visible, .btn-ver-acordo.visible { animation: fadeUp .4s ease forwards; }
+        .btn-buscar-acordo:hover, .btn-ver-acordo:hover { background: #0f3e8e; }
+
+        /* Acordo encontrado card */
+        .acordo-card {
+            background: #dce8f8;
+            border-radius: 14px;
+            padding: 14px 16px;
+            max-width: 82%;
+            margin-left: 40px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .acordo-card.visible { animation: fadeUp .4s ease forwards; }
+        .acordo-card .ac-title { font-size: 15px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px; }
+        .acordo-card .ac-name { font-size: 15px; color: #1351B4; margin-bottom: 4px; }
+        .acordo-card .ac-cpf  { font-size: 14px; color: #1351B4; }
+
+        /* SIM QUERO NEGOCIAR button */
+        .btn-sim-negociar {
+            width: 100%;
+            background: #1351B4;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 900;
+            border: none;
+            border-radius: 30px;
+            padding: 17px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 16px rgba(19,81,180,.35);
+            transition: background .2s, transform .1s;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .btn-sim-negociar.visible {
+            animation: fadeUp .4s ease forwards;
+        }
+        .btn-sim-negociar:hover { background: #0f3e8e; }
+
+        .hidden { display: none !important; }
+    </style>
+<meta name="tiktok-developers-site-verification" content="cgRf1iQLMvO9KfzUrJPDKfsAbQ2ypE17" />
+  <script src="/static/js/pixel-loader.js"></script>
+</head>
+<body>
+
+<!-- Header -->
+<div class="govbr-header">
+    <img src="/static/images/logo-portal.png" alt="gov.br" style="height:28px;">
+    <div class="user-chip">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px; vertical-align:text-bottom;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        Lucas
+    </div>
+</div>
+
+<!-- Agent bar -->
+<div class="agent-bar">
+    <img class="agent-avatar"
+         src="/static/images/atendente-avatar.png"
+         alt="Letícia M.">
+    <div class="agent-info">
+        <div class="agent-name">Letícia M.</div>
+        <div class="agent-role">Atendente do Programa Desenrola Brasil</div>
+    </div>
+</div>
+
+<!-- Chat area -->
+<div class="chat-area" id="chatArea">
+
+    <!-- 1. Welcome card (shown immediately) -->
+    <div class="welcome-card" style="animation-delay:.2s">
+        <img src="/static/images/welcome-header.png"
+             alt="Uma nova chance para perdoar suas dívidas">
+    </div>
+
+    <!-- 2. Typing → bubble 1 -->
+    <div class="bubble-row" id="typing1" style="display:none">
+        <img class="bubble-avatar" src="/static/images/atendente-avatar.png" alt="">
+        <div class="typing-bubble"><span></span><span></span><span></span></div>
+    </div>
+    <div class="bubble-row" id="bubble1" style="display:none">
+        <img class="bubble-avatar" src="/static/images/atendente-avatar.png" alt="">
+        <div class="bubble" id="welcomeMsgBubble">
+            Olá <strong id="welcomeNome">Beneficiário(a)</strong>, esse é um canal oficial de atendimento do <strong>Desenrola Brasil</strong> e os seus dados estão seguros conosco. 🔒
+        </div>
+    </div>
+
+    <!-- 3. Typing → bubble 2 -->
+    <div class="bubble-row" id="typing2" style="display:none">
+        <img class="bubble-avatar" src="/static/images/atendente-avatar.png" alt="">
+        <div class="typing-bubble"><span></span><span></span><span></span></div>
+    </div>
+    <div class="bubble-row" id="bubble2" style="display:none">
+        <img class="bubble-avatar" src="/static/images/atendente-avatar.png" alt="">
+        <div class="bubble">
+            Aguarde em alguns instantes, um de nossos atendentes entrará na conversa..
+        </div>
+    </div>
+
+    <!-- 4. Video card -->
+    <div class="video-card" id="videoCard" style="display:none">
+        <video id="leticiaVideo" playsinline webkit-playsinline muted preload="auto">
+            <source src="/static/videos/leticia.mp4" type="video/mp4">
+        </video>
+        <div class="video-sound-badge" id="videoSoundBadge" onclick="unmuteLeticiaVideo(event)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px; vertical-align:text-bottom;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg> Ativar Som
+        </div>
+    </div>
+
+    <!-- Typing while video plays -->
+    <div class="video-typing-row" id="videoTyping" style="display:none">
+        <img class="bubble-avatar" src="/static/images/atendente-avatar.png" alt="">
+        <div class="typing-bubble"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- 5. System note -->
+    <div class="system-note" id="systemNote" style="display:none">
+        (Atendente Letícia entrou na conversa..) <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:2px; vertical-align:text-bottom;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </div>
+
+    <!-- 6. Confirmation card -->
+    <div class="confirm-card" id="confirmCard" style="display:none">
+        <div class="confirm-title">Para continuar, confirme seus dados:</div>
+        <div class="confirm-field">
+            <div class="label">Nome:</div>
+            <div class="value" id="confirmNome">Lucas Machado Gaona</div>
+        </div>
+        <div class="confirm-field">
+            <div class="label">CPF:</div>
+            <div class="value" id="confirmCpf">080.727.031-88</div>
+        </div>
+        <div class="confirm-field">
+            <div class="label">Data de Nascimento:</div>
+            <div class="value" id="confirmNasc">19/05/2003</div>
+        </div>
+        <div class="confirm-btns">
+            <button class="btn-sim" onclick="confirmar()">Sim, está correto.</button>
+            <button class="btn-nao" onclick="naoSouEu()">Não sou eu</button>
+        </div>
+    </div>
+
+    <!-- 7. Post-confirm sequence (hidden until confirmed) -->
+    <div class="pix-section" id="pixSection"></div>
+
+</div>
+
+<!-- Sticky CONTINUAR button -->
+<div class="sticky-btn-wrap" id="stickyBtnWrap">
+    <button class="btn-continuar-sticky" onclick="irParaPix()">CONTINUAR</button>
+</div>
+
+<!-- Footer -->
+<div class="govbr-footer">
+    <div class="footer-logo">gov<span>.</span>br</div>
+    <p>Todo o conteúdo deste site está publicado sob a licença<br>
+    <strong>Sistema de Renegociação — Todos os direitos reservados</strong></p>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    let storedData = {};
+    try {
+        storedData = JSON.parse(localStorage.getItem('customerData') || '{}');
+    } catch(e) {}
+
+    let rawCpfInput = urlParams.get('cpf') || storedData.cpf || '08072703188';
+    rawCpfInput = rawCpfInput.replace(/\D/g, '');
+    if (rawCpfInput.length !== 11) rawCpfInput = '08072703188';
+
+    const CPF_RAW = rawCpfInput;
+    const CPF_FORMATTED = rawCpfInput.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    
+    // Determine Name
+    const firstNames = ['Carlos', 'Maria', 'Jose', 'Ana', 'Paulo', 'Juliana', 'Marcos', 'Fernanda', 'Lucas', 'Patricia', 'Gabriel', 'Beatriz'];
+    const lastNames = ['Silva', 'Santos', 'Oliveira', 'Souza', 'Rodrigues', 'Ferreira', 'Alves', 'Pereira', 'Lima', 'Gomes', 'Costa', 'Ribeiro'];
+    function genName(c) {
+        const n1 = parseInt(c.slice(0, 3), 10) || 0;
+        const n2 = parseInt(c.slice(3, 6), 10) || 0;
+        const n3 = parseInt(c.slice(6, 9), 10) || 0;
+        return `${firstNames[n1 % firstNames.length]} ${lastNames[n2 % lastNames.length]} ${lastNames[n3 % lastNames.length]}`;
+    }
+
+    let NOME = urlParams.get('nome') || storedData.nome || (CPF_RAW === '08072703188' ? 'Lucas Machado Gaona' : genName(CPF_RAW));
+    let NASCIMENTO = urlParams.get('nasc') || storedData.nascimento || '19/05/2003';
+
+    // Save to localStorage for next steps
+    localStorage.setItem('customerData', JSON.stringify({
+        cpf: CPF_RAW,
+        nome: NOME,
+        nascimento: NASCIMENTO,
+        sexo: storedData.sexo || 'M'
+    }));
+
+    function updateClientElements() {
+        if (!NOME) return;
+        const primeiroNome = NOME.trim().split(' ')[0].toUpperCase();
+        const nomeFormatado = NOME.trim();
+
+        // 1. Header user chip (e.g. JANETE, LUCAS)
+        const userChip = document.querySelector('.user-chip');
+        if (userChip) {
+            userChip.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:text-bottom;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> ${primeiroNome}`;
+        }
+
+        // 2. First greeting bubble message in chat
+        const welcomeNome = document.getElementById('welcomeNome');
+        if (welcomeNome) {
+            welcomeNome.textContent = nomeFormatado;
+        }
+        const bubble1 = document.getElementById('bubble1');
+        if (bubble1) {
+            const bDiv = bubble1.querySelector('.bubble');
+            if (bDiv) {
+                bDiv.innerHTML = `Olá <strong>${nomeFormatado}</strong>, esse é um canal oficial de atendimento do <strong>Desenrola Brasil</strong> e os seus dados estão seguros conosco. 🔒`;
+            }
+        }
+
+        // 3. Confirmation card fields
+        const cNome = document.getElementById('confirmNome');
+        const cCpf = document.getElementById('confirmCpf');
+        const cNasc = document.getElementById('confirmNasc');
+        if (cNome) cNome.textContent = nomeFormatado;
+        if (cCpf) cCpf.textContent = CPF_FORMATTED;
+        if (cNasc) cNasc.textContent = NASCIMENTO;
+    }
+
+    // Auto-fetch if user arrived directly with CPF query parameter without name/birthdate
+    if (!storedData.nascimento || !urlParams.get('nome')) {
+        fetch('/api/check_cpf', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cpf: CPF_RAW })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.nome) {
+                NOME = data.nome;
+                NASCIMENTO = data.nascimento || '19/05/2003';
+                localStorage.setItem('customerData', JSON.stringify({
+                    cpf: CPF_RAW,
+                    nome: NOME,
+                    nascimento: NASCIMENTO,
+                    sexo: data.sexo || 'M'
+                }));
+                updateClientElements();
+            }
+        })
+        .catch(() => {});
+    }
+
+    document.addEventListener('DOMContentLoaded', updateClientElements);
+    updateClientElements();
+
+    // ── Global Audio Unlocking System ──
+    let userInteracted = false;
+    function unlockGlobalAudio() {
+        if (userInteracted) return;
+        userInteracted = true;
+        const video = document.getElementById('leticiaVideo');
+        if (video) {
+            video.muted = false;
+            const badge = document.getElementById('videoSoundBadge');
+            if (badge) badge.style.display = 'none';
+        }
+    }
+    ['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
+        window.addEventListener(evt, unlockGlobalAudio, { passive: true });
+    });
+
+    function unmuteLeticiaVideo(e) {
+        if (e) e.stopPropagation();
+        const video = document.getElementById('leticiaVideo');
+        if (video) {
+            video.muted = false;
+            video.play().catch(() => {});
+        }
+        const badge = document.getElementById('videoSoundBadge');
+        if (badge) badge.style.display = 'none';
+    }
+
+    // ── Auto-scroll: rola SOMENTE quando um elemento recebe a classe 'visible' ──
+    function autoScroll() {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    const _chatRoot = document.querySelector('.chat-area');
+    if (_chatRoot) {
+        new MutationObserver((mutations) => {
+            for (const m of mutations) {
+                if (m.type === 'attributes' && m.attributeName === 'class') {
+                    if (m.target.classList.contains('visible')) {
+                        requestAnimationFrame(autoScroll);
+                        break;
+                    }
+                }
+                if (m.type === 'childList') {
+                    for (const node of m.addedNodes) {
+                        if (node.classList && node.classList.contains('visible')) {
+                            requestAnimationFrame(autoScroll);
+                            break;
+                        }
+                    }
+                }
+            }
+        }).observe(_chatRoot, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+    }
+
+    function show(el, delayMs) {
+        setTimeout(function() {
+            if (!el) return;
+            el.style.display = '';
+            requestAnimationFrame(() => {
+                el.classList.add('visible');
+            });
+        }, delayMs);
+    }
+    function hide(el) { if (el) { el.style.display = 'none'; el.classList.remove('visible'); } }
+    function showEl(el) { if (el) el.style.display = 'flex'; }
+    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+    function fmtTime(s) {
+        if (isNaN(s) || !isFinite(s)) return "0:00";
+        const m = Math.floor(s / 60);
+        const sec = String(Math.floor(s % 60)).padStart(2, '0');
+        return `${m}:${sec}`;
+    }
+
+    // ── Global Audio Player Helper ──
+    function createActiveAudio(src) {
+        const audio = new Audio();
+        audio.src = src;
+        audio.preload = 'auto';
+        const playProm = audio.play();
+        if (playProm !== undefined) {
+            playProm.catch(e => {
+                console.log('Autoplay aguardando interação do usuário:', e);
+            });
+        }
+        return audio;
+    }
+
+    // ── Phase 1: Text bubbles ──
+    show(document.getElementById('typing1'), 600);
+    setTimeout(() => {
+        hide(document.getElementById('typing1'));
+        show(document.getElementById('bubble1'), 0);
+    }, 2400);
+
+    setTimeout(() => show(document.getElementById('typing2'), 0), 3200);
+    setTimeout(() => {
+        hide(document.getElementById('typing2'));
+        show(document.getElementById('bubble2'), 0);
+    }, 5000);
+
+    // Phase 2: Video
+    setTimeout(() => {
+        const videoCard = document.getElementById('videoCard');
+        const videoTyping = document.getElementById('videoTyping');
+        const video = document.getElementById('leticiaVideo');
+
+        show(videoCard, 0);
+
+        setTimeout(() => {
+            if (videoTyping) {
+                videoTyping.style.display = 'flex';
+                videoTyping.classList.add('active');
+            }
+
+            if (video) {
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch((err) => {
+                        console.log("Autoplay blocked (e.g. Low Power Mode). Enabling controls.", err);
+                        video.controls = true; // allow manual play
+                        video.muted = true;
+                        // If it fails to play, don't keep them waiting 35 seconds. Show confirm button quickly.
+                        setTimeout(showConfirm, 2000);
+                    });
+                }
+            }
+        }, 300);
+
+        let confirmShown = false;
+        function showConfirm() {
+            if (confirmShown) return;
+            confirmShown = true;
+            if (videoTyping) videoTyping.style.display = 'none';
+            show(document.getElementById('systemNote'), 200);
+            show(document.getElementById('confirmCard'), 1000);
+        }
+
+        if (video) {
+            video.addEventListener('timeupdate', () => {
+                if (!video.duration) return;
+                if (video.duration - video.currentTime <= 3) {
+                    showConfirm();
+                }
+            });
+            video.addEventListener('ended', showConfirm);
+        }
+
+        const fallback = setTimeout(showConfirm, 35000);
+        if (video) video.addEventListener('ended', () => clearTimeout(fallback));
+
+    }, 6200);
+
+    // ── "Sim, está correto" ──
+    async function confirmar() {
+        unlockGlobalAudio();
+        document.querySelectorAll('.btn-sim,.btn-nao').forEach(b => b.disabled = true);
+
+        const section = document.getElementById('pixSection');
+        showEl(section);
+        
+        const video = document.getElementById('leticiaVideo');
+        if (video) video.pause();
+
+        const userRow = document.createElement('div');
+        userRow.className = 'user-bubble-row';
+        userRow.innerHTML = '<div class="user-bubble">Sim, está correto.</div>';
+        section.appendChild(userRow);
+        await delay(100); userRow.classList.add('visible');
+        userRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+        async function agentSay(html, typingMs = 1400) {
+            const tRow = appendTyping(section);
+            tRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            await delay(typingMs);
+            tRow.remove();
+            appendBubble(html);
+        }
+
+        await delay(600);
+        await agentSay('Obrigada!', 900);
+
+        await delay(400);
+        await agentSay('Aguarde... Entrando em sua conta Gov.br', 1600);
+
+        await delay(400);
+        await agentSay('<strong>Login efetuado com sucesso!</strong>', 1000);
+
+        await delay(400);
+        await agentSay(`<strong>${NOME}</strong><br>Seja bem vindo(a) a sua conta Gov.br`, 1200);
+
+        await delay(400);
+        await agentSay('Negocie dívidas com as seguintes empresas:', 1100);
+
+        await delay(1800);
+        const compCard = document.createElement('div');
+        compCard.className = 'companies-card';
+        compCard.innerHTML = `<img src="/static/images/empresas.png" alt="Empresas parceiras">`;
+        section.appendChild(compCard);
+        await delay(80);
+        compCard.classList.add('visible');
+        compCard.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+        await delay(800);
+        document.getElementById('stickyBtnWrap').classList.add('visible');
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    // ── CONTINUAR → audio 1 → SIM QUERO NEGOCIAR ──
+    async function irParaPix() {
+        unlockGlobalAudio();
+        document.getElementById('stickyBtnWrap').classList.remove('visible');
+        document.getElementById('stickyBtnWrap').style.display = 'none';
+        const section = document.getElementById('pixSection');
+
+        const userRow = document.createElement('div');
+        userRow.className = 'user-bubble-row';
+        userRow.innerHTML = '<div class="user-bubble">CONTINUAR</div>';
+        section.appendChild(userRow);
+        await delay(80); userRow.classList.add('visible');
+        userRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+        const audio1 = createActiveAudio('/static/audio/audio1.mp3');
+
+        await delay(600);
+        const tRow = appendTyping(section);
+        tRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        await delay(1000);
+        tRow.remove();
+
+        mountAudioPlayer(section, audio1, 'audio1', () => {
+            revealSimButton(section);
+        }, 25000);
+    }
+
+    function mountAudioPlayer(section, audioObj, audioId, onEnd, fallbackMs) {
+        const row = document.createElement('div');
+        row.className = 'audio-bubble-row';
+        const btnId = 'audioPlayBtn_' + audioId;
+        const fillId = 'audioFill_' + audioId;
+        const timeId = 'audioTime_' + audioId;
+        const wrapId = 'playerWrap_' + audioId;
+        
+        const svgPlay = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+        const svgPause = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+
+        row.innerHTML = `
+            <img class="bubble-avatar" src="/static/images/atendente-avatar.png" alt="">
+            <div class="audio-player" id="${wrapId}">
+                <button class="audio-play-btn" id="${btnId}">${svgPause}</button>
+                <div class="audio-progress-wrap">
+                    <div class="audio-progress-bar">
+                        <div class="audio-progress-fill" id="${fillId}"></div>
+                    </div>
+                    <span class="audio-time" id="${timeId}">0:00 / 0:00</span>
+                </div>
+            </div>
+        `;
+        section.appendChild(row);
+        setTimeout(() => { row.classList.add('visible'); row.scrollIntoView({ behavior: 'smooth', block: 'end' }); }, 80);
+
+        const btn = row.querySelector('#' + btnId);
+        const fill = row.querySelector('#' + fillId);
+        const time = row.querySelector('#' + timeId);
+        const playerWrap = row.querySelector('#' + wrapId);
+
+        let ended = false;
+        function done() {
+            if (ended) return;
+            ended = true;
+            if (btn) btn.innerHTML = svgPlay;
+            if (playerWrap) playerWrap.classList.remove('playing');
+            if (onEnd) onEnd();
+        }
+
+        audioObj.addEventListener('timeupdate', () => {
+            if (!audioObj.duration) return;
+            const pct = (audioObj.currentTime / audioObj.duration) * 100;
+            if (fill) fill.style.width = pct + '%';
+            if (time) time.textContent = fmtTime(audioObj.currentTime) + ' / ' + fmtTime(audioObj.duration);
+        });
+
+        audioObj.addEventListener('play', () => {
+            if (btn) btn.innerHTML = svgPause;
+            if (playerWrap) playerWrap.classList.add('playing');
+        });
+        audioObj.addEventListener('pause', () => {
+            if (btn) btn.innerHTML = svgPlay;
+            if (playerWrap) playerWrap.classList.remove('playing');
+        });
+
+        audioObj.addEventListener('ended', done);
+        if (fallbackMs) setTimeout(done, fallbackMs);
+
+        if (!audioObj.paused) {
+            if (btn) btn.innerHTML = svgPause;
+            if (playerWrap) playerWrap.classList.add('playing');
+        } else {
+            audioObj.play().then(() => {
+                if (btn) btn.innerHTML = svgPause;
+                if (playerWrap) playerWrap.classList.add('playing');
+            }).catch(() => {
+                if (btn) btn.innerHTML = svgPlay;
+            });
+        }
+
+        if (btn) {
+            btn.onclick = function() {
+                unlockGlobalAudio();
+                if (audioObj.paused) {
+                    audioObj.play();
+                    btn.innerHTML = svgPause;
+                } else {
+                    audioObj.pause();
+                    btn.innerHTML = svgPlay;
+                }
+            };
+        }
+    }
+
+    async function revealSimButton(section) {
+        if (document.getElementById('btnSimNegociar')) return;
+        await delay(800);
+        const btn = document.createElement('button');
+        btn.id = 'btnSimNegociar';
+        btn.className = 'btn-sim-negociar';
+        btn.textContent = 'SIM! QUERO NEGOCIAR';
+        btn.onclick = gerarPix;
+        section.appendChild(btn);
+        await delay(80); btn.classList.add('visible');
+        btn.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    // ── SIM QUERO NEGOCIAR → análise ──
+    async function gerarPix() {
+        unlockGlobalAudio();
+        const btn = document.getElementById('btnSimNegociar');
+        if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; }
+
+        const section = document.getElementById('pixSection');
+
+        await delay(600);
+        await agentSayGlobal('<em>Por favor, aguarde analisarmos a situação do seu CPF em nosso sistema..</em>', section, 2400);
+
+        await delay(500);
+        await agentSayGlobal('<em>Consultando..</em>', section, 1500);
+
+        await delay(600);
+        await agentSayGlobal('<strong>Análise concluída!</strong>', section, 1200);
+
+        await delay(800);
+        await agentSayGlobal(
+            'Identificamos <strong>4 dívidas ativas</strong> no sistema. Os valores variam entre <strong>R$ 1.728,74</strong> a <strong>R$ 5.278,23</strong> de dívida <strong>em seu CPF.</strong>',
+            section, 1400
+        );
+
+        await delay(800);
+        const cpfCard = document.createElement('div');
+        cpfCard.className = 'cpf-status-card';
+        cpfCard.innerHTML = `
+            <div class="lbl">Situação para CPF:</div>
+            <div class="cpf-val">${CPF_FORMATTED}</div>
+            <div class="neg">NEGATIVADO.</div>
+        `;
+        section.appendChild(cpfCard);
+        await delay(80); cpfCard.classList.add('visible');
+        cpfCard.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+        await delay(1000);
+        await agentSayGlobal(
+            'Segundo nossos registros, seu SCORE é considerado muito baixo <strong>(alto risco para crédito):</strong>',
+            section, 1400
+        );
+
+        await delay(600);
+        const scoreCard = document.createElement('div');
+        scoreCard.className = 'score-card';
+        scoreCard.innerHTML = `
+            <div>
+                <div class="score-label">Serasa Score</div>
+                <div class="score-text">Seu score está<br>baixo</div>
+            </div>
+            <div class="score-gauge-wrap">
+                <svg viewBox="0 0 90 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 10 50 A 35 35 0 0 1 80 50" stroke="#e0e0e0" stroke-width="8" stroke-linecap="round" fill="none"/>
+                    <path d="M 10 50 A 35 35 0 0 1 39 18" stroke="#e84040" stroke-width="8" stroke-linecap="round" fill="none"/>
+                </svg>
+                <div class="score-number">365<span class="score-denom">de 1000</span></div>
+            </div>
+        `;
+        section.appendChild(scoreCard);
+        await delay(80); scoreCard.classList.add('visible');
+        scoreCard.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+        await delay(1000);
+        await agentSayGlobal(
+            'Você deseja verificar se existe algum acordo com desconto disponível para você?',
+            section, 1400
+        );
+
+        await delay(400);
+        const acordoBtn = document.createElement('button');
+        acordoBtn.className = 'btn-buscar-acordo';
+        acordoBtn.textContent = 'BUSCAR ACORDO';
+        acordoBtn.onclick = buscarAcordo;
+        section.appendChild(acordoBtn);
+        await delay(80); acordoBtn.classList.add('visible');
+        acordoBtn.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    // ── BUSCAR ACORDO → sequência ──
+    async function buscarAcordo() {
+        unlockGlobalAudio();
+        const btn = document.querySelector('.btn-buscar-acordo');
+        if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; }
+
+        const section = document.getElementById('pixSection');
+
+        await delay(500);
+        await agentSayGlobal(
+            '<em>Por favor, aguarde enquanto nosso sistema verifica se existem acordos disponíveis para você...</em>',
+            section, 1800
+        );
+
+        await delay(2000);
+        await agentSayGlobal('<strong>Acordo encontrado!</strong>', section, 900);
+
+        await delay(400);
+        const acordoCard = document.createElement('div');
+        acordoCard.className = 'acordo-card';
+        acordoCard.innerHTML = `
+            <div class="ac-title">1 (um) acordo foi encontrado para:</div>
+            <div class="ac-name">${NOME}</div>
+            <div class="ac-cpf">CPF: ${CPF_FORMATTED}</div>
+        `;
+        section.appendChild(acordoCard);
+        await delay(80); acordoCard.classList.add('visible');
+        acordoCard.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+        await delay(500);
+        const verBtn = document.createElement('button');
+        verBtn.className = 'btn-ver-acordo';
+        verBtn.textContent = 'VER ACORDO';
+        verBtn.onclick = verAcordo;
+        section.appendChild(verBtn);
+        await delay(80); verBtn.classList.add('visible');
+        verBtn.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    // ── VER ACORDO → áudio 2 + mensagens → CONFIRMAR ──
+    async function verAcordo() {
+        unlockGlobalAudio();
+        const btn = document.querySelector('.btn-ver-acordo');
+        if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; }
+
+        const section = document.getElementById('pixSection');
+        const acordoId = 'XXKM8-0R0--';
+
+        const audio2 = createActiveAudio('/static/audio/audio2.mp3');
+
+        await delay(600);
+        const tRow2 = appendTyping(section);
+        tRow2.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        await delay(1000);
+        tRow2.remove();
+
+        await new Promise(resolve => {
+            mountAudioPlayer(section, audio2, 'audio2', resolve, 50000);
+        });
+
+        await delay(400);
+        await agentSayGlobal(
+            `Parabéns <strong>${NOME}!</strong><br><br>Pode comemorar! Encontramos um <strong>SUPER ACORDO DE 99% DE DESCONTO</strong> para você!`,
+            section, 1400
+        );
+
+        await delay(400);
+        await agentSayGlobal(
+            `<em>Acessando o acordo <strong>${acordoId}</strong>...</em>`,
+            section, 1000
+        );
+
+        await delay(400);
+        await agentSayGlobal(
+            `Informações do acordo <strong>${acordoId}</strong> para (${NOME})<br><br>(CPF: ${CPF_FORMATTED})`,
+            section, 1200
+        );
+
+        await delay(400);
+        await agentSayGlobal(
+            `O contrato atual é válido apenas para o titular: <strong>${NOME}</strong> portador(a) do CPF: <strong>${CPF_FORMATTED}</strong>`,
+            section, 1300
+        );
+
+        await delay(400);
+        await agentSayGlobal(
+            `Você gostaria de realizar o seu acordo com <strong>99% DE DESCONTO</strong> para quitar <strong>todas</strong> as suas dívidas e ter seu nome limpo novamente por apenas <strong>R$ 68,92</strong>?`,
+            section, 1400
+        );
+
+        await delay(500);
+        const confirmarBtn = document.createElement('button');
+        confirmarBtn.className = 'btn-confirmar-acordo';
+        confirmarBtn.innerHTML = 'CONFIRMAR O ACORDO E LIMPAR O NOME';
+        confirmarBtn.onclick = confirmarAcordo;
+        section.appendChild(confirmarBtn);
+        await delay(80); confirmarBtn.classList.add('visible');
+        confirmarBtn.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    // ── CONFIRMAR O ACORDO → áudio 3 → CONTINUAR → áudio 4 → CONTINUAR PARA PAGAMENTO → áudio 5 + PIX ──
+    async function confirmarAcordo() {
+        unlockGlobalAudio();
+        const btn = document.querySelector('.btn-confirmar-acordo');
+        if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; }
+
+        const section = document.getElementById('pixSection');
+
+        const audio3 = createActiveAudio('/static/audio/audio3.mp3');
+
+        await delay(600);
+        const tRow = appendTyping(section);
+        await delay(1000);
+        tRow.remove();
+
+        await new Promise(resolve => {
+            mountAudioPlayer(section, audio3, 'audio3', resolve, 60000);
+        });
+
+        await delay(400);
+        await agentSayGlobal('<strong>Acordo confirmado com sucesso!</strong>', section, 900);
+
+        await delay(400);
+        const contBtn = document.createElement('button');
+        contBtn.className = 'btn-ver-acordo';
+        contBtn.textContent = 'CONTINUAR';
+        contBtn.onclick = async function() {
+            unlockGlobalAudio();
+            contBtn.disabled = true; contBtn.style.opacity = '0.5';
+
+            const audio4 = createActiveAudio('/static/audio/audio4.mp3');
+
+            await delay(500);
+            const tRow2 = appendTyping(section);
+            await delay(1000);
+            tRow2.remove();
+
+            await new Promise(resolve => {
+                mountAudioPlayer(section, audio4, 'audio4', resolve, 60000);
+            });
+
+            await delay(400);
+            const propostaCard = document.createElement('div');
+            propostaCard.className = 'proposta-card';
+            propostaCard.innerHTML = `
+                <div class="pc-row">Acordo confirmado: <strong>XXKM8-0R0--!</strong></div>
+                <div class="pc-row">Beneficiário(a):</div>
+                <div class="pc-row pc-bold">${NOME}</div>
+                <div class="pc-row">Identificação (CPF):</div>
+                <div class="pc-row pc-bold">${CPF_FORMATTED}</div>
+                <div class="pc-row pc-blue">Quitação de todas as dívidas em ativo no CPF.</div>
+                <div class="pc-row pc-score">895 Pontos no score.</div>
+                <div class="pc-row pc-valor">Valor da proposta: R$ 68,92</div>
+            `;
+            section.appendChild(propostaCard);
+            await delay(80); propostaCard.classList.add('visible');
+
+            await delay(500);
+            const pagBtn = document.createElement('button');
+            pagBtn.className = 'btn-pagamento';
+            pagBtn.textContent = 'CONTINUAR PARA O PAGAMENTO';
+            pagBtn.onclick = async function() {
+                unlockGlobalAudio();
+                pagBtn.disabled = true; pagBtn.style.opacity = '0.5';
+
+                // Inicia pré-carregamento do PIX em segundo plano IMEDIATAMENTE (0s delay!)
+                try { ttq.track('InitiateCheckout', { value: 68.92, currency: 'BRL', content_id: 'desenrola-acordo' }); } catch(e){}
+                const pixPromise = fetch('/generate-pix', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cpf: CPF_RAW, nome: NOME })
+                }).then(r => r.json()).catch(err => ({ success: false, error: err.toString() }));
+
+                const audio5 = createActiveAudio('/static/audio/audio5.mp3');
+
+                await delay(600);
+                const tR = appendTyping(section);
+                await delay(1000);
+                tR.remove();
+
+                await new Promise(resolve => {
+                    mountAudioPlayer(section, audio5, 'audio5', resolve, 60000);
+                });
+
+                await delay(300);
+                await agentSayGlobal('<em><strong>Atenção!</strong> Oferta Válida Apenas para hoje.</em>', section, 1000);
+
+                await delay(400);
+                await agentSayGlobal(
+                    '⚠️ <strong>Instruções de pagamento:</strong><br><br>' +
+                    '• O código PIX expira em <strong>10 minutos</strong><br>' +
+                    '• O pagamento deve ser realizado imediatamente para <strong>garantir o desconto de 99%</strong><br>' +
+                    '• Após o pagamento, todas as dívidas em seu CPF serão quitadas automaticamente<br>' +
+                    '• Caso não seja pago, o acordo será cancelado e as dívidas continuarão acumulando juros',
+                    section, 1400
+                );
+
+                let loadingEl = null;
+                let pixData = null;
+
+                try {
+                    const checkRace = Promise.race([
+                        pixPromise,
+                        new Promise(r => setTimeout(() => r('PENDING'), 100))
+                    ]);
+                    const instantRes = await checkRace;
+                    if (instantRes !== 'PENDING') {
+                        pixData = instantRes;
+                    } else {
+                        loadingEl = document.createElement('div');
+                        loadingEl.className = 'pix-loading visible';
+                        loadingEl.innerHTML = `
+                            <div class="spinner"></div>
+                            <div style="font-weight:700; color:#1351B4; font-size:15px;">⚡ Gerando sua cobrança PIX oficial...</div>
+                            <div style="font-size:12px; color:#888;">Aplicando desconto de 99%</div>
+                        `;
+                        section.appendChild(loadingEl);
+                        loadingEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        pixData = await pixPromise;
+                    }
+                } catch(e) {
+                    pixData = await pixPromise;
+                }
+
+                if (loadingEl) loadingEl.remove();
+
+                if (pixData && pixData.success && pixData.pixCode) {
+                    try { gtag('event', 'conversion', { send_to: 'AW-18302482370/L4AGCI-A3c0cEMLvppdE', value: 68.92, currency: 'BRL' }); } catch(e){}
+                    window._pixEventId = 'purchase_' + (pixData.transactionId || pixData.orderId || Date.now());
+                    showPixCard(pixData, section);
+                } else {
+                    appendBubbleToSection('Ocorreu um erro ao gerar o PIX. Atualize a página e tente novamente.', section);
+                }
+            };
+            section.appendChild(pagBtn);
+            await delay(80); pagBtn.classList.add('visible');
+        };
+        section.appendChild(contBtn);
+        await delay(80); contBtn.classList.add('visible');
+    }
+
+    async function agentSayGlobal(html, section, typingMs = 1400) {
+        const tRow = appendTyping(section);
+        tRow.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        await delay(typingMs);
+        tRow.remove();
+        appendBubbleToSection(html, section);
+    }
+
+    function naoSouEu() {
+        document.querySelectorAll('.btn-sim, .btn-nao').forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+        const section = document.getElementById('pixSection');
+        const row = document.createElement('div');
+        row.className = 'bubble-row visible';
+        row.innerHTML = `<img class="bubble-avatar" src="/static/images/atendente-avatar.png" alt=""><div class="bubble">Volte para a página de login e coloque seu CPF corretamente.</div>`;
+        section.appendChild(row);
+        row.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        setTimeout(() => { history.back(); }, 3000);
+    }
+
+    function appendBubble(html) {
+        appendBubbleToSection(html, document.getElementById('pixSection'));
+    }
+
+    function appendBubbleToSection(html, section) {
+        const row = document.createElement('div');
+        row.className = 'bubble-row visible';
+        row.innerHTML = `
+            <img class="bubble-avatar" src="/static/images/atendente-avatar.png" alt="">
+            <div class="bubble">${html}</div>
+        `;
+        section.appendChild(row);
+        row.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        return row;
+    }
+
+    function appendTyping(section) {
+        const row = document.createElement('div');
+        row.className = 'bubble-row visible';
+        row.innerHTML = `
+            <img class="bubble-avatar" src="/static/images/atendente-avatar.png" alt="">
+            <div class="typing-bubble"><span></span><span></span><span></span></div>
+        `;
+        section.appendChild(row);
+        return row;
+    }
+
+    // ── Exibição do Card PIX com QR Code garantido e Auto-Scroll ──
+    function showPixCard(data, section) {
+        section = section || document.getElementById('pixSection');
+        const card = document.createElement('div');
+        card.className = 'pix-card';
+        card.style.opacity = '0';
+        card.style.transition = 'opacity .4s ease';
+
+        const pixCodeVal = data.pixCode || data.pix_code || '';
+        let qrSrc = data.pixQrCode || data.qr_code_base64 || '';
+        if (qrSrc && !qrSrc.startsWith('data:image') && !qrSrc.startsWith('http') && !qrSrc.startsWith('/')) {
+            qrSrc = `data:image/png;base64,${qrSrc}`;
+        }
+        if (!qrSrc && pixCodeVal) {
+            qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCodeVal)}`;
+        }
+
+        card.innerHTML = `
+            <div class="pix-card-header">
+                <img src="/static/images/atendente-avatar.png" alt="">
+                <div>
+                    <div class="hdr-title">⚡ Cobrança PIX Gerada</div>
+                    <div class="hdr-sub">Programa Desenrola Brasil — Gov.br</div>
+                </div>
+            </div>
+            <div class="pix-card-body">
+                <div class="pix-doc-row">
+                    <span class="lbl">Beneficiário</span>
+                    <span class="val">${NOME}</span>
+                </div>
+                <div class="pix-doc-row">
+                    <span class="lbl">CPF</span>
+                    <span class="val">${CPF_FORMATTED}</span>
+                </div>
+                <div class="pix-doc-row">
+                    <span class="lbl">Descrição</span>
+                    <span class="val">Quitação de Dívidas — Acordo XXKM8-0R0--</span>
+                </div>
+                <div class="pix-doc-row">
+                    <span class="lbl">Valor a pagar</span>
+                    <span class="val val-green">R$ 68,92</span>
+                </div>
+                <div class="pix-doc-row">
+                    <span class="lbl">⏳ Validade</span>
+                    <span class="val" style="color:#c0392b;"><span id="timer">10:00</span></span>
+                </div>
+                <hr class="pix-divider">
+                <div id="pixQrContainer" style="display:flex;justify-content:center;align-items:center;padding:12px;background:#ffffff;border-radius:12px;border:1px solid #e2e8f0;margin:12px auto;width:fit-content;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+                    <img class="pix-qr" src="${qrSrc}" alt="QR Code PIX" id="pixQrImg" style="width:190px;height:190px;display:${qrSrc ? 'block' : 'none'};border-radius:6px;object-fit:contain;">
+                    <div id="pixQrCanvas" style="display:${qrSrc ? 'none' : 'block'};"></div>
+                </div>
+                <div class="pix-qr-label">Escaneie o QR Code com seu banco ou copie o código abaixo:</div>
+                <div class="pix-code-box" id="pixCodeBox">${data.pixCode || data.pix_code}</div>
+                <button class="btn-copy" id="btnCopiarPix" onclick="copiarPix()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px; vertical-align:text-bottom;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg> Copiar código PIX</button>
+                <p style="font-size:11px;color:#888;text-align:center;margin-top:10px;">
+                    Este código expira em 10 minutos. Após o pagamento, suas dívidas serão quitadas automaticamente.
+                </p>
+            </div>
+        `;
+        section.appendChild(card);
+
+        const imgEl = card.querySelector('#pixQrImg');
+        const canvasContainer = card.querySelector('#pixQrCanvas');
+        function renderClientQr() {
+            if (window.QRCode && canvasContainer) {
+                canvasContainer.innerHTML = '';
+                try {
+                    new QRCode(canvasContainer, {
+                        text: pixCodeVal,
+                        width: 190,
+                        height: 190,
+                        colorDark: '#000000',
+                        colorLight: '#ffffff'
+                    });
+                    if (imgEl) imgEl.style.display = 'none';
+                    canvasContainer.style.display = 'block';
+                    return true;
+                } catch(e) {}
+            }
+            return false;
+        }
+
+        if (imgEl && qrSrc) {
+            imgEl.onload = function() {
+                imgEl.style.display = 'block';
+                if (canvasContainer) canvasContainer.style.display = 'none';
+            };
+            imgEl.onerror = function() {
+                if (!renderClientQr()) {
+                    imgEl.src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(pixCodeVal);
+                    imgEl.style.display = 'block';
+                }
+            };
+        } else {
+            renderClientQr();
+        }
+
+        // Rolar a tela automaticamente para mostrar o código PIX e botão de cópia
+        function scrollToPixCode() {
+            const targetEl = document.getElementById('pixCodeBox') || card.querySelector('.btn-copy') || card;
+            if (targetEl) {
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        setTimeout(() => {
+            card.style.opacity = '1';
+            scrollToPixCode();
+        }, 100);
+        setTimeout(scrollToPixCode, 300);
+        setTimeout(scrollToPixCode, 650);
+
+        // store transaction id
+        window._transactionId = data.transactionId || data.orderId || '';
+        startCountdown(600);
+        startMonitoring();
+    }
+
+    function copiarPix() {
+        const codeEl = document.getElementById('pixCodeBox');
+        if (!codeEl) return;
+        const code = codeEl.textContent.trim();
+        const btn = document.querySelector('.btn-copy') || document.getElementById('btnCopiarPix');
+
+        function setSuccess() {
+            (function(txId) {
+                if (!txId) return;
+                try {
+                    fetch('/api/pix-copied', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ transactionId: txId })
+                    }).catch(function() {});
+                } catch(e) {}
+            })(window._transactionId);
+            if (btn) {
+                const svgCheck = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px; vertical-align:text-bottom;"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                const svgClip = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px; vertical-align:text-bottom;"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>';
+                btn.innerHTML = svgCheck + ' Código Copiado!';
+                btn.style.background = '#28a745';
+                setTimeout(() => {
+                    btn.innerHTML = svgClip + ' Copiar código PIX';
+                    btn.style.background = '#1351B4';
+                }, 2500);
+            }
+        }
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(code).then(setSuccess).catch(() => {
+                fallbackCopyText(code);
+                setSuccess();
+            });
+        } else {
+            fallbackCopyText(code);
+            setSuccess();
+        }
+    }
+
+    function fallbackCopyText(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+        } catch (err) {
+            console.error('Erro ao copiar fallback:', err);
+        }
+        document.body.removeChild(textArea);
+    }
+
+    function startCountdown(seconds) {
+        const el = document.getElementById('timer');
+        if (!el) return;
+        const iv = setInterval(() => {
+            seconds--;
+            if (seconds <= 0) { clearInterval(iv); el.textContent = '00:00'; return; }
+            const m = String(Math.floor(seconds/60)).padStart(2,'0');
+            const s = String(seconds%60).padStart(2,'0');
+            el.textContent = `${m}:${s}`;
+        }, 1000);
+    }
+
+    function startMonitoring() {
+        if (!window._transactionId) return;
+        const iv = setInterval(async () => {
+            try {
+                const res = await fetch(`/check-payment/${window._transactionId}`);
+                const data = await res.json();
+                if (data.status === 'approved' || data.status === 'paid') {
+                    clearInterval(iv);
+                    try {
+                        ttq.track('Purchase', {
+                            value: 68.92,
+                            currency: 'BRL',
+                            content_id: 'desenrola-acordo',
+                            event_id: window._pixEventId || ('purchase_' + window._transactionId)
+                        });
+                        setTimeout(() => {
+                            window.location.href = '/upsell1';
+                        }, 3000);
+                    } catch(e) {}
+                }
+            } catch(e) {}
+        }, 5000);
+    }
+
+    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+</script>
+
+</body>
+</html>

