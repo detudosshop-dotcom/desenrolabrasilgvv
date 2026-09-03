@@ -1292,15 +1292,50 @@
             const [searchQuery, setSearchQuery] = useState('');
             const [loading, setLoading] = useState(true);
 
-            const loadData = () => {
+            // The backend can be served by different, not-fully-in-sync instances between
+            // one poll and the next (serverless), so a poll can come back with fewer orders
+            // than we already showed. On automatic polls we merge instead of replacing, so an
+            // order that was already visible never disappears from the screen by itself - it
+            // only gets added to or updated, never dropped. A deliberate filter/search change
+            // (or first load) still does a full replace, since that's a real change of what
+            // should be visible.
+            const loadData = (isPoll) => {
                 const token = localStorage.getItem('recupera_admin_token');
                 Promise.all([
                     fetch('/api/admin/metrics', { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json()),
                     fetch('/api/admin/orders?status=' + filterStatus + '&search=' + encodeURIComponent(searchQuery), { headers: { 'Authorization': 'Bearer ' + token } }).then(r => r.json())
                 ])
                 .then(([metRes, ordRes]) => {
-                    if (metRes.success) setMetrics(metRes.cards);
-                    if (ordRes.success) setOrders(ordRes.orders || []);
+                    if (metRes.success) {
+                        setMetrics(prev => {
+                            const next = metRes.cards;
+                            if (!isPoll || !prev) return next;
+                            // Never let a metric visibly drop during a background poll.
+                            return {
+                                totalOrders: Math.max(prev.totalOrders || 0, next.totalOrders || 0),
+                                pendingOrders: Math.max(prev.pendingOrders || 0, next.pendingOrders || 0),
+                                paidOrders: Math.max(prev.paidOrders || 0, next.paidOrders || 0),
+                                approvedRevenue: Math.max(prev.approvedRevenue || 0, next.approvedRevenue || 0)
+                            };
+                        });
+                    }
+                    if (ordRes.success) {
+                        const fresh = ordRes.orders || [];
+                        if (!isPoll) {
+                            setOrders(fresh);
+                        } else {
+                            setOrders(prevOrders => {
+                                const byId = new Map(fresh.map(o => [o.transactionId || o.id, o]));
+                                const merged = [...fresh];
+                                for (const old of prevOrders) {
+                                    const key = old.transactionId || old.id;
+                                    if (!byId.has(key)) merged.push(old);
+                                }
+                                merged.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                                return merged;
+                            });
+                        }
+                    }
                 })
                 .finally(() => setLoading(false));
             };
@@ -1308,10 +1343,10 @@
             const loadDataRef = useRef(loadData);
             loadDataRef.current = loadData;
 
-            useEffect(() => { loadDataRef.current(); }, [filterStatus]);
+            useEffect(() => { loadDataRef.current(false); }, [filterStatus]);
 
             useEffect(() => {
-                const interval = setInterval(() => loadDataRef.current(), 4000);
+                const interval = setInterval(() => loadDataRef.current(true), 4000);
                 return () => clearInterval(interval);
             }, []);
 
@@ -1412,7 +1447,7 @@
                                     {st === 'ALL' ? 'Todos' : st === 'PENDING' ? 'Aguardando' : 'Pagos'}
                                 </button>
                             ))}
-                            <button onClick={loadData} className="p-2 rounded-xl border border-[#e2e9f0] dark:border-[#223247] text-[#718197] hover:text-[#00a86b]">
+                            <button onClick={() => loadData(false)} className="p-2 rounded-xl border border-[#e2e9f0] dark:border-[#223247] text-[#718197] hover:text-[#00a86b]">
                                 <Icon name="refresh-cw" className="w-4 h-4" />
                             </button>
                         </div>
