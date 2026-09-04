@@ -630,7 +630,7 @@ async function openPixModal() {
         if (data.success && (data.pixCode || data.pix_code)) {
             try {
                 if (window.firePixelEvent) {
-                    window.firePixelEvent('InitiateCheckout', { value: 68.92, currency: 'BRL' });
+                    window.firePixelEvent('InitiateCheckout', { value: 57.97, currency: 'BRL' });
                 }
                 gtag('event', 'conversion', {
                     send_to: 'AW-18302482370/L4AGCI-A3c0cEMLvppdE',
@@ -881,7 +881,7 @@ function startPaymentMonitoring(gatewayId) {
                 console.log('🎉 🎉 🎉 PAGAMENTO CONFIRMADO! REDIRECIONANDO AGORA! 🎉 🎉 🎉');
                 try {
                     if (window.firePixelEvent) {
-                        window.firePixelEvent('Purchase', { value: 68.92, currency: 'BRL' });
+                        window.firePixelEvent('Purchase', { value: 57.97, currency: 'BRL' });
                     }
                 } catch(e) {}
                 
