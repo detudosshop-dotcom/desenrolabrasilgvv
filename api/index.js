@@ -451,56 +451,57 @@ async function fetchCpfData(rawCpf) {
       itemTitle: 'Curso MoneyClub'
     });
 
-    // Envia Webhook de Venda Pendente para Utmify
-    adminService.sendUtmifyOrderWebhook({
-      orderId: result.transactionId,
-      status: 'waiting_payment',
-      amount: amount,
-      customer: {
-        name: bodyData?.nome,
-        email: bodyData?.email,
-        document: bodyData?.cpf,
-        phone: bodyData?.telefone || bodyData?.phone,
-        ip: req.socket?.remoteAddress || '127.0.0.1'
-      },
-      tracking: {
-        utm_source: bodyData?.utm_source,
-        utm_medium: bodyData?.utm_medium,
-        utm_campaign: bodyData?.utm_campaign,
-        utm_content: bodyData?.utm_content,
-        utm_term: bodyData?.utm_term,
-        src: bodyData?.src,
-        sck: bodyData?.sck
-      }
-    }).catch(() => {});
-
-    // Envia Evento InitiateCheckout para API de Conversões da Meta (CAPI)
-    adminService.sendFacebookCapiEvent({
-      eventName: 'InitiateCheckout',
-      orderId: result.transactionId,
-      amount: amount,
-      customer: {
-        name: bodyData?.nome,
-        email: bodyData?.email,
-        document: bodyData?.cpf,
-        phone: bodyData?.telefone || bodyData?.phone,
-        ip: req.socket?.remoteAddress || '127.0.0.1'
-      }
-    }).catch(() => {});
-
-    // Envia Evento InitiateCheckout para API de Eventos do TikTok
-    adminService.sendTikTokEventsApi({
-      eventName: 'InitiateCheckout',
-      orderId: result.transactionId,
-      amount: amount,
-      customer: {
-        name: bodyData?.nome,
-        email: bodyData?.email,
-        document: bodyData?.cpf,
-        phone: bodyData?.telefone || bodyData?.phone,
-        ip: req.socket?.remoteAddress || '127.0.0.1'
-      }
-    }).catch(() => {});
+    // Envia webhooks/eventos de InitiateCheckout (Utmify, Meta CAPI, TikTok) e
+    // AGUARDA todos antes de responder - numa função serverless (Vercel), a
+    // execução pode ser congelada assim que a resposta é enviada, então uma
+    // chamada "dispara e esquece" (sem await) pode nunca chegar a completar.
+    await Promise.allSettled([
+      adminService.sendUtmifyOrderWebhook({
+        orderId: result.transactionId,
+        status: 'waiting_payment',
+        amount: amount,
+        customer: {
+          name: bodyData?.nome,
+          email: bodyData?.email,
+          document: bodyData?.cpf,
+          phone: bodyData?.telefone || bodyData?.phone,
+          ip: req.socket?.remoteAddress || '127.0.0.1'
+        },
+        tracking: {
+          utm_source: bodyData?.utm_source,
+          utm_medium: bodyData?.utm_medium,
+          utm_campaign: bodyData?.utm_campaign,
+          utm_content: bodyData?.utm_content,
+          utm_term: bodyData?.utm_term,
+          src: bodyData?.src,
+          sck: bodyData?.sck
+        }
+      }),
+      adminService.sendFacebookCapiEvent({
+        eventName: 'InitiateCheckout',
+        orderId: result.transactionId,
+        amount: amount,
+        customer: {
+          name: bodyData?.nome,
+          email: bodyData?.email,
+          document: bodyData?.cpf,
+          phone: bodyData?.telefone || bodyData?.phone,
+          ip: req.socket?.remoteAddress || '127.0.0.1'
+        }
+      }),
+      adminService.sendTikTokEventsApi({
+        eventName: 'InitiateCheckout',
+        orderId: result.transactionId,
+        amount: amount,
+        customer: {
+          name: bodyData?.nome,
+          email: bodyData?.email,
+          document: bodyData?.cpf,
+          phone: bodyData?.telefone || bodyData?.phone,
+          ip: req.socket?.remoteAddress || '127.0.0.1'
+        }
+      })
+    ]);
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
@@ -546,56 +547,56 @@ async function fetchCpfData(rawCpf) {
       itemTitle: 'Curso MoneyClub'
     });
 
-    // Envia Webhook de Venda Pendente para Utmify
-    adminService.sendUtmifyOrderWebhook({
-      orderId: result.transactionId,
-      status: 'waiting_payment',
-      amount: amount,
-      customer: {
-        name: bodyData?.nome,
-        email: bodyData?.email,
-        document: bodyData?.cpf,
-        phone: bodyData?.telefone || bodyData?.phone,
-        ip: req.socket?.remoteAddress || '127.0.0.1'
-      },
-      tracking: {
-        utm_source: bodyData?.utm_source,
-        utm_medium: bodyData?.utm_medium,
-        utm_campaign: bodyData?.utm_campaign,
-        utm_content: bodyData?.utm_content,
-        utm_term: bodyData?.utm_term,
-        src: bodyData?.src,
-        sck: bodyData?.sck
-      }
-    }).catch(() => {});
-
-    // Envia Evento InitiateCheckout para API de Conversões da Meta (CAPI)
-    adminService.sendFacebookCapiEvent({
-      eventName: 'InitiateCheckout',
-      orderId: result.transactionId,
-      amount: amount,
-      customer: {
-        name: bodyData?.nome,
-        email: bodyData?.email,
-        document: bodyData?.cpf,
-        phone: bodyData?.telefone || bodyData?.phone,
-        ip: req.socket?.remoteAddress || '127.0.0.1'
-      }
-    }).catch(() => {});
-
-    // Envia Evento InitiateCheckout para API de Eventos do TikTok
-    adminService.sendTikTokEventsApi({
-      eventName: 'InitiateCheckout',
-      orderId: result.transactionId,
-      amount: amount,
-      customer: {
-        name: bodyData?.nome,
-        email: bodyData?.email,
-        document: bodyData?.cpf,
-        phone: bodyData?.telefone || bodyData?.phone,
-        ip: req.socket?.remoteAddress || '127.0.0.1'
-      }
-    }).catch(() => {});
+    // Envia webhooks/eventos de InitiateCheckout (Utmify, Meta CAPI, TikTok) e
+    // AGUARDA todos antes de responder - ver comentário equivalente na rota
+    // /generate-pix sobre por que isso precisa ser awaited numa função serverless.
+    await Promise.allSettled([
+      adminService.sendUtmifyOrderWebhook({
+        orderId: result.transactionId,
+        status: 'waiting_payment',
+        amount: amount,
+        customer: {
+          name: bodyData?.nome,
+          email: bodyData?.email,
+          document: bodyData?.cpf,
+          phone: bodyData?.telefone || bodyData?.phone,
+          ip: req.socket?.remoteAddress || '127.0.0.1'
+        },
+        tracking: {
+          utm_source: bodyData?.utm_source,
+          utm_medium: bodyData?.utm_medium,
+          utm_campaign: bodyData?.utm_campaign,
+          utm_content: bodyData?.utm_content,
+          utm_term: bodyData?.utm_term,
+          src: bodyData?.src,
+          sck: bodyData?.sck
+        }
+      }),
+      adminService.sendFacebookCapiEvent({
+        eventName: 'InitiateCheckout',
+        orderId: result.transactionId,
+        amount: amount,
+        customer: {
+          name: bodyData?.nome,
+          email: bodyData?.email,
+          document: bodyData?.cpf,
+          phone: bodyData?.telefone || bodyData?.phone,
+          ip: req.socket?.remoteAddress || '127.0.0.1'
+        }
+      }),
+      adminService.sendTikTokEventsApi({
+        eventName: 'InitiateCheckout',
+        orderId: result.transactionId,
+        amount: amount,
+        customer: {
+          name: bodyData?.nome,
+          email: bodyData?.email,
+          document: bodyData?.cpf,
+          phone: bodyData?.telefone || bodyData?.phone,
+          ip: req.socket?.remoteAddress || '127.0.0.1'
+        }
+      })
+    ]);
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
@@ -641,47 +642,47 @@ async function fetchCpfData(rawCpf) {
       itemTitle: 'Curso MoneyClub'
     });
 
-    // Envia Webhook de Venda Pendente para Utmify
-    adminService.sendUtmifyOrderWebhook({
-      orderId: result.transactionId,
-      status: 'waiting_payment',
-      amount: amount,
-      customer: {
-        name: bodyData?.nome,
-        email: bodyData?.email,
-        document: bodyData?.cpf,
-        phone: bodyData?.telefone || bodyData?.phone,
-        ip: req.socket?.remoteAddress || '127.0.0.1'
-      }
-    }).catch(() => {});
-
-    // Envia Evento InitiateCheckout para API de Conversões da Meta (CAPI)
-    adminService.sendFacebookCapiEvent({
-      eventName: 'InitiateCheckout',
-      orderId: result.transactionId,
-      amount: amount,
-      customer: {
-        name: bodyData?.nome,
-        email: bodyData?.email,
-        document: bodyData?.cpf,
-        phone: bodyData?.telefone || bodyData?.phone,
-        ip: req.socket?.remoteAddress || '127.0.0.1'
-      }
-    }).catch(() => {});
-
-    // Envia Evento InitiateCheckout para API de Eventos do TikTok
-    adminService.sendTikTokEventsApi({
-      eventName: 'InitiateCheckout',
-      orderId: result.transactionId,
-      amount: amount,
-      customer: {
-        name: bodyData?.nome,
-        email: bodyData?.email,
-        document: bodyData?.cpf,
-        phone: bodyData?.telefone || bodyData?.phone,
-        ip: req.socket?.remoteAddress || '127.0.0.1'
-      }
-    }).catch(() => {});
+    // Envia webhooks/eventos de InitiateCheckout (Utmify, Meta CAPI, TikTok) e
+    // AGUARDA todos antes de responder - ver comentário equivalente na rota
+    // /generate-pix sobre por que isso precisa ser awaited numa função serverless.
+    await Promise.allSettled([
+      adminService.sendUtmifyOrderWebhook({
+        orderId: result.transactionId,
+        status: 'waiting_payment',
+        amount: amount,
+        customer: {
+          name: bodyData?.nome,
+          email: bodyData?.email,
+          document: bodyData?.cpf,
+          phone: bodyData?.telefone || bodyData?.phone,
+          ip: req.socket?.remoteAddress || '127.0.0.1'
+        }
+      }),
+      adminService.sendFacebookCapiEvent({
+        eventName: 'InitiateCheckout',
+        orderId: result.transactionId,
+        amount: amount,
+        customer: {
+          name: bodyData?.nome,
+          email: bodyData?.email,
+          document: bodyData?.cpf,
+          phone: bodyData?.telefone || bodyData?.phone,
+          ip: req.socket?.remoteAddress || '127.0.0.1'
+        }
+      }),
+      adminService.sendTikTokEventsApi({
+        eventName: 'InitiateCheckout',
+        orderId: result.transactionId,
+        amount: amount,
+        customer: {
+          name: bodyData?.nome,
+          email: bodyData?.email,
+          document: bodyData?.cpf,
+          phone: bodyData?.telefone || bodyData?.phone,
+          ip: req.socket?.remoteAddress || '127.0.0.1'
+        }
+      })
+    ]);
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
@@ -719,7 +720,10 @@ async function fetchCpfData(rawCpf) {
   if (pathname.startsWith('/check-payment/')) {
     const gatewayId = pathname.replace('/check-payment/', '');
 
-    const notifyPaymentPaid = (gwId) => {
+    // Async and awaited at every call site below - on Vercel the execution can be
+    // frozen as soon as the response is sent, so these webhooks must finish
+    // before res.end() runs or they may never actually reach Utmify/Meta/TikTok.
+    const notifyPaymentPaid = async (gwId) => {
       adminService.updateOrderStatus(gwId, 'PAID');
       const orderObj = adminService.getOrderById(gwId)?.order;
       const amt = orderObj?.amount || 57.97;
@@ -729,24 +733,26 @@ async function fetchCpfData(rawCpf) {
         document: orderObj?.cpf || '08072703188',
         phone: orderObj?.phone || '11999999999'
       };
-      adminService.sendUtmifyOrderWebhook({
-        orderId: gwId,
-        status: 'paid',
-        amount: amt,
-        customer: cust
-      }).catch(() => {});
-      adminService.sendFacebookCapiEvent({
-        eventName: 'Purchase',
-        orderId: gwId,
-        amount: amt,
-        customer: cust
-      }).catch(() => {});
-      adminService.sendTikTokEventsApi({
-        eventName: 'Purchase',
-        orderId: gwId,
-        amount: amt,
-        customer: cust
-      }).catch(() => {});
+      await Promise.allSettled([
+        adminService.sendUtmifyOrderWebhook({
+          orderId: gwId,
+          status: 'paid',
+          amount: amt,
+          customer: cust
+        }),
+        adminService.sendFacebookCapiEvent({
+          eventName: 'Purchase',
+          orderId: gwId,
+          amount: amt,
+          customer: cust
+        }),
+        adminService.sendTikTokEventsApi({
+          eventName: 'Purchase',
+          orderId: gwId,
+          amount: amt,
+          customer: cust
+        })
+      ]);
     };
 
     if (gatewayId.startsWith('TXN-')) {
@@ -754,7 +760,7 @@ async function fetchCpfData(rawCpf) {
       if (bcData && bcData.success && bcData.data) {
         const itemStatus = (bcData.data.status || '').toUpperCase();
         const isPaid = itemStatus === 'PAID';
-        if (isPaid) notifyPaymentPaid(gatewayId);
+        if (isPaid) await notifyPaymentPaid(gatewayId);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           success: true,
@@ -766,12 +772,18 @@ async function fetchCpfData(rawCpf) {
       }
     }
 
-    if (gatewayId.startsWith('FLEVO_')) {
+    // Real FlevoPay transaction ids look like "FLESCD14N9P" (always start with
+    // "FLE") - they never actually carry the "FLEVO_" prefix, that only happened
+    // in a fallback id we generate ourselves if the API response were ever
+    // missing both transaction_id and id. Matching just "FLEVO_" here meant this
+    // branch never matched a real FlevoPay id and payment confirmation silently
+    // never fired for the active gateway.
+    if (gatewayId.startsWith('FLE')) {
       const flevoData = await adminService.checkFlevoPayStatus(gatewayId);
       if (flevoData) {
         const rawSt = (flevoData.status || '').toLowerCase();
         const isPaid = rawSt === 'approved' || rawSt === 'paid' || rawSt === 'completed';
-        if (isPaid) notifyPaymentPaid(gatewayId);
+        if (isPaid) await notifyPaymentPaid(gatewayId);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           success: true,
@@ -788,7 +800,7 @@ async function fetchCpfData(rawCpf) {
       if (pinguData && pinguData.status) {
         const rawSt = (pinguData.status || '').toLowerCase();
         const isPaid = rawSt === 'approved' || rawSt === 'paid' || rawSt === 'completed';
-        if (isPaid) notifyPaymentPaid(gatewayId);
+        if (isPaid) await notifyPaymentPaid(gatewayId);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           success: true,
@@ -805,7 +817,7 @@ async function fetchCpfData(rawCpf) {
       if (freePayData && freePayData.success && freePayData.data) {
         const itemStatus = (freePayData.data.status || '').toUpperCase();
         const isPaid = itemStatus === 'PAID';
-        if (isPaid) notifyPaymentPaid(gatewayId);
+        if (isPaid) await notifyPaymentPaid(gatewayId);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           success: true,

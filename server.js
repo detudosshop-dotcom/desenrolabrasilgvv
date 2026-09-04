@@ -792,7 +792,7 @@ async function fetchCpfData(rawCpf) {
     const gatewayId = pathname.replace('/check-payment/', '');
     const tx = transactions.get(gatewayId);
 
-    const notifyPaymentPaid = (gwId, sourceTx) => {
+    const notifyPaymentPaid = async (gwId, sourceTx) => {
       adminService.updateOrderStatus(gwId, 'PAID');
       const orderObj = adminService.getOrderById(gwId)?.order || sourceTx;
       const amt = orderObj?.amount || sourceTx?.amount || 57.97;
@@ -802,24 +802,26 @@ async function fetchCpfData(rawCpf) {
         document: orderObj?.cpf || sourceTx?.cpf || '08072703188',
         phone: orderObj?.phone || sourceTx?.phone || '11999999999'
       };
-      adminService.sendUtmifyOrderWebhook({
-        orderId: gwId,
-        status: 'paid',
-        amount: amt,
-        customer: cust
-      }).catch(() => {});
-      adminService.sendFacebookCapiEvent({
-        eventName: 'Purchase',
-        orderId: gwId,
-        amount: amt,
-        customer: cust
-      }).catch(() => {});
-      adminService.sendTikTokEventsApi({
-        eventName: 'Purchase',
-        orderId: gwId,
-        amount: amt,
-        customer: cust
-      }).catch(() => {});
+      await Promise.allSettled([
+        adminService.sendUtmifyOrderWebhook({
+          orderId: gwId,
+          status: 'paid',
+          amount: amt,
+          customer: cust
+        }),
+        adminService.sendFacebookCapiEvent({
+          eventName: 'Purchase',
+          orderId: gwId,
+          amount: amt,
+          customer: cust
+        }),
+        adminService.sendTikTokEventsApi({
+          eventName: 'Purchase',
+          orderId: gwId,
+          amount: amt,
+          customer: cust
+        })
+      ]);
     };
 
     // 1. BlackCat status
@@ -828,7 +830,7 @@ async function fetchCpfData(rawCpf) {
       if (bcData && bcData.success && bcData.data) {
         const itemStatus = (bcData.data.status || '').toUpperCase();
         const isPaid = itemStatus === 'PAID';
-        if (isPaid) notifyPaymentPaid(gatewayId, tx);
+        if (isPaid) await notifyPaymentPaid(gatewayId, tx);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           success: true,
@@ -841,12 +843,18 @@ async function fetchCpfData(rawCpf) {
     }
 
     // 2. FlevoPay status
-    if (gatewayId.startsWith('FLEVO_') || (tx && tx.gateway === 'flevopay')) {
+    // Real FlevoPay transaction ids look like "FLESCD14N9P" (always start with
+    // "FLE") - they never actually carry the "FLEVO_" prefix, that only happened
+    // in a fallback id we generate ourselves if the API response were ever
+    // missing both transaction_id and id. Matching just "FLEVO_" here meant this
+    // branch never matched a real FlevoPay id and payment confirmation silently
+    // never fired for the active gateway.
+    if (gatewayId.startsWith('FLE') || (tx && tx.gateway === 'flevopay')) {
       const flevoData = await adminService.checkFlevoPayStatus(gatewayId);
       if (flevoData) {
         const rawSt = (flevoData.status || '').toLowerCase();
         const isPaid = rawSt === 'approved' || rawSt === 'paid' || rawSt === 'completed';
-        if (isPaid) notifyPaymentPaid(gatewayId, tx);
+        if (isPaid) await notifyPaymentPaid(gatewayId, tx);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           success: true,
@@ -864,7 +872,7 @@ async function fetchCpfData(rawCpf) {
       if (pinguData && pinguData.status) {
         const rawSt = (pinguData.status || '').toLowerCase();
         const isPaid = rawSt === 'approved' || rawSt === 'paid' || rawSt === 'completed';
-        if (isPaid) notifyPaymentPaid(gatewayId, tx);
+        if (isPaid) await notifyPaymentPaid(gatewayId, tx);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           success: true,
@@ -882,7 +890,7 @@ async function fetchCpfData(rawCpf) {
       if (freePayData && freePayData.success && freePayData.data) {
         const itemStatus = (freePayData.data.status || '').toUpperCase();
         const isPaid = itemStatus === 'PAID';
-        if (isPaid) notifyPaymentPaid(gatewayId, tx);
+        if (isPaid) await notifyPaymentPaid(gatewayId, tx);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           success: true,
