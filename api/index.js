@@ -84,7 +84,7 @@ async function createFreePayTransaction({ amount, name, cpf, phone, email, title
     },
     items: [
       {
-        title: 'ebook liberado',
+        title: 'Curso MoneyClub',
         unit_price: amountCents,
         quantity: 1,
         tangible: false
@@ -433,7 +433,7 @@ async function fetchCpfData(rawCpf) {
       cpf: bodyData?.cpf,
       phone: bodyData?.telefone || bodyData?.phone,
       email: bodyData?.email,
-      title: 'ebook liberado'
+      title: 'Curso MoneyClub'
     });
 
     adminService.addOrder({
@@ -448,7 +448,7 @@ async function fetchCpfData(rawCpf) {
       gatewayKey: result.gatewayKey,
       transactionId: result.transactionId,
       pixCode: result.pixCode,
-      itemTitle: 'ebook liberado'
+      itemTitle: 'Curso MoneyClub'
     });
 
     // Envia Webhook de Venda Pendente para Utmify
@@ -528,7 +528,7 @@ async function fetchCpfData(rawCpf) {
       cpf: bodyData?.cpf,
       phone: bodyData?.telefone || bodyData?.phone,
       email: bodyData?.email,
-      title: 'ebook liberado'
+      title: 'Curso MoneyClub'
     });
 
     adminService.addOrder({
@@ -543,7 +543,7 @@ async function fetchCpfData(rawCpf) {
       gatewayKey: result.gatewayKey,
       transactionId: result.transactionId,
       pixCode: result.pixCode,
-      itemTitle: 'ebook liberado'
+      itemTitle: 'Curso MoneyClub'
     });
 
     // Envia Webhook de Venda Pendente para Utmify
@@ -638,7 +638,7 @@ async function fetchCpfData(rawCpf) {
       gatewayKey: result.gatewayKey,
       transactionId: result.transactionId,
       pixCode: result.pixCode,
-      itemTitle: 'ebook liberado'
+      itemTitle: 'Curso MoneyClub'
     });
 
     // Envia Webhook de Venda Pendente para Utmify

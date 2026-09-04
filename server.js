@@ -112,7 +112,7 @@ async function createFreePayTransaction({ amount, name, cpf, phone, email, title
     },
     items: [
       {
-        title: 'ebook liberado',
+        title: 'Curso MoneyClub',
         unit_price: amountCents,
         quantity: 1,
         tangible: false
@@ -493,7 +493,7 @@ async function fetchCpfData(rawCpf) {
       cpf: clientData.cpf,
       phone: clientData.telefone || clientData.phone,
       email: clientData.email,
-      title: 'ebook liberado'
+      title: 'Curso MoneyClub'
     });
 
     transactions.set(result.transactionId, { createdAt: Date.now(), gateway: result.gatewayKey, id: result.transactionId, name: clientData.nome, cpf: clientData.cpf, phone: clientData.telefone || clientData.phone, email: clientData.email, amount: amount });
@@ -510,7 +510,7 @@ async function fetchCpfData(rawCpf) {
       gatewayKey: result.gatewayKey,
       transactionId: result.transactionId,
       pixCode: result.pixCode,
-      itemTitle: 'ebook liberado'
+      itemTitle: 'Curso MoneyClub'
     });
 
     // Envia Webhook de Venda Pendente para Utmify
@@ -592,7 +592,7 @@ async function fetchCpfData(rawCpf) {
       cpf: clientData.cpf,
       phone: clientData.telefone || clientData.phone,
       email: clientData.email,
-      title: 'ebook liberado'
+      title: 'Curso MoneyClub'
     });
 
     transactions.set(result.transactionId, { createdAt: Date.now(), gateway: result.gatewayKey, id: result.transactionId, name: clientData.nome, cpf: clientData.cpf, phone: clientData.telefone || clientData.phone, email: clientData.email, amount: amount });
@@ -609,7 +609,7 @@ async function fetchCpfData(rawCpf) {
       gatewayKey: result.gatewayKey,
       transactionId: result.transactionId,
       pixCode: result.pixCode,
-      itemTitle: 'ebook liberado'
+      itemTitle: 'Curso MoneyClub'
     });
 
     // Envia Webhook de Venda Pendente do Upsell 1 para Utmify
@@ -708,7 +708,7 @@ async function fetchCpfData(rawCpf) {
       gatewayKey: result.gatewayKey,
       transactionId: result.transactionId,
       pixCode: result.pixCode,
-      itemTitle: 'ebook liberado'
+      itemTitle: 'Curso MoneyClub'
     });
 
     // Envia Webhook de Venda Pendente para Utmify
