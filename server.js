@@ -324,7 +324,7 @@ const handler = async (req, res) => {
 
     // 7. Orders
     if (pathname === '/api/admin/orders' && method === 'GET') {
-      const result = adminService.getOrders(parsedUrl.query);
+      const result = await adminService.getOrders(parsedUrl.query);
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(result));
       return;
@@ -333,7 +333,7 @@ const handler = async (req, res) => {
     // Export de contatos (nome, telefone, email) por status - para remarketing
     if (pathname === '/api/admin/orders/export' && method === 'GET') {
       const statusFilter = parsedUrl.query.status || 'ALL';
-      const result = adminService.getOrders({ status: statusFilter });
+      const result = await adminService.getOrders({ status: statusFilter });
       const csv = adminService.ordersToCsv(result.orders || []);
       res.writeHead(200, {
         'Content-Type': 'text/csv; charset=utf-8',
@@ -396,7 +396,7 @@ const handler = async (req, res) => {
 
     if (pathname === '/api/admin/metrics' && method === 'GET') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(adminService.getMetrics()));
+      res.end(JSON.stringify(await adminService.getMetrics()));
       return;
     }
 
