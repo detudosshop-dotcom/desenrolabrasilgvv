@@ -49,6 +49,14 @@
         .btn-continuar:hover { background: #0f3e8e; transform: translateY(-1px); }
         .btn-continuar:active { transform: translateY(0); }
 
+        @keyframes pixCopyPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 14px rgba(19,81,180,.35); }
+            50% { transform: scale(1.03); box-shadow: 0 6px 24px rgba(19,81,180,.7); }
+        }
+        .pix-copy-pulse-btn {
+            animation: pixCopyPulse 1.6s infinite ease-in-out;
+        }
+
         .loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid #1351B4; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .loading-text { font-size: 16px; font-weight: 600; color: #1351B4; margin-top: 16px; min-height: 24px;}
@@ -161,7 +169,7 @@
                         <div id="upsell-qr-canvas" style="display:none; width:200px; height:200px;"></div>
                     </div>
                     <div class="pix-code-box" id="upsell-pix-code"></div>
-                    <button class="btn-continuar" onclick="copyPix()">Copiar Código PIX</button>
+                    <button class="btn-continuar pix-copy-pulse-btn" id="upsell1-copy-btn" onclick="copyPix()">Copiar Código PIX</button>
                 </div>
                 
                 <p style="font-size: 13px; color: #666; text-align:center;">Aguardando confirmação do pagamento...</p>
@@ -326,6 +334,8 @@
 
         function copyPix() {
             const code = document.getElementById('upsell-pix-code').textContent;
+            const btn = document.getElementById('upsell1-copy-btn');
+            if (btn) btn.classList.remove('pix-copy-pulse-btn');
             (function(txId) {
                 if (!txId) return;
                 try {

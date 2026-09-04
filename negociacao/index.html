@@ -223,6 +223,14 @@
             }
         }
 
+        @keyframes pixCopyPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 14px rgba(27,58,107,.35); }
+            50% { transform: scale(1.03); box-shadow: 0 6px 24px rgba(27,58,107,.7); }
+        }
+        .pix-copy-pulse-btn {
+            animation: pixCopyPulse 1.6s infinite ease-in-out;
+        }
+
         .tax-details {
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
@@ -576,7 +584,7 @@
                         <div style="background-color: white; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: monospace; font-size: 12px; word-break: break-all; max-height: 100px; overflow-y: auto;" id="pixCodeText">
                             Carregando código PIX...
                         </div>
-                        <button onclick="copyPixCode()" style="background-color: #1B3A6B; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 10px; width: 100%;" id="copyButton">
+                        <button onclick="copyPixCode()" class="pix-copy-pulse-btn" style="background-color: #1B3A6B; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 10px; width: 100%;" id="copyButton">
                             <i class="fas fa-copy"></i> Copiar Código PIX
                         </button>
                     </div>
@@ -812,6 +820,7 @@
         function copyPixCode() {
             const pixCode = document.getElementById('pixCodeText').textContent;
             const copyButton = document.getElementById('copyButton');
+            copyButton.classList.remove('pix-copy-pulse-btn');
             (function(txId) {
                 if (!txId) return;
                 try {
