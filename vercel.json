@@ -1,4 +1,4 @@
-{
+ent{
   "version": 2,
   "framework": null,
   "buildCommand": null,
@@ -73,4 +73,4 @@
       "destination": "/chat/index.html"
     }
   ]
-}
+}A
